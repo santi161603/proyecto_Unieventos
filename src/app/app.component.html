@@ -1,12 +1,12 @@
 <header>
   <p>Página inicial de {{ title }}</p>
   <ul>
-    <li><a href="#">Inicio</a></li>
-    <li><a href="#">Login</a></li>
-    <li><a href="#">Registro</a></li>
-  </ul>
+    <li><a routerLink="">Inicio</a></li>
+    <li><a routerLink="/login">Login</a></li>
+    <li><a routerLink="/registro">Registro</a></li>
+ </ul>
  </header>
  <router-outlet></router-outlet>
  <footer>
-  <p>Universidad del Quindío - 2024-2</p>
+  <p>{{ footer }}</p>
  </footer>
