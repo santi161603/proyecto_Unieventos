@@ -1,7 +1,7 @@
 <form >
     <div>
         <label>Nombre: </label>
-        <input type="text" />
+        <input type="text" formControlName="nombre"/>
     </div>
  
  
@@ -13,37 +13,40 @@
  
     <div>
         <label>Tipo: </label>
-    <select>
-        <option value="">Seleccione un tipo</option>
+   <select formControlName="tipo" >
+       <option value="">Seleccione un tipo</option>
+       @for (item of tiposDeEvento; track $index) {
+           <option value="{{item}}">{{item}}</option>
         <option value="Cultural">Cultural</option>
         <option value="Concierto">Concierto</option>
         <option value="Teatro">Teatro</option>
-        <option value="Deportivo">Deportivo</option>       
-    </select>
+        <option value="Deportivo">Deportivo</option>
+    }
+    </select>     
     </div>
  
  
     <div>
         <label>Dirección: </label>
-        <input type="text" />
+        <input type="text" formControlName="direccion"/>
     </div>
  
  
     <div>
         <label>Ciudad: </label>
-        <input type="text" />
+        <input type="text" formControlName="ciudad"/>
     </div>
  
  
     <div>
         <label>Imagen evento: </label>
-        <input type="file" />
+        <input type="file" (change)="onFileChange($event, 'portada')" />   
     </div>
  
  
     <div>
         <label>Imagen localidades: </label>
-        <input type="file" />
+        <input type="file" (change)="onFileChange($event, 'localidades')" />
     </div>
  
  
