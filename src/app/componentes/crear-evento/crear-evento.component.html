@@ -11,18 +11,18 @@
     </div>
  
  
-    <div>
-        <label>Tipo: </label>
-   <select formControlName="tipo" >
-       <option value="">Seleccione un tipo</option>
-       @for (item of tiposDeEvento; track $index) {
-           <option value="{{item}}">{{item}}</option>
+    <div class="col-6">
+        <label class="form-label">Tipo: </label>
+        <select formControlName="tipo" class="form-select" >
+            <option value="">Seleccione un tipo</option>
+            @for (item of tiposDeEvento; track $index) {
+                <option value="{{item}}">{{item}}</option>
         <option value="Cultural">Cultural</option>
         <option value="Concierto">Concierto</option>
         <option value="Teatro">Teatro</option>
         <option value="Deportivo">Deportivo</option>
-    }
-    </select>     
+            }
+        </select>     
     </div>
  
  

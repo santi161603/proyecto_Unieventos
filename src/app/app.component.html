@@ -1,13 +1,6 @@
-<header>
-  <p>Página inicial de {{ title }}</p>
-  <ul>
-    <li><a routerLink="">Inicio</a></li>
-    <li><a routerLink="/login">Login</a></li>
-    <li><a routerLink="/registro">Registro</a></li>
-    <li><a routerLink="/crear-evento">crear-evento</a></li>
- </ul>
- </header>
- <router-outlet></router-outlet>
- <footer>
-  <p>{{ footer }}</p>
- </footer>
+<app-header></app-header>
+<router-outlet></router-outlet>
+<ul>
+  <li><a routerLink="/crear-evento">crear-evento</a></li>
+  </ul>
+<app-footer></app-footer>
