@@ -1,0 +1,15 @@
+img{
+    border-radius: 5%;
+    height: 400px;
+}
+.custom-control .carousel-control-prev-icon,
+.custom-control .carousel-control-next-icon {
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo negro semitransparente */
+  border-radius: 50%; /* Hace que el icono sea circular */
+}
+
+.custom-control:hover .carousel-control-prev-icon,
+.custom-control:hover .carousel-control-next-icon {
+  background-color: rgba(0, 0, 0, 0.8); /* Fondo más oscuro al pasar el mouse */
+}
+  

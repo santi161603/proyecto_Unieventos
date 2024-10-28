@@ -10,7 +10,7 @@ export const routes: Routes = [
    { path: '', component: InicioComponent },
    { path: 'login', component: LoginComponent },
    { path: 'registro', component: RegistroComponent },
-   {path:'crear-evento',component:CrearEventoComponent},
+   { path:'crear-evento',component:CrearEventoComponent},
    { path: "gestion-eventos", component: GestionEventosComponent },
    { path: "**", pathMatch: "full", redirectTo: "" }
 ];
