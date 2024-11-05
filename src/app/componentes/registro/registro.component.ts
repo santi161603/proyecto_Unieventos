@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../servicios/auth.service';
 import { CrearCuentaDTO } from '../../dto/crear-cuenta-dto';
 import Swal from 'sweetalert2';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.css'
 })
@@ -27,11 +28,11 @@ export class RegistroComponent {
       cedula: ['', [Validators.required]],
       nombre: ['', [Validators.required]],
       apellido: ['Perez', [Validators.required]],
-      telefono: ['', [Validators.required, Validators.maxLength(10)]],
+      telefono: this.formBuilder.array([this.crearTelefonoControl()]),
       direccion: ['', [Validators.required]],
       ciudad: ['ARMENIA',[Validators.required,Validators.maxLength(50)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]],
+      contrasena: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]],
       confirmaPassword: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]],
       rol: ['CLIENTE',[Validators.required]],
     },
@@ -40,9 +41,29 @@ export class RegistroComponent {
   );
  }
 
+ private crearTelefonoControl(): FormControl {
+  return this.formBuilder.control('', [Validators.required, Validators.maxLength(10)]);
+}
+
+get telefono(): FormArray {
+  return this.registroForm.get('telefono') as FormArray;
+}
+
+public addTelefono() {
+  this.telefono.push(this.crearTelefonoControl());
+}
+
+public removeTelefono(index: number): void {
+  this.telefono.removeAt(index);
+}
 
   public registrar() {
-    const crearCuenta = this.registroForm.value as CrearCuentaDTO;
+    const crearCuenta = {
+      ...this.registroForm.value,
+      telefono: this.registroForm.value.telefono.map((tel: string) => tel.toString()) // Asegúrate de que son cadenas
+  };
+
+  console.log('Datos a enviar:', crearCuenta);
 
     this.authService.crearCuenta(crearCuenta).subscribe({
       next: (data) => {
