@@ -16,46 +16,30 @@ export class RegistroComponent {
 
   registroForm!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder,private authService: AuthService) { 
+  constructor(private formBuilder: FormBuilder,private authService: AuthService) {
 
     this.crearFormulario();
  }
- 
- 
+
+
   private crearFormulario() {
     this.registroForm = this.formBuilder.group({
       cedula: ['', [Validators.required]],
       nombre: ['', [Validators.required]],
       apellido: ['Perez', [Validators.required]],
-      telefonos: [
-        '', 
-        [
-            Validators.required, 
-            Validators.maxLength(10)
-        ]
-    ],
-      email: ['', [Validators.required, Validators.email]],
+      telefono: ['', [Validators.required, Validators.maxLength(10)]],
       direccion: ['', [Validators.required]],
-      ciudad: [
-        'ARMENIA', 
-        [
-            Validators.required, 
-            Validators.maxLength(50)
-        ]
-    ],
+      ciudad: ['ARMENIA',[Validators.required,Validators.maxLength(50)]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]],
-      rol: [
-    'CLIENTE', 
-    [
-        Validators.required
-    ]
-],
+      confirmaPassword: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]],
+      rol: ['CLIENTE',[Validators.required]],
     },
-    
-    { validators: this.passwordsMatchValidator } 
+
+    { validators: this.passwordsMatchValidator }
   );
  }
- 
+
 
   public registrar() {
     const crearCuenta = this.registroForm.value as CrearCuentaDTO;
@@ -82,17 +66,16 @@ export class RegistroComponent {
 
     }
 
-  
+
  passwordsMatchValidator(formGroup: FormGroup) {
   const password = formGroup.get('password')?.value;
   const confirmaPassword = formGroup.get('confirmaPassword')?.value;
- 
- 
+
+
   // Si las contraseñas no coinciden, devuelve un error, de lo contrario, null
   return true; //password == confirmaPassword ? null : { passwordsMismatch: true };
  }
- 
+
 }
 
 
- 

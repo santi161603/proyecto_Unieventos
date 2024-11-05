@@ -17,11 +17,11 @@ export class AuthService {
  public crearCuenta(cuentaDTO: CrearCuentaDTO): Observable<MensajeDTO> {
   return this.http.post<MensajeDTO>(`${this.authURL}/crear-cuenta`, cuentaDTO);
  }
- 
- 
+
+
  public iniciarSesion(loginDTO: LoginDTO): Observable<MensajeDTO> {
   return this.http.post<MensajeDTO>(`${this.authURL}/iniciar-sesion`, loginDTO);
  }
- 
+
  constructor(private http: HttpClient) { }
 }

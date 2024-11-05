@@ -2,7 +2,7 @@ export interface CrearCuentaDTO {
     cedula: string;
     nombre: string;
     apellido: string;
-    telefono: string[];
+    telefono: string;
     direccion?: string;
     ciudad: String;
     email: string;
