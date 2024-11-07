@@ -7,5 +7,4 @@ export interface CrearCuentaDTO {
     ciudad: String;
     email: string;
     contrasena: string;
-    rol: String;
 }

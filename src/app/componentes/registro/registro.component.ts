@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../servicios/auth.service';
+import { EnumService } from '../../servicios/get-enums.service';
 import { CrearCuentaDTO } from '../../dto/crear-cuenta-dto';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
@@ -16,10 +17,12 @@ import { CommonModule } from '@angular/common';
 export class RegistroComponent {
 
   registroForm!: FormGroup;
+  ciudades: string[] = []; // Lista para almacenar las ciudades
 
-  constructor(private formBuilder: FormBuilder,private authService: AuthService, private router: Router) {
+  constructor(private formBuilder: FormBuilder,private authService: AuthService, private router: Router, private enumService: EnumService) {
 
     this.crearFormulario();
+    this.cargarCiudades();
  }
 
 
@@ -27,14 +30,13 @@ export class RegistroComponent {
     this.registroForm = this.formBuilder.group({
       cedula: ['', [Validators.required]],
       nombre: ['', [Validators.required]],
-      apellido: ['Perez', [Validators.required]],
+      apellido: ['', [Validators.required]],
       telefono: this.formBuilder.array([this.crearTelefonoControl()]),
       direccion: ['', [Validators.required]],
-      ciudad: ['ARMENIA',[Validators.required,Validators.maxLength(50)]],
+      ciudad: ['', [Validators.required]], 
       email: ['', [Validators.required, Validators.email]],
       contrasena: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]],
       confirmaPassword: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]],
-      rol: ['CLIENTE',[Validators.required]],
     },
 
     { validators: this.passwordsMatchValidator }
@@ -57,12 +59,23 @@ public removeTelefono(index: number): void {
   this.telefono.removeAt(index);
 }
 
+private cargarCiudades() {
+  this.enumService.listarCiudades().subscribe({
+    next: (data) => {
+      this.ciudades = data; // Asigna las ciudades obtenidas a la lista
+    },
+    error: (error) => {
+      console.error('Error al obtener ciudades:', error);
+    }
+  });
+}
+
   public registrar() {
     const crearCuenta = {
       ...this.registroForm.value,
       telefono: this.registroForm.value.telefono.map((tel: string) => tel.toString()) // Asegúrate de que son cadenas
 
-  };
+  } as CrearCuentaDTO;
 
   console.log('Datos a enviar:', crearCuenta);
 
@@ -99,7 +112,7 @@ public removeTelefono(index: number): void {
 
 
   // Si las contraseñas no coinciden, devuelve un error, de lo contrario, null
-  return true; //password == confirmaPassword ? null : { passwordsMismatch: true };
+  return password == confirmaPassword ? null : { passwordsMismatch: true };
  }
 
 }

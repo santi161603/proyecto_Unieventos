@@ -21,6 +21,11 @@
            </div>
 
            <div class="col-6">
+            <label class="form-label">apellido: </label>
+            <input type="text" class="form-control" formControlName="apellido" />
+           </div>
+
+           <div class="col-6">
             <label class="form-label">Email: </label>
             <input type="email" class="form-control" formControlName="email" />
           </div>
@@ -28,6 +33,15 @@
            <div class="col-6">
             <label class="form-label">Dirección: </label>
             <input type="text" class="form-control" formControlName="direccion" />
+          </div>
+
+          <div class="col-6">
+            <label class="form-label">Ciudad: </label>
+            <select class="form-control" formControlName="ciudad">
+              <option *ngFor="let ciudad of ciudades" [value]="ciudad">
+                {{ ciudad }}
+              </option>
+            </select>
           </div>
 
           <div formArrayName="telefono">
