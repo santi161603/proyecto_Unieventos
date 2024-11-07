@@ -1,0 +1,13 @@
+<app-header-eventos></app-header-eventos>
+<app-banner></app-banner>
+<app-search></app-search>
+<app-filtros-eventos></app-filtros-eventos>
+
+<div class="event-list">
+    <div *ngFor="let event of filteredEvents" class="event-item">
+      <h3>{{ event.name }}</h3>
+      <p>{{ event.description }}</p>
+      <p>{{ event.date }} - {{ event.city }}</p>
+      <button>Ver más</button>
+    </div>
+  </div>

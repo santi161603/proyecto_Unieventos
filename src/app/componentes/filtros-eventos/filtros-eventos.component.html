@@ -1,0 +1,17 @@
+<div class="filters">
+    <label for="category">Categoría:</label>
+    <select id="category" [(ngModel)]="selectedCategory">
+      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+    </select>
+  
+    <label for="city">Ciudad:</label>
+    <select id="city" [(ngModel)]="selectedCity">
+      <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
+    </select>
+  
+    <label for="date">Fecha:</label>
+    <select id="date" [(ngModel)]="selectedDate">
+      <option *ngFor="let date of dates" [value]="date">{{ date }}</option>
+    </select>
+  </div>
+  
