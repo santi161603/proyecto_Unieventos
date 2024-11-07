@@ -1,0 +1,16 @@
+.banner-container {
+    background-image: url('/assets/banner.jpg'); /* Reemplaza con la ruta de tu imagen */
+    background-size: cover;
+    background-position: center;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  
+  .overlay {
+    background-color: rgba(0, 0, 0, 0.5); /* Oscurece la imagen de fondo */
+    padding: 20px;
+    border-radius: 8px;
+  }
