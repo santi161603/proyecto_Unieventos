@@ -1,1 +1,24 @@
-<app-carousel [images]="businessDetail.images" [id]="'carouselExample'"></app-carousel>
+<app-banner></app-banner> <!-- Banner con título y eslogan -->
+
+<div class="container mt-4">
+  <div class="row">
+
+    <!-- Carrusel de eventos destacados -->
+    <div class="col-md-3">
+      <eventosPorCategoria></eventosPorCategoria>
+    </div>
+
+    <!-- Featured Events Section (Carrusel de eventos destacados) -->
+    <div class="col-md-6">
+      <!-- Aquí va el componente del carrusel ya implementado como <app-carousel> -->
+      <app-carousel [images]="businessDetail.images" [id]="'carouselExample'"></app-carousel>
+    </div>
+
+    <!-- Categories Section -->
+    <div class="col-md-3">
+      <eventosPorCiudad></eventosPorCiudad>
+    </div>
+
+  </div>
+</div>
+

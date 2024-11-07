@@ -1,0 +1,9 @@
+<div class="events-in-your-city">
+    <h5>Eventos en tu ciudad</h5>
+    <div *ngFor="let event of cityEvents" class="event-card mb-3 p-3 border rounded">
+      <h6>{{ event.name }}</h6>
+      <p>{{ event.date }} - {{ event.location }}</p>
+      <a [routerLink]="['/evento', event.id]" class="btn btn-sm btn-primary">Ver más</a>
+    </div>
+  </div>
+  

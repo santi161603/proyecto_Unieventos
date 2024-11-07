@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../servicios/auth.service';
 import { CrearCuentaDTO } from '../../dto/crear-cuenta-dto';
 import Swal from 'sweetalert2';
@@ -17,7 +17,7 @@ export class RegistroComponent {
 
   registroForm!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder,private authService: AuthService) {
+  constructor(private formBuilder: FormBuilder,private authService: AuthService, private router: Router) {
 
     this.crearFormulario();
  }
@@ -61,6 +61,7 @@ public removeTelefono(index: number): void {
     const crearCuenta = {
       ...this.registroForm.value,
       telefono: this.registroForm.value.telefono.map((tel: string) => tel.toString()) // Asegúrate de que son cadenas
+
   };
 
   console.log('Datos a enviar:', crearCuenta);
@@ -72,7 +73,11 @@ public removeTelefono(index: number): void {
           text: 'La cuenta se ha creado correctamente',
           icon: 'success',
           confirmButtonText: 'Aceptar'
-        })
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.router.navigate(['/verificacion-codigo']); // Redirección
+          }
+        });
       },
       error: (error) => {
         Swal.fire({
