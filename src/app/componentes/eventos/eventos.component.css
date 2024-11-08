@@ -1,0 +1,68 @@
+/* Banner */
+.banner {
+    text-align: center;
+    background-image: url('https://png.pngtree.com/background/20210711/original/pngtree-purple-beautiful-romantic-cool-fresh-banner-background-picture-image_1084967.jpg'); /* Cambia la URL según la ubicación de la imagen de fondo */
+    background-size: cover;
+    padding: 20px;
+    color: white;
+  }
+  
+  .banner h1 {
+    font-size: 3em;
+    margin: 0;
+  }
+  
+  .banner p {
+    font-size: 1.2em;
+    margin: 5px 0;
+  }
+  
+  /* Filtros */
+  app-filtros-eventos {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+  }
+  
+  /* Lista de eventos */
+  .event-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 0 20px;
+  }
+  
+  .event-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    padding: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  .event-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  
+  .event-item h3 {
+    font-size: 1.1em;
+    margin: 10px 0;
+  }
+  
+  .event-item button {
+    background-color: #4CAF50; /* Cambia el color según tus necesidades */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .event-item button:hover {
+    background-color: #45a049;
+  }
+  

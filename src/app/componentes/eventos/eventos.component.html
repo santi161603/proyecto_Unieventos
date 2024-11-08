@@ -1,21 +1,26 @@
 
-<app-banner></app-banner>
-<app-search></app-search>
-
-<app-filtros-eventos
-  [selectedCategory]="categoria"
-  [selectedCity]="ciudad"
-  [selectedDate]="fecha"
-  (categoryChange)="onCategoriaChange($event)"
-  (cityChange)="onCiudadChange($event)"
-  (dateChange)="onDateChange($event)">
-</app-filtros-eventos>
-
-<div class="event-list">
-  <div *ngFor="let event of filteredEvents" class="event-item">
-    <h3>{{ event.nombre }}</h3>
-    <p>{{ event.descripcion }}</p>
-    <p>{{ event.fecha }} - {{ event.ciudad }}</p>
-    <button>Ver más</button>
+<div class="banner">
+    <h1>UNIEVENTOS</h1>
+    <p>Descubre los Mejores Eventos en Colombia</p>
   </div>
-</div>
+  
+  <app-search></app-search>
+  
+  <app-filtros-eventos
+    [selectedCategory]="categoria"
+    [selectedCity]="ciudad"
+    [selectedDate]="fecha"
+    (categoryChange)="onCategoriaChange($event)"
+    (cityChange)="onCiudadChange($event)"
+    (dateChange)="onDateChange($event)">
+  </app-filtros-eventos>
+  
+  <div class="event-list">
+    <div *ngFor="let event of filteredEvents" class="event-item">
+      
+      <h3>{{ event.nombre }}</h3>
+      <p>Información del evento</p>
+      <button>Comprar entrada</button>
+    </div>
+  </div>
+  
