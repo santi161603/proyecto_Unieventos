@@ -16,10 +16,11 @@ import { BannerComponent } from "../banner/banner.component";
 export class InicioComponent {
   businessDetail:any={
     images: [
-      "https://picsum.photos/1000?random=2",
-      "https://picsum.photos/1000?random=1",
+      "https://firebasestorage.googleapis.com/v0/b/unieventos-d397d.appspot.com/o/f8cca7dd-395f-40c8-ae39-6855add8dc0d-evento.jpg?alt=media&token=bb1dcccc-fa10-4a87-a0b3-c6ba1773e599",
+      "https://aguacatec.es/wp-content/uploads/2023/10/e5a978b8-6772-4c85-a50e-15581af7d483.png",
       "https://picsum.photos/1000?random=3"
       ]
   };
   myImages: string = 'carouselExample';
+
 }

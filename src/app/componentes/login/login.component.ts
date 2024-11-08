@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
 export class LoginComponent {
   loginForm!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder,private auth :AuthService, private tokenService: TokenService ) { 
+  constructor(private formBuilder: FormBuilder,private auth :AuthService, private tokenService: TokenService ) {
     this.crearFormulario();
   }
 
@@ -30,14 +30,13 @@ export class LoginComponent {
 
   public login() {
 
-
     const loginDTO = this.loginForm.value as LoginDTO;
-   
-   
+
+
     this.auth.iniciarSesion(loginDTO).subscribe({
       next: (data) => {
         this.tokenService.login(data.respuesta.token);
-        
+
       },
       error: (error) => {
         Swal.fire({
@@ -47,8 +46,8 @@ export class LoginComponent {
         });
       },
     });
-   
-   
+
+
    }
-   
+
 }

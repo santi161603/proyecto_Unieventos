@@ -20,6 +20,9 @@ export class EventosPorCategoriasComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  private getEvent(){
+
+  }
 
 
 }
