@@ -1,0 +1,82 @@
+.detalle-evento-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .evento-imagen-descripcion {
+    display: flex;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .evento-imagen {
+    width: 40%;
+    height: auto;
+    margin-right: 20px;
+  }
+  
+  .evento-descripcion {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .evento-detalles {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .evento-fechas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20%;
+  }
+  
+  .fecha {
+    text-align: center;
+    margin: 5px;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 5px;
+  }
+  
+  .evento-info-general {
+    width: 50%;
+  }
+  
+  .evento-mapa .mapa-imagen {
+    width: 100%;
+    max-width: 150px;
+    border-radius: 10px;
+  }
+  
+  .evento-localidades {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .evento-localidades table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .evento-localidades th, .evento-localidades td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .evento-acciones {
+    margin-top: 20px;
+  }
+  
+  .btn-comprar, .btn-añadir-carrito {
+    margin: 10px;
+    padding: 10px 20px;
+    font-weight: bold;
+  }
+  

@@ -1,1 +1,60 @@
-<p>{{evento | json}}</p>
+<div class="detalle-evento-container" *ngIf="evento">
+    <!-- Imagen de portada y descripción -->
+    <div class="evento-imagen-descripcion">
+      <img [src]="evento.imagenPortada" alt="Imagen del evento" class="evento-imagen">
+      <div class="evento-descripcion">
+        <h1>{{ evento.nombre }}</h1>
+        <p>{{ evento.descripcion }}</p>
+      </div>
+    </div>
+  
+    <!-- Información General del Evento -->
+    <div class="evento-detalles">
+      <div class="evento-fechas">
+        <div class="fecha">
+          <span class="dia">{{ evento.fecha | date: 'EEE' | uppercase }}</span>
+          <span class="fecha-numero">{{ evento.fecha | date: 'dd' }}</span>
+          <span class="mes-anio">{{ evento.fecha | date: 'MMM yyyy' | uppercase }}</span>
+          <span class="hora">{{ evento.fecha | date: 'shortTime' }}</span>
+        </div>
+      </div>
+      <div class="evento-info-general">
+        <h2>INFORMACIÓN GENERAL</h2>
+        <p><strong>Tipo:</strong> {{ evento.tipo }}</p>
+        <p><strong>Lugar:</strong> {{ evento.direccion }}</p>
+        <p><strong>Ciudad:</strong> {{ evento.ciudad }}</p>
+        <p><strong>Estado:</strong> {{ evento.estado }}</p>
+      </div>
+      <div class="evento-mapa">
+        <img [src]="evento.imagenLocalidades" alt="Mapa del lugar" class="mapa-imagen">
+      </div>
+    </div>
+  
+    <!-- Localidades del Evento -->
+    <div class="evento-localidades">
+      <h2>Localidades</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Capacidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let localidad of evento.localidades">
+            <td>{{ localidad.nombre }}</td>
+            <td>{{ localidad.precio | currency }}</td>
+            <td>{{ localidad.capacidad }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Botones de acción -->
+    <div class="evento-acciones">
+      <button class="btn-comprar">COMPRAR ENTRADA</button>
+      <button class="btn-añadir-carrito">AÑADIR A CARRITO</button>
+    </div>
+  </div>
+  
