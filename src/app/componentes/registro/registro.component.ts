@@ -33,7 +33,7 @@ export class RegistroComponent {
       apellido: ['', [Validators.required]],
       telefono: this.formBuilder.array([this.crearTelefonoControl()]),
       direccion: ['', [Validators.required]],
-      ciudad: ['', [Validators.required]], 
+      ciudad: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       contrasena: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]],
       confirmaPassword: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]],
@@ -88,7 +88,8 @@ private cargarCiudades() {
           confirmButtonText: 'Aceptar'
         }).then((result) => {
           if (result.isConfirmed) {
-            this.router.navigate(['/verificacion-codigo']); // Redirección
+            const idUsuario = data.respuesta;
+            this.router.navigate(['/verificacion-codigo', idUsuario]); // Redirección
           }
         });
       },
@@ -107,9 +108,8 @@ private cargarCiudades() {
 
 
  passwordsMatchValidator(formGroup: FormGroup) {
-  const password = formGroup.get('password')?.value;
+  const password = formGroup.get('contrasena')?.value;
   const confirmaPassword = formGroup.get('confirmaPassword')?.value;
-
 
   // Si las contraseñas no coinciden, devuelve un error, de lo contrario, null
   return password == confirmaPassword ? null : { passwordsMismatch: true };

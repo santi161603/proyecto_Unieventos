@@ -18,5 +18,15 @@ export class AuthService {
   return this.http.post<MensajeDTO>(`${this.authURL}/crear-cuenta`, cuentaDTO);
  }
 
+ public activarCuenta(idUsuario: string, codigo: number): Observable<MensajeDTO> {
+  return this.http.put<MensajeDTO>(`${this.authURL}/activar-cuenta/${idUsuario}`, {
+    codigo:codigo
+  });
+}
+
+public reenviarToken(idUsuario: string): Observable<MensajeDTO> {
+  return this.http.put<MensajeDTO>(`${this.authURL}/reenviar-token/${idUsuario}`, {});
+}
+
  constructor(private http: HttpClient) { }
 }

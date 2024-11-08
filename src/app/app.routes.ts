@@ -13,8 +13,8 @@ export const routes: Routes = [
    { path: '', component: InicioComponent },
    { path: 'login', component: LoginComponent },
    { path: 'registro', component: RegistroComponent },
-   { path: 'verificacion-codigo', component: VerificacionCodigoComponent},
-   { path: 'crear-evento',component:CrearEventoComponent},
+   { path: 'verificacion-codigo/:idUsuario', component: VerificacionCodigoComponent},
+   { path:'crear-evento',component:CrearEventoComponent},
    { path: "gestion-eventos", component: GestionEventosComponent },
    { path: "eventos", component: EventosComponent},
    { path: "**", pathMatch: "full", redirectTo: "" }
