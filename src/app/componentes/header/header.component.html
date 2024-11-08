@@ -1,26 +1,41 @@
 <div class="container">
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3">
-      <div class="col-md-3 mb-2 mb-md-0">
-        <a routerLink="" class="d-inline-flex link-body-emphasis text-decoration-none align-items-center">
-          <i class="fa-solid fa-ticket fs-3"></i>
-          <span class="fs-4 ms-3 me-3">{{title}}</span>
-        </a>
-      </div>
-   
-                                                                                    
-      <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li><a routerLink="" class="nav-link px-2 link-secondary">Inicio</a></li>
-        <li><a routerLink="/eventos" class="nav-link px-2">eventos</a></li>
-        <!--@if ( rol == "ADMIN" ) {-->
-          <li><a routerLink="/gestion-eventos" class="nav-link px-2">Gestión de eventos</a></li>
-        <!--}-->
-        <li><a routerLink="" class="nav-link px-2">Historial de eventos</a></li>
-      </ul>
-   
-   
-      <div class="col-md-3 text-end">
-        <button type="button" routerLink="/login" class="btn btn-outline-primary me-2">Login</button>
-        <button type="button" routerLink="/registro" class="btn btn-primary">Registro</button>
-      </div>
-    </header>
-   </div>
+  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3">
+    
+    <div class="col-md-3 mb-2 mb-md-0">
+      <a routerLink="/" class="d-inline-flex link-body-emphasis text-decoration-none align-items-center">
+        <i class="fa-solid fa-ticket fs-3"></i>
+        <span class="fs-4 ms-3 me-3">{{title}}</span>
+      </a>
+    </div>
+
+    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+      <!-- Mostrar el enlace de Inicio solo si inicioButton es verdadero -->
+      <li *ngIf="inicioButton">
+        <a routerLink="/" class="nav-link px-2 link-secondary">Inicio</a>
+      </li>
+
+      <!-- Mostrar el enlace de Eventos solo si eventos es verdadero -->
+      <li *ngIf="Eventos">
+        <a routerLink="/eventos" class="nav-link px-2">Eventos</a>
+      </li>
+
+      <!-- Mostrar el enlace de Gestión de eventos solo si gestionEventos es verdadero -->
+      <li *ngIf="gestionEventos">
+        <a routerLink="/gestion-eventos" class="nav-link px-2">Gestión de eventos</a>
+      </li>
+
+      <!-- Mostrar el enlace de Historial de eventos solo si historialEventos es verdadero -->
+      <li *ngIf="historialEventos">
+        <a routerLink="/historial" class="nav-link px-2">Historial de eventos</a>
+      </li>
+    </ul>
+
+    <div class="col-md-3 text-end">
+      <!-- Mostrar el botón de Login solo si loginButton es verdadero -->
+      <button *ngIf="loginButton" type="button" routerLink="/login" class="btn btn-outline-primary me-2">Login</button>
+
+      <!-- Mostrar el botón de Registro solo si registroButton es verdadero -->
+      <button *ngIf="registroButton" type="button" routerLink="/registro" class="btn btn-primary">Registro</button>
+    </div>
+  </header>
+</div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -9,6 +9,13 @@ import { RouterModule } from '@angular/router';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
+  @Input() loginButton: boolean = false;
+  @Input() registroButton: boolean = false;
+  @Input() historialEventos: boolean = false;
+  @Input() gestionEventos: boolean = false;
+  @Input() Eventos: boolean = false;
+  @Input() inicioButton: boolean = false;
+
   title="Unieventos";
   rol= "ADMIN";
 }
