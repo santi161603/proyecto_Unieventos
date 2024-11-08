@@ -6,7 +6,7 @@ import { EventoDTO } from '../dto/evento-dto';
  providedIn: 'root'
 })
 export class EventosService {
-
+/*
 
  eventos:EventoDTO [];
 
@@ -69,8 +69,8 @@ export class EventosService {
     imagenLocalidades:'https://picsum.photos/100',
     estado:'Activo'
   });
- 
- 
+
+
   this.eventos.push({
     id:'2',
     nombre:'Evento 2',
@@ -84,8 +84,8 @@ export class EventosService {
     imagenLocalidades:'https://picsum.photos/100',
     estado:'Activo'
   });
- 
- 
+
+
   this.eventos.push({
     id:'3',
     nombre:'Evento 3',
@@ -100,7 +100,7 @@ export class EventosService {
     estado:'Activo'
   });
  }
- 
+ */
 
 }
 

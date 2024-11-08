@@ -11,7 +11,6 @@ import { LoginDTO } from '../dto/login-dto';
 })
 export class AuthService {
 
-
  private authURL = "http://localhost:8081/servicios/cuenta-no-autenticada";
 
  public crearCuenta(cuentaDTO: CrearCuentaDTO): Observable<MensajeDTO> {

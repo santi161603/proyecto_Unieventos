@@ -15,4 +15,12 @@ export class EnumService {
   public listarCiudades(): Observable<string[]> {
     return this.http.get<string[]>(`${this.publicoURL}/get-ciudades`);
   }
+
+  public listarTipoEvento(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.publicoURL}/get-tipo-evento`);
+  }
+
+  public listarEstadoCuenta(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.publicoURL}/get-estado-cuenta`);
+  }
 }

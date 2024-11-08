@@ -1,54 +1,56 @@
-<form >
-    <div>
-        <label>Nombre: </label>
-        <input type="text" formControlName="nombre"/>
+<form [formGroup]="crearEventoForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="nombre">Nombre del evento</label>
+    <input id="nombre" formControlName="nombre" type="text" />
+    <div *ngIf="crearEventoForm.get('nombre')?.invalid && crearEventoForm.get('nombre')?.touched">
+      Nombre es obligatorio y debe tener máximo 50 caracteres.
     </div>
- 
- 
-    <div>
-        <label>Descripción: </label>
-        <textarea ></textarea>   
+  </div>
+
+  <div>
+    <label for="descripcion">Descripción</label>
+    <textarea id="descripcion" formControlName="descripcion"></textarea>
+    <div *ngIf="crearEventoForm.get('descripcion')?.invalid && crearEventoForm.get('descripcion')?.touched">
+      Descripción es obligatoria y debe tener máximo 700 caracteres.
     </div>
- 
- 
-    <div class="col-6">
-        <label class="form-label">Tipo: </label>
-        <select formControlName="tipo" class="form-select" >
-            <option value="">Seleccione un tipo</option>
-            @for (item of tiposDeEvento; track $index) {
-                <option value="{{item}}">{{item}}</option>
-        <option value="Cultural">Cultural</option>
-        <option value="Concierto">Concierto</option>
-        <option value="Teatro">Teatro</option>
-        <option value="Deportivo">Deportivo</option>
-            }
-        </select>     
+  </div>
+
+  <div>
+    <label for="tipoEvento">Tipo de Evento</label>
+    <select id="tipoEvento" formControlName="tipoEvento">
+      <option *ngFor="let tipo of tipoEventoEnum" [value]="tipo">{{ tipo }}</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="estadoEvento">Estado del Evento</label>
+    <select id="estadoEvento" formControlName="estadoEvento">
+      <option *ngFor="let estado of estadoCuentaEnum" [value]="estado">{{ estado }}</option>
+    </select>
+  </div>
+
+  <div formArrayName="subEventos">
+    <h4>Subeventos</h4>
+    <div *ngFor="let subEvento of subEventos.controls; let i = index" [formGroupName]="i">
+      <label>Fecha del evento</label>
+      <input type="date" formControlName="fechaEvento" />
+
+      <label>Localidad</label>
+      <input type="text" formControlName="localidad" />
+
+      <label>Hora del evento</label>
+      <input type="time" formControlName="horaEvento" />
+
+      <label>Cantidad de Entradas</label>
+      <input type="number" formControlName="cantidadEntradas" />
+
+      <label>Precio de la Entrada</label>
+      <input type="number" formControlName="precioEntrada" />
+
+      <button type="button" (click)="eliminarSubEvento(i)">Eliminar SubEvento</button>
     </div>
- 
- 
-    <div>
-        <label>Dirección: </label>
-        <input type="text" formControlName="direccion"/>
-    </div>
- 
- 
-    <div>
-        <label>Ciudad: </label>
-        <input type="text" formControlName="ciudad"/>
-    </div>
- 
- 
-    <div>
-        <label>Imagen evento: </label>
-        <input type="file" (change)="onFileChange($event, 'portada')" />   
-    </div>
- 
- 
-    <div>
-        <label>Imagen localidades: </label>
-        <input type="file" (change)="onFileChange($event, 'localidades')" />
-    </div>
- 
- 
-    <button type="submit" >Crear evento</button>
- </form>
+    <button type="button" (click)="agregarSubEvento()">Agregar SubEvento</button>
+  </div>
+
+  <button type="submit">Crear Evento</button>
+</form>

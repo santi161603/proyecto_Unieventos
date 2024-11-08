@@ -19,11 +19,11 @@ export class GestionEventosComponent {
   textoBtnEliminar: string;
 
   constructor(public eventosService:EventosService) {
-    this.eventos = eventosService.listar();
+    this.eventos = [];
     this.seleccionados=[];
     this.textoBtnEliminar="";
   }
-  
+
   public seleccionar(evento: EventoDTO, estado: boolean) {
     if (estado) {
       this.seleccionados.push(evento);
@@ -32,7 +32,7 @@ export class GestionEventosComponent {
     }
     this.actualizarMensaje();
    }
-   
+
    private actualizarMensaje() {
     const tam = this.seleccionados.length;
     if (tam != 0) {
@@ -62,12 +62,12 @@ export class GestionEventosComponent {
    }
    public eliminarEventos() {
     this.seleccionados.forEach(e1 => {
-      this.eventosService.eliminar(e1.id);
-      this.eventos = this.eventos.filter(e2 => e2.id !== e1.id);
+      //this.eventosService.eliminar(e1.id);
+    //  this.eventos = this.eventos.filter(e2 => e2.id !== e1.id);
     });
     this.seleccionados = [];
     this.actualizarMensaje();
    }
-   
-   
+
+
 }
