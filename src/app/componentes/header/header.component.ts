@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { TokenService } from '../../servicios/token.service';
 
 @Component({
   selector: 'app-header',
@@ -9,13 +10,15 @@ import { RouterModule } from '@angular/router';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  @Input() loginButton: boolean = false;
-  @Input() registroButton: boolean = false;
-  @Input() historialEventos: boolean = false;
-  @Input() gestionEventos: boolean = false;
-  @Input() Eventos: boolean = false;
-  @Input() inicioButton: boolean = false;
 
   title="Unieventos";
-  rol= "ADMIN";
+  rol: string = "";
+
+  constructor(private tokenService: TokenService ) {
+    this.getRolUser;
+  }
+
+  private getRolUser(){
+    this.rol = this.tokenService.getRol();
+  }
 }
