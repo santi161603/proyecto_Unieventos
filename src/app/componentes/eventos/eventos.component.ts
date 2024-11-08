@@ -8,9 +8,9 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-eventos',
   standalone: true,
-  imports: [HeaderEventosComponent, BannerComponent, SearchComponent, FiltrosEventosComponent, CommonModule],
+  imports: [CommonModule, HeaderEventosComponent, BannerComponent, SearchComponent, FiltrosEventosComponent],
   templateUrl: './eventos.component.html',
-  styleUrl: './eventos.component.css'
+  styleUrls: ['./eventos.component.css']
 })
 export class EventosComponent {
   eventos = [
@@ -19,21 +19,44 @@ export class EventosComponent {
     { nombre: 'Maratón de la ciudad', descripcion: 'Un evento deportivo con miles de participantes', categoria: 'Deportes', ciudad: 'Cali', fecha: 'Próximamente' },
   ];
 
+  filteredEvents = [...this.eventos];
+
   // Filtros
   nombreEvento: string = '';
   categoria: string = '';
   ciudad: string = '';
   fecha: string = '';
 
+  // Filtrar eventos con los criterios
   filtrarEventos() {
-    // Filtrar los eventos por los valores de los filtros
-    this.eventos = this.eventos.filter(evento => {
+    this.filteredEvents = this.eventos.filter(evento => {
       return (
         (this.nombreEvento ? evento.nombre.toLowerCase().includes(this.nombreEvento.toLowerCase()) : true) &&
-        (this.categoria ? evento.categoria === this.categoria : true) &&
-        (this.ciudad ? evento.ciudad === this.ciudad : true) &&
-        (this.fecha ? evento.fecha === this.fecha : true)
+        (this.categoria ? evento.categoria.toLowerCase() === this.categoria.toLowerCase() : true) &&
+        (this.ciudad ? evento.ciudad.toLowerCase() === this.ciudad.toLowerCase() : true) &&
+        (this.fecha ? evento.fecha.toLowerCase() === this.fecha.toLowerCase() : true)
       );
     });
+  }
+
+  // Métodos para manejar los cambios de filtros
+  onNombreEventoChange(nombre: string) {
+    this.nombreEvento = nombre;
+    this.filtrarEventos();
+  }
+
+  onCategoriaChange(categoria: string) {
+    this.categoria = categoria;
+    this.filtrarEventos();
+  }
+
+  onCiudadChange(ciudad: string) {
+    this.ciudad = ciudad;
+    this.filtrarEventos();
+  }
+
+  onDateChange(fecha: string) {
+    this.fecha = fecha;
+    this.filtrarEventos();
   }
 }
