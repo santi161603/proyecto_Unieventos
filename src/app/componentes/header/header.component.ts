@@ -40,6 +40,11 @@ export class HeaderComponent {
     })
   }
 
+  cerrarSesion() {
+    console.log("Sesión cerrada");
+    // Lógica adicional para cerrar sesión
+  }
+
   ngOnDestroy(): void {
     // Nos desuscribimos para evitar fugas de memoria
     if (this.rolSubscription) {

@@ -15,9 +15,15 @@
     <div class="col-md-3 text-end">
       <!-- Mostrar la imagen de perfil si está logueado -->
       <ng-container *ngIf="isLogger; else loginButtons">
-        <a routerLink="/perfil" class="d-inline-block">
-          <img [src]="userProfileImage" alt="Foto de perfil" class="rounded-circle profile-image">
-        </a>
+        <div class="dropdown">
+          <a class="d-inline-block" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            <img [src]="userProfileImage" alt="Foto de perfil" class="rounded-circle profile-image">
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+           <!-- <li><a class="dropdown-item" routerLink="/perfil">Configurar cuenta</a></li> -->
+            <li><a class="dropdown-item" (click)="cerrarSesion()">Cerrar sesión</a></li>
+          </ul>
+        </div>
       </ng-container>
 
       <!-- Mostrar botones de login y registro si no está logueado -->

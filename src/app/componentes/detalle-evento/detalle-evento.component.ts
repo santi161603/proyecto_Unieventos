@@ -18,14 +18,14 @@ export class DetalleEventoComponent {
   constructor(private route: ActivatedRoute, private eventosService: EventosService) {
     this.route.params.subscribe((params) => {
       this.codigoEvento = params['id'];
-      this.obtenerEvento();
+      //this.obtenerEvento();
     });
   }
 
-  public obtenerEvento() {
+  /*public obtenerEvento() {
     const eventoConsultado = this.eventosService.obtener(this.codigoEvento);
     if (eventoConsultado != undefined) {
       this.evento = eventoConsultado;
     }
-  }
+  }*/
 }
