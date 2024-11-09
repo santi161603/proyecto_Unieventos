@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { HeaderEventosComponent } from '../header-eventos/header-eventos.component';
 import { BannerComponent } from '../banner/banner.component';
 import { SearchComponent } from "../search/search.component";
 import { FiltrosEventosComponent } from "../filtros-eventos/filtros-eventos.component";
@@ -8,7 +7,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-eventos',
   standalone: true,
-  imports: [CommonModule, HeaderEventosComponent, BannerComponent, SearchComponent, FiltrosEventosComponent],
+  imports: [CommonModule, BannerComponent, SearchComponent, FiltrosEventosComponent],
   templateUrl: './eventos.component.html',
   styleUrls: ['./eventos.component.css']
 })

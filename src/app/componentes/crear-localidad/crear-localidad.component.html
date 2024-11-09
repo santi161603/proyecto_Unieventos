@@ -1,0 +1,67 @@
+<form [formGroup]="crearLocalidadForm" (ngSubmit)="onSubmit()" class="container mt-5">
+    <div class="mb-3 row">
+        <label for="nombreLocalidad" class="col-sm-2 col-form-label">Nombre de la Localidad</label>
+        <div class="col-sm-10">
+            <input id="nombreLocalidad" formControlName="nombreLocalidad" type="text" class="form-control" />
+            <div *ngIf="crearLocalidadForm.get('nombreLocalidad')?.invalid && crearLocalidadForm.get('nombreLocalidad')?.touched" class="text-danger">
+                El nombre de la localidad es obligatorio y debe tener máximo 50 caracteres.
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <label for="direccion" class="col-sm-2 col-form-label">Dirección</label>
+        <div class="col-sm-10">
+            <input id="direccion" formControlName="direccion" type="text" class="form-control" />
+            <div *ngIf="crearLocalidadForm.get('direccion')?.invalid && crearLocalidadForm.get('direccion')?.touched" class="text-danger">
+                La dirección es obligatoria.
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <label for="ciudad" class="col-sm-2 col-form-label">Ciudad</label>
+        <div class="col-sm-10">
+            <input id="ciudad" formControlName="ciudad" type="text" class="form-control" />
+            <div *ngIf="crearLocalidadForm.get('ciudad')?.invalid && crearLocalidadForm.get('ciudad')?.touched" class="text-danger">
+                La ciudad es obligatoria.
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <label for="tipoLocalidad" class="col-sm-2 col-form-label">Tipo de Localidad</label>
+        <div class="col-sm-10">
+            <input id="tipoLocalidad" formControlName="tipoLocalidad" type="text" class="form-control" />
+            <div *ngIf="crearLocalidadForm.get('tipoLocalidad')?.invalid && crearLocalidadForm.get('tipoLocalidad')?.touched" class="text-danger">
+                El tipo de localidad es obligatorio.
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <label for="capacidadMaxima" class="col-sm-2 col-form-label">Capacidad Máxima</label>
+        <div class="col-sm-10">
+            <input id="capacidadMaxima" formControlName="capacidadMaxima" type="number" class="form-control" />
+            <div *ngIf="crearLocalidadForm.get('capacidadMaxima')?.invalid && crearLocalidadForm.get('capacidadMaxima')?.touched" class="text-danger">
+                La capacidad máxima es obligatoria y debe ser un número positivo.
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <label for="capacidadDisponible" class="col-sm-2 col-form-label">Capacidad Disponible</label>
+        <div class="col-sm-10">
+            <input id="capacidadDisponible" formControlName="capacidadDisponible" type="number" class="form-control" />
+            <div *ngIf="crearLocalidadForm.get('capacidadDisponible')?.invalid && crearLocalidadForm.get('capacidadDisponible')?.touched" class="text-danger">
+                La capacidad disponible es obligatoria y debe ser un número positivo.
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <div class="col-sm-10 offset-sm-2">
+            <button type="submit" class="btn btn-primary">Crear Localidad</button>
+        </div>
+    </div>
+</form>

@@ -7,6 +7,8 @@ import { GestionEventosComponent } from './componentes/gestion-eventos/gestion-e
 import { VerificacionCodigoComponent } from './componentes/verificacion-codigo/verificacion-codigo.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { CrearLocalidadComponent } from './componentes/crear-localidad/crear-localidad.component';
+import { GestionLocalidadesComponent } from './componentes/gestionar-localidades/gestionar-localidades.component';
 import { EventosComponent } from './componentes/eventos/eventos.component';
 
 export const routes: Routes = [
@@ -15,7 +17,9 @@ export const routes: Routes = [
    { path: 'registro', component: RegistroComponent },
    { path: 'verificacion-codigo/:idUsuario', component: VerificacionCodigoComponent},
    { path:'crear-evento',component:CrearEventoComponent},
+   { path: 'crear-localidad', component:CrearLocalidadComponent},
    { path: "gestion-eventos", component: GestionEventosComponent },
+   { path: "gestion-localidad", component: GestionLocalidadesComponent},
    { path: "eventos", component: EventosComponent},
    { path: "**", pathMatch: "full", redirectTo: "" }
 ];
