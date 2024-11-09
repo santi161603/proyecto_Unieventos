@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../servicios/auth.service';
+import { ClientService } from '../../servicios/auth.service';
 import { EnumService } from '../../servicios/get-enums.service';
 import { CrearCuentaDTO } from '../../dto/crear-cuenta-dto';
 import Swal from 'sweetalert2';
@@ -19,7 +19,7 @@ export class RegistroComponent {
   registroForm!: FormGroup;
   ciudades: string[] = []; // Lista para almacenar las ciudades
 
-  constructor(private formBuilder: FormBuilder,private authService: AuthService, private router: Router, private enumService: EnumService) {
+  constructor(private formBuilder: FormBuilder,private authService: ClientService, private router: Router, private enumService: EnumService) {
 
     this.crearFormulario();
     this.cargarCiudades();

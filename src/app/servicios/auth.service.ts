@@ -9,7 +9,7 @@ import { LoginDTO } from '../dto/login-dto';
 @Injectable({
  providedIn: 'root'
 })
-export class AuthService {
+export class ClientService {
 
  private authURL = "http://localhost:8081/servicios/cuenta-no-autenticada";
 
@@ -25,6 +25,10 @@ export class AuthService {
 
 public reenviarToken(idUsuario: string): Observable<MensajeDTO> {
   return this.http.put<MensajeDTO>(`${this.authURL}/reenviar-token/${idUsuario}`, {});
+}
+
+public obtenerTodosLosEventos(): Observable<MensajeDTO> {
+  return this.http.get<MensajeDTO>(`${this.authURL}/obtener-todos-eventos`)
 }
 
  constructor(private http: HttpClient) { }

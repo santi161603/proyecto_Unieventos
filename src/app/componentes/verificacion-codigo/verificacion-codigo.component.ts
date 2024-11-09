@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
-import { AuthService } from '../../servicios/auth.service'; // Asegúrate de importar el servicio
+import { ClientService } from '../../servicios/auth.service'; // Asegúrate de importar el servicio
 import { MensajeDTO } from '../../dto/mensaje-dto'; // Si es necesario importar DTO
 
 @Component({
@@ -17,7 +17,7 @@ export class VerificacionCodigoComponent {
   codigoForm: FormGroup;
   idUsuario!: string;
 
-  constructor(private formBuilder: FormBuilder, private router: Router,private authService: AuthService, private route: ActivatedRoute,) {
+  constructor(private formBuilder: FormBuilder, private router: Router,private authService: ClientService, private route: ActivatedRoute,) {
     this.codigoForm = this.formBuilder.group({
       codigo: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4)]],
     });
