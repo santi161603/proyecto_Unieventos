@@ -1,40 +1,45 @@
 <div class="container">
-  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3">
+  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-3 border-bottom">
     <div class="col-md-3 mb-2 mb-md-0">
-      <a routerLink="" class="d-inline-flex link-body-emphasis text-decoration-none align-items-center">
-        <i class="fa-solid fa-ticket fs-3"></i>
+      <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none align-items-center">
+        <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+          <use xlink:href="#bootstrap"></use>
+        </svg>
         <span class="fs-4 ms-3 me-3">{{ title }}</span>
       </a>
     </div>
 
     <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-      <li><a routerLink="" class="nav-link px-2 link-secondary">Inicio</a></li>
-      <li><a routerLink="/eventos" class="nav-link px-2">Eventos</a></li>
+      <li><a href="#" class="nav-link px-2 link-secondary">Overview</a></li>
+      <li><a href="#" class="nav-link px-2 link-body-emphasis">Inventory</a></li>
+      <li><a href="#" class="nav-link px-2 link-body-emphasis">Customers</a></li>
+      <li><a href="#" class="nav-link px-2 link-body-emphasis">Products</a></li>
     </ul>
 
     <div class="col-md-3 text-end">
-      <!-- Mostrar la imagen de perfil si está logueado -->
+      <form class="d-inline-block" role="search">
+        <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+      </form>
+
       <ng-container *ngIf="isLogger; else loginButtons">
         <div class="dropdown">
-          <a class="d-inline-block" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+          <a href="#" class="d-inline-block" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
             <img [src]="userProfileImage" alt="Foto de perfil" class="rounded-circle profile-image">
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-           <!-- <li><a class="dropdown-item" routerLink="/perfil">Configurar cuenta</a></li> -->
-           <li *ngIf="rol === 'ADMINISTRADOR'">
-            <a class="dropdown-item" routerLink="/gestion-eventos">Gestión de Eventos</a>
-            <a class="dropdown-item" routerLink="/gestion-localidad">Gestionar Localidades</a>
-          </li>
-           <li><a class="dropdown-item" routerLink="/perfil">Configurar cuenta</a></li>
+            <li *ngIf="rol === 'ADMINISTRADOR'">
+              <a class="dropdown-item" href="/gestion-eventos">Gestión de Eventos</a>
+              <a class="dropdown-item" href="/gestion-localidad">Gestionar Localidades</a>
+            </li>
+            <li><a class="dropdown-item" href="/perfil">Configurar cuenta</a></li>
             <li><a class="dropdown-item" (click)="cerrarSesion()">Cerrar sesión</a></li>
           </ul>
         </div>
       </ng-container>
 
-      <!-- Mostrar botones de login y registro si no está logueado -->
       <ng-template #loginButtons>
-        <button type="button" routerLink="/login" class="btn btn-outline-primary me-2">Login</button>
-        <button type="button" routerLink="/registro" class="btn btn-primary">Registro</button>
+        <button type="button" class="btn btn-outline-primary me-2" routerLink="/login">Login</button>
+        <button type="button" class="btn btn-primary" routerLink="/registro">Registro</button>
       </ng-template>
     </div>
   </header>

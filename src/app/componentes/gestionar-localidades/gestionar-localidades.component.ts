@@ -3,11 +3,12 @@ import { RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AdministradorService } from '../../servicios/administrador.service';
 import { LocalidadDTO } from '../../dto/localidad-dto';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-gestion-localidades',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, CommonModule],
   templateUrl: './gestionar-localidades.component.html',
   styleUrls: ['./gestionar-localidades.component.css']
 })
@@ -63,5 +64,8 @@ export class GestionLocalidadesComponent {
     });
     this.seleccionadas = [];
     this.actualizarMensaje();
+  }
+  trackByIndex(index: number, item: LocalidadDTO): number {
+    return index;
   }
 }
