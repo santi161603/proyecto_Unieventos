@@ -64,8 +64,8 @@ public enviarTokenRecuperacion(correo: CorreoDTO): Observable<MensajeDTO> {
   return this.http.put<MensajeDTO>(`${this.authURL}/enviar-token-recuperar`, correo)
 }
 
-public obtenerEventoPorId(idEvento: string): Observable<EventoObtenidoDTO> {
-  return this.http.get<EventoObtenidoDTO>(`${this.authURL}/obtener-evento/${idEvento}`);
+public obtenerEventoPorId(idEvento: string): Observable<MensajeDTO> {
+  return this.http.get<MensajeDTO>(`${this.authURL}/obtener-evento/${idEvento}`);
 }
 
 
