@@ -33,6 +33,7 @@ export const routes: Routes = [
    { path: "verificar-codigo-restablecer", component: VerificarCodigoRestablecerComponent},
    { path: "gestion-cupones", component: GestionarCuponComponent},
    { path: "crear-cupon", component:CrearCuponComponent},
+   { path: "eventos-detalle", component: DetalleEventoComponent},
    { path: "**", pathMatch: "full", redirectTo: "" }
 ];
 

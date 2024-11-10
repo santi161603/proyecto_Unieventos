@@ -16,6 +16,9 @@ import { EventoObtenidoDTO } from '../../dto/evento-obtenido-dto';
   styleUrls: ['./eventos.component.css']
 })
 export class EventosComponent {
+navegarADetalleEvento(arg0: string) {
+throw new Error('Method not implemented.');
+}
   categoryEvents: EventoObtenidoDTO[] = [];
   cities: string[] = [];
   categories: string[] = [];

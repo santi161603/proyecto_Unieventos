@@ -11,7 +11,8 @@
         <p class="event-description">{{ event.descripcion }}</p>
         <span class="event-status badge bg-primary">{{ event.estadoEvento }}</span>
 
-        <a [routerLink]="['/evento', event.idEvento]" class="btn btn-primary mt-3">Ver más</a>
+        <button (click)="navegarADetalleEvento(event.idEvento)" class="btn btn-primary mt-3">Ver más</button>
+
       </div>
     </div>
   </div>

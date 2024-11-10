@@ -12,18 +12,22 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./detalle-evento.component.css']
 })
 export class DetalleEventoComponent {
-  idEvento: string = '';
+  idEvento: string | null = null;
   evento: EventoObtenidoDTO | undefined;
 
   constructor(private route: ActivatedRoute, private clientService: ClientService) {
-    this.route.params.subscribe((params) => {
-      this.idEvento = params['id'];
-      this.obtenerEvento();
-    });
+
+      this.idEvento = sessionStorage.getItem('idEvento');
+
+      if (this.idEvento) {
+        this.obtenerEvento(this.idEvento);
+      } else {
+        console.error("No se encontró el ID del evento en sessionStorage");
+      }
   }
 
-  public obtenerEvento() {
-    this.clientService.obtenerEventoPorId(this.idEvento).subscribe({
+  public obtenerEvento(idEvento: string) {
+    this.clientService.obtenerEventoPorId(idEvento).subscribe({
       next: (evento) => this.evento = evento,
       error: (err) => console.error("Error al obtener el evento:", err)
     });

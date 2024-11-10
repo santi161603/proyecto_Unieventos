@@ -1,15 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Route, Router, RouterModule } from '@angular/router';
 import { EnumService } from '../../servicios/get-enums.service';
 import { ClientService } from '../../servicios/auth.service';
 import { TipoEventoDTO } from '../../dto/tipo-evento-dto';
 import { EventoObtenidoDTO } from '../../dto/evento-obtenido-dto';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'eventosPorCategoria',
   templateUrl: './eventos-por-categorias.component.html',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule],
   styleUrls: ['./eventos-por-categorias.component.css'],
   standalone: true
 })
@@ -18,11 +19,11 @@ export class EventosPorCategoriasComponent implements OnInit {
   categoryEvents: EventoObtenidoDTO[] = [];
 
 
-  constructor(private enumService: EnumService, private clientService: ClientService) {
+  constructor(private enumService: EnumService, private clientService: ClientService, private router: Router) {
 
   }
   ngOnInit(): void {
-this.getTipoEventos()
+  this.getTipoEventos()
   }
 
   getTipoEventos() {
@@ -58,13 +59,24 @@ this.getTipoEventos()
 
     for (let i = 0; i < 4; i++) {
       const randomIndex = Math.floor(Math.random() * copiaEventos.length);
-      eventosAleatorios.push(copiaEventos.splice(randomIndex, 1)[0]);
-      console.log(eventosAleatorios)// Elimina el evento seleccionado
+    const evento = copiaEventos.splice(randomIndex, 1)[0];
+    if (evento) {
+      eventosAleatorios.push(evento); // Agrega solo si el evento es válido
+    }
     }
 
     return eventosAleatorios;
   }
 
+  navegarADetalleEvento(idEvento: string) {
+
+    sessionStorage.removeItem('idEvento')
+
+    sessionStorage.setItem('idEvento', idEvento);
+
+    this.router.navigate(['/eventos-detalle']);
+
+  }
 }
 
 

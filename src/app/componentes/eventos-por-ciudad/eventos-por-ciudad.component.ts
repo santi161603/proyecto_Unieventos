@@ -4,11 +4,12 @@ import { RouterModule } from '@angular/router';
 import { EventoObtenidoDTO } from '../../dto/evento-obtenido-dto';
 import { EnumService } from '../../servicios/get-enums.service';
 import { ClientService } from '../../servicios/auth.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'eventosPorCiudad',
   templateUrl: './eventos-por-ciudad.component.html',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule,ReactiveFormsModule],
   styleUrls: ['./eventos-por-ciudad.component.css'],
   standalone: true
 })
@@ -64,8 +65,10 @@ export class EventosPorCiudadComponent implements OnInit {
 
     for (let i = 0; i < 4; i++) {
       const randomIndex = Math.floor(Math.random() * copiaEventos.length);
-      eventosAleatorios.push(copiaEventos.splice(randomIndex, 1)[0]);
-      console.log(eventosAleatorios)
+    const evento = copiaEventos.splice(randomIndex, 1)[0];
+    if (evento) {
+      eventosAleatorios.push(evento); // Agrega solo si el evento es válido
+    }
     }
 
     return eventosAleatorios;
