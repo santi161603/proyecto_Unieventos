@@ -3,6 +3,7 @@ import { InicioComponent } from './componentes/inicio/inicio.component';
 import { LoginComponent } from './componentes/login/login.component';
 import { RegistroComponent } from './componentes/registro/registro.component';
 import { CrearEventoComponent } from './componentes/crear-evento/crear-evento.component';
+import { DetalleEventoComponent } from './componentes/detalle-evento/detalle-evento.component';
 import { GestionEventosComponent } from './componentes/gestion-eventos/gestion-eventos.component';
 import { VerificacionCodigoComponent } from './componentes/verificacion-codigo/verificacion-codigo.component';
 import { NgModule } from '@angular/core';
@@ -21,7 +22,8 @@ export const routes: Routes = [
    { path: 'login', component: LoginComponent },
    { path: 'registro', component: RegistroComponent },
    { path: 'verificacion-codigo/:idUsuario', component: VerificacionCodigoComponent},
-   { path:'crear-evento',component:CrearEventoComponent},
+   { path: 'crear-evento',component:CrearEventoComponent},
+   { path: "obtener-evento",component:DetalleEventoComponent},
    { path: 'crear-localidad', component:CrearLocalidadComponent},
    { path: "gestion-eventos", component: GestionEventosComponent },
    { path: "gestion-localidad", component: GestionLocalidadesComponent},

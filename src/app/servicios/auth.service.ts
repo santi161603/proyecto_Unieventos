@@ -6,6 +6,7 @@ import { MensajeDTO } from '../dto/mensaje-dto';
 import { CorreoDTO } from '../dto/correo-dto';
 import { RestabecerContrasenaDTO } from '../dto/restablecer-contrasena-dto';
 import { TipoEventoDTO } from '../dto/tipo-evento-dto';
+import { EventoObtenidoDTO } from '../dto/evento-obtenido-dto';
 
 
 @Injectable({
@@ -60,9 +61,13 @@ public obtenerTodasLasLocalidades(): Observable<MensajeDTO> {
 }
 
 public enviarTokenRecuperacion(correo: CorreoDTO): Observable<MensajeDTO> {
-
   return this.http.put<MensajeDTO>(`${this.authURL}/enviar-token-recuperar`, correo)
 }
+
+public obtenerEventoPorId(idEvento: string): Observable<EventoObtenidoDTO> {
+  return this.http.get<EventoObtenidoDTO>(`${this.authURL}/obtener-evento/${idEvento}`);
+}
+
 
  constructor(private http: HttpClient) { }
 }

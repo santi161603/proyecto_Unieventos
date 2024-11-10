@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { EventoDTO } from '../../dto/evento-dto';
+import { EventoObtenidoDTO } from '../../dto/evento-obtenido-dto';
 import { ActivatedRoute } from '@angular/router';
-import { EventosService } from '../../servicios/eventos.service';
+import { ClientService } from '../../servicios/auth.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -12,20 +12,20 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./detalle-evento.component.css']
 })
 export class DetalleEventoComponent {
-  codigoEvento: string = '';
-  evento: EventoDTO | undefined;
+  idEvento: string = '';
+  evento: EventoObtenidoDTO | undefined;
 
-  constructor(private route: ActivatedRoute, private eventosService: EventosService) {
+  constructor(private route: ActivatedRoute, private clientService: ClientService) {
     this.route.params.subscribe((params) => {
-      this.codigoEvento = params['id'];
-      //this.obtenerEvento();
+      this.idEvento = params['id'];
+      this.obtenerEvento();
     });
   }
 
-  /*public obtenerEvento() {
-    const eventoConsultado = this.eventosService.obtener(this.codigoEvento);
-    if (eventoConsultado != undefined) {
-      this.evento = eventoConsultado;
-    }
-  }*/
+  public obtenerEvento() {
+    this.clientService.obtenerEventoPorId(this.idEvento).subscribe({
+      next: (evento) => this.evento = evento,
+      error: (err) => console.error("Error al obtener el evento:", err)
+    });
+  }
 }
