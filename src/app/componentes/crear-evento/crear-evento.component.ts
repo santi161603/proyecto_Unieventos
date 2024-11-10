@@ -154,6 +154,8 @@ export class CrearEventoComponent implements OnInit{
           title: 'Éxito',
           text: 'El evento se ha creado correctamente.',
         });
+        this.crearEventoForm.reset(); // Reinicia el formulario tras la creación exitosa
+        this.imagenSeleccionada = null;
       },
       error: (error) => {
         // Alerta de error si ocurre algún problema en el envío

@@ -1,7 +1,8 @@
 export interface CrearCuponDTO {
-    nombreCupon: string; 
-    descripcionCupon: string; 
-    porcentajeDescuento: number; 
-    fechaVencimiento: Date; 
+    nombreCupon: string,
+    descripcionCupon: string,
+    porcentajeDescuento: number,
+    userCupon: string,
+    fechaVencimiento: Date,
     cantidad: number;
 }

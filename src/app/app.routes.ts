@@ -13,6 +13,8 @@ import { EventosComponent } from './componentes/eventos/eventos.component';
 import { RestablecerContrasenaComponent } from './componentes/restablecer-contrasena/restablecer-contrasena.component';
 import { CambiarContrasenaComponent } from './componentes/cambiar-contrasena/cambiar-contrasena.component';
 import { VerificarCodigoRestablecerComponent } from './componentes/verificar-codigo-restablecer/verificar-codigo-restablecer.component';
+import { GestionarCuponComponent } from './componentes/gestionar-cupon/gestionar-cupon.component';
+import { CrearCuponComponent } from './componentes/crear-cupon/crear-cupon.component';
 
 export const routes: Routes = [
    { path: '', component: InicioComponent },
@@ -27,6 +29,8 @@ export const routes: Routes = [
    { path: "recuperar-contraseña", component: RestablecerContrasenaComponent},
    { path: "cambiar-contrasena", component: CambiarContrasenaComponent},
    { path: "verificar-codigo-restablecer", component: VerificarCodigoRestablecerComponent},
+   { path: "gestion-cupones", component: GestionarCuponComponent},
+   { path: "crear-cupon", component:CrearCuponComponent},
    { path: "**", pathMatch: "full", redirectTo: "" }
 ];
 

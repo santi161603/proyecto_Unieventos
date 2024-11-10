@@ -49,6 +49,12 @@ public obtenereventosPorCategorias(tipoEvento: string): Observable<MensajeDTO>{
   });
 }
 
+public obtenereventosPorCiudad(ciudad: string): Observable<MensajeDTO>{
+  return this.http.put<MensajeDTO>(`${this.authURL}/obtener-todos-los-eventos-por-ciudad`, {
+    ciudad : ciudad
+  });
+}
+
 public obtenerTodasLasLocalidades(): Observable<MensajeDTO> {
   return this.http.get<MensajeDTO>(`${this.authURL}/obtener-todas-localidad`)
 }

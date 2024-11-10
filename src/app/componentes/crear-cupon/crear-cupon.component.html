@@ -1,1 +1,72 @@
-<p>crear-cupon works!</p>
+<div class="container mt-5">
+  <div class="card shadow-sm">
+    <div class="card-header text-center bg-primary text-white">
+      <h3>Crear Cupón</h3>
+    </div>
+    <div class="card-body p-4">
+      <form [formGroup]="cuponForm" (ngSubmit)="onSubmit()">
+
+        <!-- Nombre del Cupón -->
+        <div class="mb-3">
+          <label for="nombreCupon" class="form-label">Nombre del Cupón</label>
+          <input type="text" id="nombreCupon" formControlName="nombreCupon" class="form-control"
+            placeholder="Ingresa el nombre del cupón" />
+          <div *ngIf="cuponForm.get('nombreCupon')?.invalid && cuponForm.get('nombreCupon')?.touched" class="text-danger">
+            El nombre no puede estar en blanco
+          </div>
+        </div>
+
+        <!-- Descripción del Cupón -->
+        <div class="mb-3">
+          <label for="descripcionCupon" class="form-label">Descripción</label>
+          <textarea id="descripcionCupon" formControlName="descripcionCupon" class="form-control"
+            placeholder="Ingresa la descripción del cupón"></textarea>
+          <div *ngIf="cuponForm.get('descripcionCupon')?.invalid && cuponForm.get('descripcionCupon')?.touched" class="text-danger">
+            La descripción no puede estar en blanco
+          </div>
+        </div>
+
+        <!-- Porcentaje de Descuento -->
+        <div class="mb-3">
+          <label for="porcentajeDescuento" class="form-label">Porcentaje de Descuento</label>
+          <input type="number" id="porcentajeDescuento" formControlName="porcentajeDescuento" class="form-control"
+            placeholder="Ingresa el porcentaje de descuento (0 - 80)" />
+          <div *ngIf="cuponForm.get('porcentajeDescuento')?.invalid && cuponForm.get('porcentajeDescuento')?.touched" class="text-danger">
+            Ingresa un porcentaje válido (mayor que 0 y menor o igual a 80)
+          </div>
+        </div>
+
+        <!-- Usuario (opcional) -->
+        <div class="mb-3">
+          <label for="userCupon" class="form-label">Usuario (opcional)</label>
+          <input type="text" id="userCupon" formControlName="userCupon" class="form-control"
+            placeholder="Ingresa el ID del usuario si aplica" />
+        </div>
+
+        <!-- Fecha de Vencimiento -->
+        <div class="mb-3">
+          <label for="fechaVencimiento" class="form-label">Fecha de Vencimiento</label>
+          <input type="date" id="fechaVencimiento" formControlName="fechaVencimiento" class="form-control" />
+          <div *ngIf="cuponForm.get('fechaVencimiento')?.invalid && cuponForm.get('fechaVencimiento')?.touched" class="text-danger">
+            Ingresa una fecha futura válida
+          </div>
+        </div>
+
+        <!-- Cantidad -->
+        <div class="mb-3">
+          <label for="cantidad" class="form-label">Cantidad</label>
+          <input type="number" id="cantidad" formControlName="cantidad" class="form-control"
+            placeholder="Ingresa la cantidad (al menos 10)" />
+          <div *ngIf="cuponForm.get('cantidad')?.invalid && cuponForm.get('cantidad')?.touched" class="text-danger">
+            La cantidad debe ser al menos 10
+          </div>
+        </div>
+
+        <!-- Botón de Crear -->
+        <button type="submit" class="btn btn-success w-100 mt-4" [disabled]="cuponForm.invalid">
+          Crear Cupón
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

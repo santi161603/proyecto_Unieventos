@@ -1,9 +1,18 @@
-<div class="events-in-your-city">
-    <h5>Eventos en tu ciudad</h5>
-    <div *ngFor="let event of cityEvents" class="event-card mb-3 p-3 border rounded">
-      <h6>{{ event.name }}</h6>
-      <p>{{ event.date }} - {{ event.location }}</p>
-      <a [routerLink]="['/evento', event.id]" class="btn btn-sm btn-primary">Ver más</a>
+<div class="categories">
+  <h5>Por Ciudad</h5>
+  <div class="row">
+    <!-- Mostrar eventos en 2 columnas -->
+    <div class="col-md-6" *ngFor="let event of citysEvents">
+      <div class="event-card mb-4 p-3 border rounded shadow-sm">
+        <!-- Mostrar la imagen del evento -->
+        <img [src]="event.imagenPoster" alt="{{ event.imagenPoster }}" class="img-fluid rounded-top mb-3">
+
+        <h6 class="event-title">{{ event.nombre }}</h6>
+        <p class="event-description">{{ event.descripcion }}</p>
+        <span class="event-status badge bg-primary">{{ event.estadoEvento }}</span>
+
+        <a [routerLink]="['/evento', event.nombre]" class="btn btn-primary mt-3">Ver más</a>
+      </div>
     </div>
   </div>
-  
+</div>
