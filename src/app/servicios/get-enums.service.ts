@@ -15,6 +15,9 @@ export class EnumService {
   public listarCiudades(): Observable<string[]> {
     return this.http.get<string[]>(`${this.publicoURL}/get-ciudades`);
   }
+  public listarTipoLocalidades(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.publicoURL}/get-tipo-localidad`);
+  }
 
   public listarTipoEvento(): Observable<string[]> {
     return this.http.get<string[]>(`${this.publicoURL}/get-tipo-evento`);

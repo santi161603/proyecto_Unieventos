@@ -11,6 +11,7 @@ import { LocalidadDTO } from '../dto/localidad-dto';
   providedIn: 'root'
 })
 export class AdministradorService {
+
   tokenUser: string | null;
 
   constructor(private http: HttpClient, private token: TokenService) {
@@ -31,6 +32,36 @@ export class AdministradorService {
 
     return this.http.post<MensajeDTO>(`${this.authURL}/crear-evento`, eventoDTO, {headers});
    }
+
+   public subirImagen(imagenSeleccionada: File): Observable<MensajeDTO> {
+    if (!this.tokenUser) {
+      throw new Error('No token de autenticación disponible');
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.tokenUser}`
+    });
+
+    // Crear FormData y agregar la imagen
+    const formData = new FormData();
+    formData.append('imagen', imagenSeleccionada);
+
+    return this.http.post<MensajeDTO>(`${this.authURL}/subir-imagen`, formData, { headers });
+  }
+
+  public obtenerTodasLasLocalidadesNombreID(): Observable<MensajeDTO> {
+
+    if (!this.tokenUser) {
+      throw new Error('No token de autenticación disponible');
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.tokenUser}`
+    });
+
+    return this.http.get<MensajeDTO>(`${this.authURL}/obtener-todas-localidades-id-nombre`, {headers})
+  }
+
 
    public crearLocalidad(LocalidadDTO: LocalidadDTO): Observable<MensajeDTO> {
 

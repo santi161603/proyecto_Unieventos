@@ -18,8 +18,10 @@ export class CrearEventoComponent implements OnInit{
   crearEventoForm: FormGroup;
   tipoEventoEnum: string[] = []; // Opciones de ejemplo
   estadoCuentaEnum: string[] = []; // Opciones de ejemplo
+  localidades: { nombreLocalidad: string, IdLocalidad: string }[] = [];
+  imagenSeleccionada: File | null = null;
 
-  constructor(private fb: FormBuilder, private adminService: AdministradorService, private enums: EnumService) {
+  constructor(private fb: FormBuilder, private adminService: AdministradorService, private enums: EnumService, private admiService: AdministradorService) {
     this.crearEventoForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.maxLength(50)]],
       descripcion: ['', [Validators.required, Validators.maxLength(700)]],
@@ -30,10 +32,23 @@ export class CrearEventoComponent implements OnInit{
 
     this.getTipoEvento();
     this.getEstadoEvento();
+    this.getNombreLocalidades();
   }
 
   ngOnInit(): void {
     this.agregarSubEvento(); // Agregar un subevento inicial
+  }
+
+  private getNombreLocalidades() {
+    this.adminService.obtenerTodasLasLocalidadesNombreID().subscribe({
+      next: (data) => {
+        console.log(data)
+        this.localidades = data.respuesta; // Asigna las localidades obtenidas del backend
+      },
+      error: (error) => {
+        console.error('Error al obtener localidades:', error);
+      }
+    });
   }
 
   private getTipoEvento(){
@@ -81,32 +96,44 @@ export class CrearEventoComponent implements OnInit{
     this.subEventos.removeAt(indice);
   }
 
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.imagenSeleccionada = input.files[0];
+    } else {
+      this.imagenSeleccionada = null;
+    }
+  }
+
   onSubmit(): void {
     if (this.crearEventoForm.valid) {
       console.log(this.crearEventoForm.value);
-
       const crearEvento = {
         ...this.crearEventoForm.value
+      } as EventoDTO
+
+      if(this.imagenSeleccionada){
+        this.admiService.subirImagen(this.imagenSeleccionada).subscribe({
+          next: (urlImagen) => {
+            crearEvento.imageEvento = urlImagen.respuesta;
+            console.log(urlImagen)
+            console.log(urlImagen.respuesta)
+             // Agrega la URL de la imagen al DTO
+            this.crearEventoServicio(crearEvento);
+          },
+          error: (error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Hubo un problema al subir la imagen. Por favor, inténtalo de nuevo.' + error,
+            });
+          }
+        });
+      }
+      else{
+        this.crearEventoServicio(crearEvento)
       }
       // Llamada al servicio para enviar los datos al backend
-      this.adminService.crearEvento(crearEvento).subscribe({
-        next :(response) => {
-          // Alerta de éxito si la respuesta del backend es positiva
-          Swal.fire({
-            icon: 'success',
-            title: 'Éxito',
-            text: 'El evento se ha creado correctamente.',
-          });
-        },
-        error: (error) => {
-          // Alerta de error si ocurre algún problema en el envío
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Hubo un problema al crear el evento. Por favor, inténtalo de nuevo.',
-          });
-        }
-    });
 
     } else {
       // Alerta indicando que el formulario no es válido
@@ -116,5 +143,26 @@ export class CrearEventoComponent implements OnInit{
         text: 'Por favor, completa todos los campos requeridos antes de enviar.',
       });
     }
+  }
+
+  crearEventoServicio(crearEvento: EventoDTO){
+    this.adminService.crearEvento(crearEvento).subscribe({
+      next :(response) => {
+        // Alerta de éxito si la respuesta del backend es positiva
+        Swal.fire({
+          icon: 'success',
+          title: 'Éxito',
+          text: 'El evento se ha creado correctamente.',
+        });
+      },
+      error: (error) => {
+        // Alerta de error si ocurre algún problema en el envío
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Hubo un problema al crear el evento. Por favor, inténtalo de nuevo.',
+        });
+      }
+  });
   }
 }

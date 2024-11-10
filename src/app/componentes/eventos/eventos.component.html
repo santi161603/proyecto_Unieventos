@@ -1,26 +1,41 @@
+<app-banner></app-banner> <!-- Banner con título y eslogan -->
 
-<div class="banner">
-    <h1>UNIEVENTOS</h1>
-    <p>Descubre los Mejores Eventos en Colombia</p>
-  </div>
-  
-  <app-search></app-search>
-  
-  <app-filtros-eventos
-    [selectedCategory]="categoria"
-    [selectedCity]="ciudad"
-    [selectedDate]="fecha"
-    (categoryChange)="onCategoriaChange($event)"
-    (cityChange)="onCiudadChange($event)"
-    (dateChange)="onDateChange($event)">
-  </app-filtros-eventos>
-  
-  <div class="event-list">
-    <div *ngFor="let event of filteredEvents" class="event-item">
-      
-      <h3>{{ event.nombre }}</h3>
-      <p>Información del evento</p>
-      <button>Comprar entrada</button>
+<div class="filters">
+  <!-- Contenedor para el buscador y los spinners -->
+  <div class="filters-container">
+    <!-- Buscador -->
+    <div class="search-container">
+      <input type="text" placeholder="Buscar evento..." [(ngModel)]="searchQuery" class="search-input" (input)="onNombreEventoChange(searchQuery)">
+    </div>
+
+    <!-- Spinners para categoría y ciudad -->
+    <div class="spinner-container">
+      <select [(ngModel)]="categoria" class="custom-spinner" (change)="onCategoriaChange($event)">
+        <option value="" disabled selected>Seleccionar Categoría</option>
+        <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+      </select>
+
+      <select [(ngModel)]="ciudad" class="custom-spinner" (change)="onCiudadChange($event)">
+        <option value="" disabled selected>Seleccionar Ciudad</option>
+        <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
+      </select>
     </div>
   </div>
-  
+</div>
+
+<!-- Lista de eventos -->
+<div class="categories">
+  <h5>Lista de eventos</h5>
+  <div class="row">
+    <div class="col-md-6" *ngFor="let event of categoryEvents">
+      <div class="event-card mb-4 p-3 border rounded shadow-sm">
+        <img [src]="event.imagenPoster" alt="{{ event.imagenPoster }}" class="img-fluid rounded-top mb-3">
+        <h6 class="event-title">{{ event.nombre }}</h6>
+        <p class="event-description">{{ event.descripcion }}</p>
+        <span class="event-status badge bg-primary">{{ event.estadoEvento }}</span>
+        <a [routerLink]="['/evento', event.nombre]" class="btn btn-primary mt-3">Ver más</a>
+      </div>
+    </div>
+  </div>
+</div>
+

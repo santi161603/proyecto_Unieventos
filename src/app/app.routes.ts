@@ -10,6 +10,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CrearLocalidadComponent } from './componentes/crear-localidad/crear-localidad.component';
 import { GestionLocalidadesComponent } from './componentes/gestionar-localidades/gestionar-localidades.component';
 import { EventosComponent } from './componentes/eventos/eventos.component';
+import { RestablecerContrasenaComponent } from './componentes/restablecer-contrasena/restablecer-contrasena.component';
+import { CambiarContrasenaComponent } from './componentes/cambiar-contrasena/cambiar-contrasena.component';
+import { VerificarCodigoRestablecerComponent } from './componentes/verificar-codigo-restablecer/verificar-codigo-restablecer.component';
 
 export const routes: Routes = [
    { path: '', component: InicioComponent },
@@ -21,6 +24,9 @@ export const routes: Routes = [
    { path: "gestion-eventos", component: GestionEventosComponent },
    { path: "gestion-localidad", component: GestionLocalidadesComponent},
    { path: "eventos", component: EventosComponent},
+   { path: "recuperar-contraseña", component: RestablecerContrasenaComponent},
+   { path: "cambiar-contrasena", component: CambiarContrasenaComponent},
+   { path: "verificar-codigo-restablecer", component: VerificarCodigoRestablecerComponent},
    { path: "**", pathMatch: "full", redirectTo: "" }
 ];
 

@@ -12,13 +12,14 @@ const TOKEN_KEY = "AuthToken";
 })
 export class TokenService {
   private rolSubject = new BehaviorSubject<string>('');
-  private isLoginSubject = new BehaviorSubject<boolean>(false);
+  private isLoginSubject = new BehaviorSubject<boolean>(this.isLogged());
   constructor(private router: Router) {
     // Si ya hay un token almacenado, se decodifica y establece el rol actual
     const currentToken = this.getToken();
     if (currentToken) {
       const rol = this.decodeRoleFromToken(currentToken);
       this.rolSubject.next(rol);
+      this.isLoginSubject.next(true);
     }
   }
 
@@ -29,31 +30,30 @@ export class TokenService {
   const rol = this.decodeRoleFromToken(token);
   this.rolSubject.next(rol);
   const isLogged = this.isLogged()
-  this.isLoginSubject.next(isLogged);// Actualiza el BehaviorSubject con el nuevo rol
+  this.isLoginSubject.next(true); // Actualiza el estado de login
+}
+
+public isLoggerObservable(): Observable<boolean> {
+  return this.isLoginSubject.asObservable();
 }
 
   public getToken(): string | null {
     return sessionStorage.getItem(TOKEN_KEY);
   }
 
-  public isLogged() {
-    if (this.getToken()) {
-      return true;
-    }
-    return false;
-  }
-
-  public isLoggerObservable(): Observable<boolean>{
-    return this.isLoginSubject.asObservable();
+  public isLogged(): boolean {
+    return !!this.getToken(); // Devuelve true si hay un token
   }
 
   public login(token: string){
     this.setToken(token);
+    this.isLoginSubject.next(true); // Asegura que isLogger esté en true después de iniciar sesión
     this.router.navigate(["/"]);
  }
 
  public logout() {
   window.sessionStorage.clear();
+  this.isLoginSubject.next(false); // Actualiza el estado de login a false
   this.router.navigate(["/login"]);
 }
 

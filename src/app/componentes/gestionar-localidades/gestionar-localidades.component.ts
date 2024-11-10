@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
-import { AdministradorService } from '../../servicios/administrador.service';
-import { LocalidadDTO } from '../../dto/localidad-dto';
+import { ClientService } from '../../servicios/auth.service';
+import { LocalidadObtenidaDTO } from '../../dto/localidad-obtenida-dto';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -13,32 +13,44 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./gestionar-localidades.component.css']
 })
 export class GestionLocalidadesComponent {
-  localidades: LocalidadDTO[];
-  seleccionadas: LocalidadDTO[];
-  textoBtnEliminar: string;
+  localidades: LocalidadObtenidaDTO[] = [];
+  seleccionadas: LocalidadObtenidaDTO[] = [];
+  textoBtnEliminar: string = "";
 
-  constructor(public localidadesService: AdministradorService) {
-    this.localidades = [];
-    this.seleccionadas = [];
-    this.textoBtnEliminar = "";
+  constructor(public localidadesService: ClientService) {
+    this.obtenerLocalidades();
   }
 
-  public seleccionar(localidad: LocalidadDTO, estado: boolean) {
+  public seleccionar(localidad: LocalidadObtenidaDTO, estado: boolean) {
     if (estado) {
       this.seleccionadas.push(localidad);
     } else {
-      this.seleccionadas.splice(this.seleccionadas.indexOf(localidad), 1);
+      this.seleccionadas = this.seleccionadas.filter(item => item !== localidad);
     }
     this.actualizarMensaje();
+
+
+  }
+  obtenerLocalidades() {
+    console.log("estoy dentro de obtenerLocalidades")
+    this.localidadesService.obtenerTodasLasLocalidades().subscribe({
+      next: (data) =>{
+        console.log(data.respuesta)
+        this.localidades = data.respuesta
+      },
+      error(err) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No pudimos obtener todas las localidad por favor vuelve a intentarlo' + err,
+        });
+      },
+    })
   }
 
   private actualizarMensaje() {
     const tam = this.seleccionadas.length;
-    if (tam != 0) {
-      this.textoBtnEliminar = tam === 1 ? "1 elemento" : `${tam} elementos`;
-    } else {
-      this.textoBtnEliminar = "";
-    }
+    this.textoBtnEliminar = tam > 0 ? `${tam} ${tam === 1 ? 'elemento' : 'elementos'}` : "";
   }
 
   public confirmarEliminacion() {
@@ -65,7 +77,8 @@ export class GestionLocalidadesComponent {
     this.seleccionadas = [];
     this.actualizarMensaje();
   }
-  trackByIndex(index: number, item: LocalidadDTO): number {
+
+  trackByIndex(index: number, item: LocalidadObtenidaDTO): number {
     return index;
   }
 }

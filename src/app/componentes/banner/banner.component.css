@@ -1,5 +1,5 @@
 .banner-container {
-    background-image: url('/assets/banner.jpg'); /* Reemplaza con la ruta de tu imagen */
+    background-image: url('https://firebasestorage.googleapis.com/v0/b/unieventos-d397d.appspot.com/o/c98fdf1e-98fb-4ef2-92fc-8835776c34ec.png?alt=media&token=dccf9790-85cc-4e40-843f-a096f02e8f17'); /* Reemplaza con la ruta de tu imagen */
     background-size: cover;
     background-position: center;
     height: 300px;
@@ -8,7 +8,7 @@
     justify-content: center;
     position: relative;
   }
-  
+
   .overlay {
     background-color: rgba(0, 0, 0, 0.5); /* Oscurece la imagen de fondo */
     padding: 20px;

@@ -2,25 +2,20 @@
   <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-3 border-bottom">
     <div class="col-md-3 mb-2 mb-md-0">
       <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none align-items-center">
-        <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
-          <use xlink:href="#bootstrap"></use>
-        </svg>
-        <span class="fs-4 ms-3 me-3">{{ title }}</span>
+        <!-- Logo a la izquierda del nombre -->
+        <img src="https://firebasestorage.googleapis.com/v0/b/unieventos-d397d.appspot.com/o/imagen_2024-11-09_171149624-removebg-preview.png?alt=media&token=65104311-7bf2-4e3c-9c0e-70576369d927" alt="Logo de UniEventos" class="me-3" width="40" height="32"> <!-- Asegúrate de reemplazar con la ruta correcta -->
+        <span class="fs-4">{{ title }}</span>
       </a>
     </div>
 
     <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-      <li><a href="#" class="nav-link px-2 link-secondary">Overview</a></li>
-      <li><a href="#" class="nav-link px-2 link-body-emphasis">Inventory</a></li>
-      <li><a href="#" class="nav-link px-2 link-body-emphasis">Customers</a></li>
-      <li><a href="#" class="nav-link px-2 link-body-emphasis">Products</a></li>
+      <li><a href="/eventos" class="nav-link px-2 link-secondary">Eventos</a></li>
+      <li><a href="/eventos" class="nav-link px-2 link-body-emphasis">Inventory</a></li>
+      <li><a href="/eventos" class="nav-link px-2 link-body-emphasis">Customers</a></li>
+      <li><a href="/eventos" class="nav-link px-2 link-body-emphasis">Products</a></li>
     </ul>
 
     <div class="col-md-3 text-end">
-      <form class="d-inline-block" role="search">
-        <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-      </form>
-
       <ng-container *ngIf="isLogger; else loginButtons">
         <div class="dropdown">
           <a href="#" class="d-inline-block" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">

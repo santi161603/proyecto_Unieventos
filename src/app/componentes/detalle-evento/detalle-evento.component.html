@@ -1,13 +1,13 @@
 <div class="detalle-evento-container" *ngIf="evento">
     <!-- Imagen de portada y descripción -->
     <div class="evento-imagen-descripcion">
-      <img [src]="evento.imagenPortada" alt="Imagen del evento" class="evento-imagen">
+      <img [src]="evento.imageEvento" alt="Imagen del evento" class="evento-imagen">
       <div class="evento-descripcion">
         <h1>{{ evento.nombre }}</h1>
         <p>{{ evento.descripcion }}</p>
       </div>
     </div>
-  
+
     <!-- Información General del Evento -->
     <div class="evento-detalles">
       <div class="evento-fechas">
@@ -29,7 +29,7 @@
         <img [src]="evento.imagenLocalidades" alt="Mapa del lugar" class="mapa-imagen">
       </div>
     </div>
-  
+
     <!-- Localidades del Evento -->
     <div class="evento-localidades">
       <h2>Localidades</h2>
@@ -50,11 +50,10 @@
         </tbody>
       </table>
     </div>
-  
+
     <!-- Botones de acción -->
     <div class="evento-acciones">
       <button class="btn-comprar">COMPRAR ENTRADA</button>
       <button class="btn-añadir-carrito">AÑADIR A CARRITO</button>
     </div>
   </div>
-  

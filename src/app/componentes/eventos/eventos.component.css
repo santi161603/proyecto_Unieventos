@@ -1,68 +1,176 @@
-/* Banner */
-.banner {
-    text-align: center;
-    background-image: url('https://png.pngtree.com/background/20210711/original/pngtree-purple-beautiful-romantic-cool-fresh-banner-background-picture-image_1084967.jpg'); /* Cambia la URL según la ubicación de la imagen de fondo */
-    background-size: cover;
-    padding: 20px;
-    color: white;
+/* Estilo para la barra de búsqueda */
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 300px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 255, 0.3);
+}
+
+/* Estilo para los spinners */
+.spinner-container {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.custom-spinner {
+  padding: 8px 15px;
+  font-size: 16px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
+}
+
+.custom-spinner:focus {
+  outline: none;
+  border-color: #0056b3;
+}
+
+/* Estilo general para las categorías */
+.categories {
+  margin-top: 50px;
+}
+
+.categories h5 {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+/* Estilo para las tarjetas de evento */
+.event-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Imagen de cada evento */
+.event-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Título del evento */
+.event-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Descripción del evento */
+.event-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+/* Estado del evento (badge) */
+.event-status {
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 50px;
+  display: inline-block;
+  margin-bottom: 15px;
+}
+
+/* Botón de "Ver más" */
+.event-card .btn {
+  font-size: 14px;
+  padding: 8px 15px;
+  border-radius: 25px;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.event-card .btn:hover {
+  background-color: #0056b3;
+}
+
+/* Adaptaciones para pantallas pequeñas */
+@media (max-width: 767px) {
+  .event-card {
+    margin-bottom: 20px;
   }
-  
-  .banner h1 {
-    font-size: 3em;
-    margin: 0;
-  }
-  
-  .banner p {
-    font-size: 1.2em;
-    margin: 5px 0;
-  }
-  
-  /* Filtros */
-  app-filtros-eventos {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin: 20px 0;
-  }
-  
-  /* Lista de eventos */
-  .event-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 0 20px;
-  }
-  
-  .event-item {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    text-align: center;
-    padding: 10px;
-    background-color: #f9f9f9;
-  }
-  
-  .event-image {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 4px;
-  }
-  
-  .event-item h3 {
-    font-size: 1.1em;
-    margin: 10px 0;
-  }
-  
-  .event-item button {
-    background-color: #4CAF50; /* Cambia el color según tus necesidades */
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .event-item button:hover {
-    background-color: #45a049;
-  }
-  
+}
+
+/* Contenedor para el buscador y los spinners */
+.filters-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  margin-top: 30px;  /* Ajusta el margen superior aquí */
+}
+
+/* Estilo para la barra de búsqueda */
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.search-input {
+  width: 300px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 255, 0.3);
+}
+
+/* Estilo para los spinners */
+.spinner-container {
+  display: flex;
+  gap: 20px;
+}
+
+.custom-spinner {
+  padding: 8px 15px;
+  font-size: 16px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
+}
+
+.custom-spinner:focus {
+  outline: none;
+  border-color: #0056b3;
+}

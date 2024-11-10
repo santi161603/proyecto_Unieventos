@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class HeaderComponent {
 
-  title="Unieventos";
+  title="UNIEVENTOS";
   rol: string = "";
   isLogger: boolean = false;
   userProfileImage: string = 'https://firebasestorage.googleapis.com/v0/b/unieventos-d397d.appspot.com/o/11f17bd7-a025-4ea2-af87-f34f3bcff858-usuario.jpg?alt=media&token=9f26ebc4-54fb-476a-8fd5-67f365add5c3';
@@ -41,8 +41,7 @@ export class HeaderComponent {
   }
 
   cerrarSesion() {
-    console.log("Sesión cerrada");
-    // Lógica adicional para cerrar sesión
+    this.tokenService.logout();
   }
 
   ngOnDestroy(): void {

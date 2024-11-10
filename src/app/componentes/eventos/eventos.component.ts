@@ -3,59 +3,46 @@ import { BannerComponent } from '../banner/banner.component';
 import { SearchComponent } from "../search/search.component";
 import { FiltrosEventosComponent } from "../filtros-eventos/filtros-eventos.component";
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { BrowserModule } from '@angular/platform-browser';
+import { EventoObtenidoDTO } from '../../dto/evento-obtenido-dto';
 
 @Component({
   selector: 'app-eventos',
   standalone: true,
-  imports: [CommonModule, BannerComponent, SearchComponent, FiltrosEventosComponent],
+  imports: [ReactiveFormsModule,CommonModule, RouterModule, FormsModule, BannerComponent],
   templateUrl: './eventos.component.html',
   styleUrls: ['./eventos.component.css']
 })
 export class EventosComponent {
-  eventos = [
-    { nombre: 'Concierto de Rock', descripcion: 'Un evento increíble de música en vivo', categoria: 'Música', ciudad: 'Bogotá', fecha: 'Hoy' },
-    { nombre: 'Teatro clásico', descripcion: 'Una obra de teatro clásica en el teatro nacional', categoria: 'Teatro', ciudad: 'Medellín', fecha: 'Este fin de semana' },
-    { nombre: 'Maratón de la ciudad', descripcion: 'Un evento deportivo con miles de participantes', categoria: 'Deportes', ciudad: 'Cali', fecha: 'Próximamente' },
-  ];
-
-  filteredEvents = [...this.eventos];
-
-  // Filtros
-  nombreEvento: string = '';
+  categoryEvents: EventoObtenidoDTO[] = [];
+  cities: string[] = [];
+  categories: string[] = [];
+  searchQuery: string = ''; // Tipo 'string' para el buscador
   categoria: string = '';
   ciudad: string = '';
-  fecha: string = '';
+ // Métodos para manejar los cambios de filtros
+ onNombreEventoChange(nombre: string) {
+  this.searchQuery = nombre; // Cambio a searchQuery
+  this.filtrarEventos();
+}
 
-  // Filtrar eventos con los criterios
-  filtrarEventos() {
-    this.filteredEvents = this.eventos.filter(evento => {
-      return (
-        (this.nombreEvento ? evento.nombre.toLowerCase().includes(this.nombreEvento.toLowerCase()) : true) &&
-        (this.categoria ? evento.categoria.toLowerCase() === this.categoria.toLowerCase() : true) &&
-        (this.ciudad ? evento.ciudad.toLowerCase() === this.ciudad.toLowerCase() : true) &&
-        (this.fecha ? evento.fecha.toLowerCase() === this.fecha.toLowerCase() : true)
-      );
-    });
-  }
+onCategoriaChange(event: Event) {
+  const value = (event.target as HTMLSelectElement).value;
+  this.categoria = value;
+  this.filtrarEventos();
+}
 
-  // Métodos para manejar los cambios de filtros
-  onNombreEventoChange(nombre: string) {
-    this.nombreEvento = nombre;
-    this.filtrarEventos();
-  }
+onCiudadChange(event: Event) {
+  const value = (event.target as HTMLSelectElement).value;
+  this.ciudad = value;
+  this.filtrarEventos();
+}
 
-  onCategoriaChange(categoria: string) {
-    this.categoria = categoria;
-    this.filtrarEventos();
-  }
-
-  onCiudadChange(ciudad: string) {
-    this.ciudad = ciudad;
-    this.filtrarEventos();
-  }
-
-  onDateChange(fecha: string) {
-    this.fecha = fecha;
-    this.filtrarEventos();
-  }
+// Método para filtrar eventos (este es solo un ejemplo)
+filtrarEventos() {
+  // Aquí puedes agregar la lógica de filtrado para los eventos
+  console.log('Filtrando eventos por:', this.categoria, this.ciudad, this.searchQuery);
+}
 }

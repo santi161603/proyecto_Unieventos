@@ -4,4 +4,5 @@ export interface SubEventosDto{
   horaEvento: string; // LocalTime en formato "HH:mm:ss"
   cantidadEntradas: number;
   precioEntrada: number;
+  localidadNombre?: string; // Nombre de la localidad que asignaremos después
 }

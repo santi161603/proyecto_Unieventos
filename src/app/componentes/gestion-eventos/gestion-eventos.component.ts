@@ -4,6 +4,9 @@ import { RouterModule } from '@angular/router';
 import { EventoObtenidoDTO } from '../../dto/evento-obtenido-dto';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
+import { LocalidadNombreIdDTO } from '../../dto/localidades-id-nombre';
+import { AdministradorService } from '../../servicios/administrador.service';
+import { SubEventosDto } from '../../dto/subevento-dto';
 
 @Component({
   selector: 'app-gestion-eventos',
@@ -14,24 +17,54 @@ import { CommonModule } from '@angular/common';
 })
 export class GestionEventosComponent {
   eventos: EventoObtenidoDTO[] = [];
+  localidades: LocalidadNombreIdDTO[] = [];
   seleccionados: EventoObtenidoDTO[] = [];
   textoBtnEliminar: string = "";
 
-  constructor(private clientSer: ClientService) {
+  constructor(private clientSer: ClientService, private adminService: AdministradorService) {
+    this.cargarLocalidades();
     this.cargarEventos();
   }
 
+  private cargarLocalidades(): void {
+    this.adminService.obtenerTodasLasLocalidadesNombreID().subscribe({
+      next: (response) => {
+        console.log(response.respuesta)
+        this.localidades = response.respuesta;  // Almacena todas las localidades
+        console.log(this.localidades); // Verifica las localidades cargadas
+      },
+      error: (err) => {
+        console.error('Error al cargar localidades', err);
+      }
+    });
+  }
+
+  private obtenerNombreLocalidad(localidadId: string): string {
+    const localidad = this.localidades.find(l => l.IdLocalidad === localidadId); // Busca la localidad por IdLocalidad
+    console.log(localidad); // Verifica que el objeto localidad se haya encontrado correctamente
+    return localidad ? localidad.nombreLocalidad : 'Desconocido'; // Retorna el nombre o 'Desconocido' si no se encuentra
+  }
+
   private cargarEventos(): void {
-     this.clientSer.obtenerTodosLosEventos().subscribe({
-       next: (response) => {
+    this.clientSer.obtenerTodosLosEventos().subscribe({
+      next: (response) => {
         this.eventos = response.respuesta.map((evento: EventoObtenidoDTO) => ({
           ...evento,
-          mostrarDetalles: false // Inicializa `mostrarDetalles` en `false`
-        })); // Asegúrate de que 'data' coincide con la estructura de tu DTO
-        console.log(this.eventos); // Verifica los datos de subEvento aquí
-         }, error: (err) => {
-           console.error('Error al cargar eventos', err);
-          } }); }
+          mostrarDetalles: false,
+          subEventos: evento.subEventos.map((subEvento: SubEventosDto) => {
+            console.log(subEvento.localidad); // Verifica qué contiene
+            return {
+              ...subEvento,
+              localidadNombre: this.obtenerNombreLocalidad(subEvento.localidad)
+            };
+          })
+        }));
+      },
+      error: (err) => {
+        console.error('Error al cargar eventos', err);
+      }
+    });
+  }
 
   public seleccionar(evento: EventoObtenidoDTO, estado: boolean) {
     if (estado) {

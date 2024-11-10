@@ -1,6 +1,7 @@
 img{
     border-radius: 5%;
     height: 400px;
+    width: 80%;
 }
 .custom-control .carousel-control-prev-icon,
 .custom-control .carousel-control-next-icon {
@@ -12,4 +13,3 @@ img{
 .custom-control:hover .carousel-control-next-icon {
   background-color: rgba(0, 0, 0, 0.8); /* Fondo más oscuro al pasar el mouse */
 }
-  

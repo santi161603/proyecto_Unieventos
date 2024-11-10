@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header p-4">
+      <h5 class="mb-0">
+        <i class="fa-solid fa-envelope me-3"></i>Verificación de Código
+      </h5>
+    </div>
+    <div class="card-body p-4">
+      <form [formGroup]="codigoForm" (ngSubmit)="verificarCodigo()">
+        <div class="mb-3">
+          <label for="codigo" class="form-label">Ingrese el código enviado a su correo</label>
+          <input type="text" id="codigo" formControlName="codigo" class="form-control" />
+          <div *ngIf="codigoForm.get('codigo')?.invalid && codigoForm.get('codigo')?.touched" class="text-danger">
+            El código es requerido y debe tener 6 dígitos.
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="codigoForm.invalid">Verificar</button>
+        <button type="button" class="btn btn-secondary ms-2" (click)="reenviarCodigo()">Reenviar Código</button>
+      </form>
+    </div>
+  </div>
+</div>
+

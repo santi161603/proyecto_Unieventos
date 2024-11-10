@@ -1,24 +1,23 @@
 <app-banner></app-banner> <!-- Banner con título y eslogan -->
 
 <div class="container mt-4">
-  <div class="row">
+  <div class="row g-4 justify-content-center"> <!-- Se agrega justify-content-center para centrar los elementos -->
 
-    <!-- Carrusel de eventos destacados -->
-    <div class="col-md-3">
+    <!-- Eventos por categoría (Primero) -->
+    <div class="col-10">
       <eventosPorCategoria></eventosPorCategoria>
     </div>
 
-    <!-- Featured Events Section (Carrusel de eventos destacados) -->
-    <div class="col-md-6">
+    <!-- Carrusel de imágenes (Segundo) -->
+    <div class="col-6">
       <!-- Aquí va el componente del carrusel ya implementado como <app-carousel> -->
       <app-carousel [images]="businessDetail.images" [id]="'carouselExample'"></app-carousel>
     </div>
 
-    <!-- Categories Section -->
-    <div class="col-md-3">
+    <!-- Eventos por ciudad (Último) -->
+    <div class="col-10">
       <eventosPorCiudad></eventosPorCiudad>
     </div>
 
   </div>
 </div>
-

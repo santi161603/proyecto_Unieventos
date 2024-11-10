@@ -5,6 +5,7 @@ export interface EventoDTO {
    descripcion:string,
    TipoEvento:string,
    estadoEvento:string,
-   subEvento: SubEventosDto[];
+   subEvento: SubEventosDto[],
+   imageEvento: string;
 }
 

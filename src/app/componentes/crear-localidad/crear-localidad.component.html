@@ -20,24 +20,31 @@
     </div>
 
     <div class="mb-3 row">
-        <label for="ciudad" class="col-sm-2 col-form-label">Ciudad</label>
-        <div class="col-sm-10">
-            <input id="ciudad" formControlName="ciudad" type="text" class="form-control" />
-            <div *ngIf="crearLocalidadForm.get('ciudad')?.invalid && crearLocalidadForm.get('ciudad')?.touched" class="text-danger">
-                La ciudad es obligatoria.
-            </div>
-        </div>
-    </div>
+      <label for="ciudad" class="col-sm-2 col-form-label">Ciudad</label>
+      <div class="col-sm-10">
+          <select id="ciudad" formControlName="ciudad" class="form-select">
+              <option value="">Seleccione una ciudad</option> <!-- Opción por defecto -->
+              <option *ngFor="let ciudad of ciudades" [value]="ciudad">{{ ciudad }}</option>
+          </select>
+          <div *ngIf="crearLocalidadForm.get('ciudad')?.invalid && crearLocalidadForm.get('ciudad')?.touched" class="text-danger">
+              La ciudad es obligatoria.
+          </div>
+      </div>
+  </div>
 
-    <div class="mb-3 row">
-        <label for="tipoLocalidad" class="col-sm-2 col-form-label">Tipo de Localidad</label>
-        <div class="col-sm-10">
-            <input id="tipoLocalidad" formControlName="tipoLocalidad" type="text" class="form-control" />
-            <div *ngIf="crearLocalidadForm.get('tipoLocalidad')?.invalid && crearLocalidadForm.get('tipoLocalidad')?.touched" class="text-danger">
-                El tipo de localidad es obligatorio.
-            </div>
+
+  <div class="mb-3 row">
+    <label for="tipoLocalidad" class="col-sm-2 col-form-label">Tipo de Localidad</label>
+    <div class="col-sm-10">
+        <select id="tipoLocalidad" formControlName="tipoLocalidad" class="form-select">
+            <option value="">Seleccione el tipo de localidad</option> <!-- Opción por defecto -->
+            <option *ngFor="let tipo of tiposLocalidad" [value]="tipo">{{ tipo }}</option>
+        </select>
+        <div *ngIf="crearLocalidadForm.get('tipoLocalidad')?.invalid && crearLocalidadForm.get('tipoLocalidad')?.touched" class="text-danger">
+            El tipo de localidad es obligatorio.
         </div>
     </div>
+  </div>
 
     <div class="mb-3 row">
         <label for="capacidadMaxima" class="col-sm-2 col-form-label">Capacidad Máxima</label>
@@ -58,6 +65,13 @@
             </div>
         </div>
     </div>
+
+    <div class="mb-3 row">
+      <label for="imagen" class="col-sm-2 col-form-label">Imagen (opcional)</label>
+      <div class="col-sm-10">
+          <input id="imagen" type="file" (change)="onFileSelected($event)" class="form-control" />
+      </div>
+   </div>
 
     <div class="mb-3 row">
         <div class="col-sm-10 offset-sm-2">

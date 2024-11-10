@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="card" style="max-width: 400px; margin: 0 auto; margin-top: 50px;">
+    <div class="card-header text-center">
+      <h4>Cambiar Contraseña</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="cambiarContrasenaForm" (ngSubmit)="cambiarContrasena()">
+
+        <!-- Campo de Contraseña -->
+        <div class="mb-3">
+          <label for="contrasenaNueva" class="form-label">Nueva Contraseña:</label>
+          <input
+            type="password"
+            id="contrasenaNueva"
+            class="form-control"
+            formControlName="contrasenaNueva"
+            placeholder="Ingrese la nueva contraseña"
+          />
+          <div *ngIf="contrasenaNueva?.invalid && contrasenaNueva?.touched" class="text-danger">
+            La contraseña debe tener al menos 6 caracteres.
+          </div>
+        </div>
+
+        <!-- Campo de Confirmar Contraseña -->
+        <div class="mb-3">
+          <label for="confirmarContrasena" class="form-label">Confirmar Contraseña:</label>
+          <input
+            type="password"
+            id="confirmarContrasena"
+            class="form-control"
+            formControlName="confirmarContrasena"
+            placeholder="Confirme la nueva contraseña"
+          />
+          <div *ngIf="confirmarContrasena?.invalid && confirmarContrasena?.touched" class="text-danger">
+            Las contraseñas deben coincidir.
+          </div>
+        </div>
+
+        <!-- Botón para Cambiar Contraseña -->
+        <div class="text-center">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="cambiarContrasenaForm.invalid"
+          >
+            Cambiar Contraseña
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+

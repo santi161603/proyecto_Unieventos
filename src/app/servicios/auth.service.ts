@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CrearCuentaDTO } from '../dto/crear-cuenta-dto';
 import { MensajeDTO } from '../dto/mensaje-dto';
-import { LoginDTO } from '../dto/login-dto';
+import { CorreoDTO } from '../dto/correo-dto';
+import { RestabecerContrasenaDTO } from '../dto/restablecer-contrasena-dto';
+import { TipoEventoDTO } from '../dto/tipo-evento-dto';
 
 
 @Injectable({
@@ -23,12 +25,37 @@ export class ClientService {
   });
 }
 
+public verificarCodigo(idUsuario: string, codigo: number): Observable<MensajeDTO> {
+  return this.http.put<MensajeDTO>(`${this.authURL}/verificar-codigo/${idUsuario}`, {
+    codigo:codigo
+  });
+}
+
 public reenviarToken(idUsuario: string): Observable<MensajeDTO> {
   return this.http.put<MensajeDTO>(`${this.authURL}/reenviar-token/${idUsuario}`, {});
 }
 
+public restablecerContrasena(restablecer: RestabecerContrasenaDTO): Observable<MensajeDTO> {
+  return this.http.put<MensajeDTO>(`${this.authURL}/restablecer-contrasena`, restablecer);
+}
+
 public obtenerTodosLosEventos(): Observable<MensajeDTO> {
   return this.http.get<MensajeDTO>(`${this.authURL}/obtener-todos-eventos`)
+}
+
+public obtenereventosPorCategorias(tipoEvento: string): Observable<MensajeDTO>{
+  return this.http.put<MensajeDTO>(`${this.authURL}/obtener-todos-los-eventos-por-categoria`, {
+    tipoEvento : tipoEvento
+  });
+}
+
+public obtenerTodasLasLocalidades(): Observable<MensajeDTO> {
+  return this.http.get<MensajeDTO>(`${this.authURL}/obtener-todas-localidad`)
+}
+
+public enviarTokenRecuperacion(correo: CorreoDTO): Observable<MensajeDTO> {
+
+  return this.http.put<MensajeDTO>(`${this.authURL}/enviar-token-recuperar`, correo)
 }
 
  constructor(private http: HttpClient) { }
