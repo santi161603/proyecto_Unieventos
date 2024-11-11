@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Route, Router, RouterModule } from '@angular/router';
 import { EventoObtenidoDTO } from '../../dto/evento-obtenido-dto';
 import { EnumService } from '../../servicios/get-enums.service';
 import { ClientService } from '../../servicios/auth.service';
@@ -19,7 +19,7 @@ export class EventosPorCiudadComponent implements OnInit {
   citysEvents: EventoObtenidoDTO[] = [];
 
 
-  constructor(private enumService: EnumService, private clientService: ClientService) {
+  constructor(private enumService: EnumService, private clientService: ClientService, private router: Router) {
 
   }
   ngOnInit(): void {
@@ -72,6 +72,16 @@ export class EventosPorCiudadComponent implements OnInit {
     }
 
     return eventosAleatorios;
+  }
+
+  navegarADetalleEvento(idEvento: string) {
+
+    sessionStorage.removeItem('idEvento')
+
+    sessionStorage.setItem('idEvento', idEvento);
+
+    this.router.navigate(['/eventos-detalle']);
+
   }
 
 }

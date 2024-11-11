@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
 import { ClientService } from '../../servicios/auth.service';
 import { LocalidadObtenidaDTO } from '../../dto/localidad-obtenida-dto';
@@ -17,26 +17,41 @@ export class GestionLocalidadesComponent {
   seleccionadas: LocalidadObtenidaDTO[] = [];
   textoBtnEliminar: string = "";
 
-  constructor(public localidadesService: ClientService) {
+  constructor(public localidadesService: ClientService, private router: Router) {
     this.obtenerLocalidades();
   }
 
-  public seleccionar(localidad: LocalidadObtenidaDTO, estado: boolean) {
-    if (estado) {
-      this.seleccionadas.push(localidad);
+  public seleccionar(localidad: LocalidadObtenidaDTO) {
+    // Si ya está seleccionada, la deseleccionamos
+    if (this.seleccionadas.includes(localidad)) {
+      this.seleccionadas = [];
     } else {
-      this.seleccionadas = this.seleccionadas.filter(item => item !== localidad);
+      // Si no está seleccionada, seleccionamos la nueva
+      this.seleccionadas = [localidad];
     }
     this.actualizarMensaje();
-
-
   }
+
+  public navegarActualizar() {
+    if (this.seleccionadas.length === 1) {
+     // Redirigir o mostrar una vista para actualizar la localidad
+     const localidadId = this.seleccionadas[0].idLocalidad;
+
+     sessionStorage.removeItem("idLocalidadActualizar")
+     sessionStorage.setItem("idLocalidaActualizar", localidadId)
+
+     console.log(localidadId)
+
+     this.router.navigate(['/actualizar-localidad'])
+    }
+  }
+
   obtenerLocalidades() {
     console.log("estoy dentro de obtenerLocalidades")
     this.localidadesService.obtenerTodasLasLocalidades().subscribe({
-      next: (data) =>{
+      next: (data) => {
         console.log(data.respuesta)
-        this.localidades = data.respuesta
+        this.localidades = data.respuesta;
       },
       error(err) {
         Swal.fire({
@@ -56,7 +71,7 @@ export class GestionLocalidadesComponent {
   public confirmarEliminacion() {
     Swal.fire({
       title: "¿Estás seguro?",
-      text: "Esta acción eliminará las localidades seleccionadas.",
+      text: "Esta acción eliminará la localidad seleccionada.",
       icon: "error",
       showCancelButton: true,
       confirmButtonText: "Confirmar",
@@ -64,16 +79,13 @@ export class GestionLocalidadesComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         this.eliminarLocalidades();
-        Swal.fire("Eliminadas!", "Las localidades seleccionadas han sido eliminadas.", "success");
+        Swal.fire("Eliminada!", "La localidad seleccionada ha sido eliminada.", "success");
       }
     });
   }
 
   public eliminarLocalidades() {
-    this.seleccionadas.forEach(loc => {
-      // this.localidadesService.eliminar(loc.id); // Descomentar cuando se implemente el servicio
-      this.localidades = this.localidades.filter(l => l !== loc);
-    });
+    this.localidades = this.localidades.filter(l => !this.seleccionadas.includes(l));
     this.seleccionadas = [];
     this.actualizarMensaje();
   }

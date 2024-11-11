@@ -16,6 +16,7 @@ import { CambiarContrasenaComponent } from './componentes/cambiar-contrasena/cam
 import { VerificarCodigoRestablecerComponent } from './componentes/verificar-codigo-restablecer/verificar-codigo-restablecer.component';
 import { GestionarCuponComponent } from './componentes/gestionar-cupon/gestionar-cupon.component';
 import { CrearCuponComponent } from './componentes/crear-cupon/crear-cupon.component';
+import { ActualizarLocalidadComponent } from './componentes/actualizar-localidad/actualizar-localidad.component';
 
 export const routes: Routes = [
    { path: '', component: InicioComponent },
@@ -34,6 +35,7 @@ export const routes: Routes = [
    { path: "gestion-cupones", component: GestionarCuponComponent},
    { path: "crear-cupon", component:CrearCuponComponent},
    { path: "eventos-detalle", component: DetalleEventoComponent},
+   { path: "actualizar-localidad", component:ActualizarLocalidadComponent},
    { path: "**", pathMatch: "full", redirectTo: "" }
 ];
 

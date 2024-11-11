@@ -1,5 +1,4 @@
-export interface LocalidadObtenidaDTO {
-  idLocalidad:string,
+export interface DTOActualizarLocalidad {
   nombreLocalidad: string,
   direccion: string,
   ciudad: String,

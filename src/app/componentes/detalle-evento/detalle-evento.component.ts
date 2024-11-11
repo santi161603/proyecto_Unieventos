@@ -28,7 +28,10 @@ export class DetalleEventoComponent {
 
   public obtenerEvento(idEvento: string) {
     this.clientService.obtenerEventoPorId(idEvento).subscribe({
-      next: (data) => this.evento = data.respuesta,
+      next: (data) => {
+        this.evento = data.respuesta
+        console.log(data.respuesta)
+      },
       error: (err) => console.error("Error al obtener el evento:", err)
     });
   }

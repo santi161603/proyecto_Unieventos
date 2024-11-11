@@ -8,6 +8,7 @@ import { TokenService } from './token.service';
 import { LocalidadDTO } from '../dto/localidad-dto';
 import { CrearCuentaDTO } from '../dto/crear-cuenta-dto';
 import { CrearCuponDTO } from '../dto/crear-cupon-dto';
+import { DTOActualizarLocalidad } from '../dto/actualizar-localidad-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -91,7 +92,43 @@ export class AdministradorService {
     return this.http.post<MensajeDTO>(`${this.authURL}/crear-cupon`, cuponDTO, {headers});
    }
 
+   public actualizarLocalidad(idLocalidad:string, DTOActualizarLocalidad: DTOActualizarLocalidad): Observable<MensajeDTO> {
 
+    if(!this.tokenUser){
+      throw new Error('No token de autenticación disponible')
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.tokenUser}`  // 'Bearer' seguido del token
+    });
+
+    return this.http.put<MensajeDTO>(`${this.authURL}/actualizar-localidad/${idLocalidad}`, DTOActualizarLocalidad, {headers});
+   }
+
+   public actualizarEvento(DTOActualizarEvento: DTOActualizarLocalidad): Observable<MensajeDTO> {
+
+    if(!this.tokenUser){
+      throw new Error('No token de autenticación disponible')
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.tokenUser}`  // 'Bearer' seguido del token
+    });
+
+    return this.http.post<MensajeDTO>(`${this.authURL}/crear-localidad`, DTOActualizarEvento, {headers});
+   }
+   public actualizarCupon(DTOActualizarCupon: DTOActualizarLocalidad): Observable<MensajeDTO> {
+
+    if(!this.tokenUser){
+      throw new Error('No token de autenticación disponible')
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.tokenUser}`  // 'Bearer' seguido del token
+    });
+
+    return this.http.post<MensajeDTO>(`${this.authURL}/crear-localidad`, DTOActualizarCupon, {headers});
+   }
 
 
 }

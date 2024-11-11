@@ -68,6 +68,9 @@ public obtenerEventoPorId(idEvento: string): Observable<MensajeDTO> {
   return this.http.get<MensajeDTO>(`${this.authURL}/obtener-evento/${idEvento}`);
 }
 
+public obtenerLocalidadPorId(idLocalidad: string): Observable<MensajeDTO> {
+  return this.http.get<MensajeDTO>(`${this.authURL}/obtener-por-id-localidad/${idLocalidad}`);
+}
 
  constructor(private http: HttpClient) { }
 }

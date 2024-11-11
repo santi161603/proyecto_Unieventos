@@ -40,7 +40,7 @@ export class EventosPorCategoriasComponent implements OnInit {
   }
   seleccionarTipoAleatoriamente() {
     const tipoAleatorio = this.tipoEventos[Math.floor(Math.random() * this.tipoEventos.length)]
-    this.obtenerEventosPorCategoria("CHARLA");
+    this.obtenerEventosPorCategoria(tipoAleatorio);
 
   }
   obtenerEventosPorCategoria(tipoAleatorio: string) {

@@ -1,0 +1,13 @@
+/* Estilo personalizado para la fila seleccionada */
+.selected-row {
+  background-color: rgba(38, 194, 129, 0.3) !important; /* Tono azul claro con opacidad */
+}
+
+.selected-row:hover {
+  background-color: rgba(38, 194, 129, 0.5) !important; /* Aumentamos la opacidad al pasar el ratón */
+}
+img {
+  max-width: 200px;
+  max-height: 180px;
+  object-fit: cover; /* Ajusta la imagen para llenar el espacio */
+}
