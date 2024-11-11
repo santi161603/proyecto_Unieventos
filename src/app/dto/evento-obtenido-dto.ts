@@ -1,4 +1,4 @@
-import { SubEventosDto } from "./subevento-dto";
+import { SubEventosObtenidosDto } from "./subevento-dto";
 
 export interface EventoObtenidoDTO {
    idEvento: string;
@@ -6,7 +6,7 @@ export interface EventoObtenidoDTO {
    descripcion:string,
    estadoEvento:string,
    tipoEvento:string,
-   subEventos: SubEventosDto[],
+   subEventos: SubEventosObtenidosDto[],
    imagenPoster: string;
    mostrarDetalles?: boolean;
 }

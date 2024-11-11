@@ -5,12 +5,12 @@ import { EventoObtenidoDTO } from '../../dto/evento-obtenido-dto';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AdministradorService } from '../../servicios/administrador.service';
 import { ClientService } from '../../servicios/auth.service';
-import { SubEventosDto } from '../../dto/subevento-dto';
 import { DTOActualizarLocalidad } from '../../dto/actualizar-localidad-dto';
 import { EventoActualizarDTO } from '../../dto/actualizar-evento-dto';
 import Swal from 'sweetalert2';
 import { LocalidadNombreIdDTO } from '../../dto/localidades-id-nombre';
 import { EnumService } from '../../servicios/get-enums.service';
+import { SubEventosObtenidosDto } from '../../dto/subevento-dto';
 
 @Component({
   selector: 'app-actualizar-evento',
@@ -109,17 +109,23 @@ export class ActualizarEventoComponent implements OnInit {
 
         // Crear los subeventos dinámicamente
         const subEventos = this.actualizarEventoForm.get('subEventos') as FormArray;
-        data.respuesta.subEventos.forEach((subEvento: SubEventosDto) => {
+        data.respuesta.subEventos.forEach((subEvento: SubEventosObtenidosDto) => {
+
+          console.log(subEvento.fechaEvento)
 
           const fechaEvento = new Date(subEvento.fechaEvento); // Asegúrate de que subEvento.fechaEvento esté en un formato ISO válido
           const fechaFormateada = fechaEvento.toISOString().split('T')[0]; // Esto convertirá la fecha a 'YYYY-MM-DD'
 
+
+
           subEventos.push(this.fb.group({
+            idSubEvento:[subEvento.idSubEvento],
             fechaEvento: [fechaFormateada, Validators.required],
             localidad: [subEvento.localidad, Validators.required],
             horaEvento: [subEvento.horaEvento, Validators.required],
             cantidadEntradas: [subEvento.cantidadEntradas, Validators.required],
             precioEntrada: [subEvento.precioEntrada, Validators.required],
+            estadoSubEvento:[subEvento.estadoSubEvento, Validators.required]
           }));
         });
 
@@ -140,16 +146,22 @@ export class ActualizarEventoComponent implements OnInit {
 
   agregarSubEvento(): void {
     this.subEventos.push(this.fb.group({
+      idSubEvento:[0],
       fechaEvento: ['', Validators.required],
       localidad: ['', Validators.required],
       horaEvento: ['', Validators.required],
       cantidadEntradas: ['', Validators.required],
       precioEntrada: ['', Validators.required],
+      estadoSubEvento: ['', Validators.required]
     }));
   }
 
   eliminarSubEvento(index: number): void {
-    this.subEventos.removeAt(index);
+    const subEvento = this.subEventos.at(index);
+    if (subEvento) {
+      console.log(subEvento)
+      subEvento.patchValue({ estadoSubEvento: 'ELIMINADO' });
+    }
   }
 
   onFileSelected(event: Event): void {

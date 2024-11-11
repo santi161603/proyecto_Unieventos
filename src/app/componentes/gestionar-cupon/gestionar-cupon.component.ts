@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CuponObtenidoDTO } from '../../dto/cupon-obtenido-dto';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CuentaAutenticadaService } from '../../servicios/cuenta-autenticada.service';
 import Swal from 'sweetalert2';
 
@@ -14,14 +14,29 @@ import Swal from 'sweetalert2';
   styleUrl: './gestionar-cupon.component.css'
 })
 export class GestionarCuponComponent {
+
   cupones: CuponObtenidoDTO[] = [];
   cuponesSeleccionados: CuponObtenidoDTO[] = [];    // Lista de cupones seleccionados para eliminación
   textoBtnEliminar = '';
-
-  constructor(public cuponService: CuentaAutenticadaService) {
+  constructor(private cuponService: CuentaAutenticadaService, private router:Router) {
     this.obtenerCupones();
   }
 
+
+   navegarUpdate() {
+    if (this.cuponesSeleccionados.length === 1) {
+      // Redirigir o mostrar una vista para actualizar la localidad
+      const idCupon = this.cuponesSeleccionados[0].idCupon;
+
+      sessionStorage.removeItem("idCuponActualizar")
+      sessionStorage.setItem("idCuponActualizar", idCupon)
+
+      console.log(idCupon)
+
+      this.router.navigate(['/actualizar-cupon'])
+     }
+
+    }
    // Obtener todos los cupones desde el servicio
    obtenerCupones(): void {
     this.cuponService.obtenerTodosLosCupones().subscribe({
@@ -40,13 +55,14 @@ export class GestionarCuponComponent {
   }
 
   // Seleccionar o deseleccionar un cupón
-  seleccionarCupon(cupon: CuponObtenidoDTO, isChecked: boolean): void {
-   /* if (isChecked) {
-      this.cuponesSeleccionados.push(cupon);
+   // Seleccionar o deseleccionar un cupón
+   public seleccionarCupon(cupon: CuponObtenidoDTO): void {
+    if (this.cuponesSeleccionados.includes(cupon)) {
+      this.cuponesSeleccionados = [];
     } else {
-      this.cuponesSeleccionados = this.cuponesSeleccionados.filter(c => c !== cupon);
+      this.cuponesSeleccionados = [cupon]; // Solo permitir seleccionar un cupón
     }
-    this.actualizarTextoEliminar();*/
+    this.actualizarTextoEliminar();
   }
 
   // Actualizar el texto del botón de eliminar

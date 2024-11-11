@@ -32,29 +32,39 @@
   <div formArrayName="subEventos">
     <h4>Subeventos</h4>
     <div *ngFor="let subEvento of subEventos.controls; let i = index" [formGroupName]="i">
-      <label>Fecha del evento</label>
-      <input type="date" formControlName="fechaEvento" />
+      <div *ngIf="subEvento.get('estadoSubEvento')?.value !== 'ELIMINADO'">
+        <label>Fecha del evento</label>
+        <input type="date" formControlName="fechaEvento" />
 
-      <label>Localidad</label>
-      <select formControlName="localidad">
-        <option *ngFor="let localidad of localidades" [value]="localidad.IdLocalidad">
-          {{ localidad.nombreLocalidad }}
-        </option>
-      </select>
+        <label>Localidad</label>
+        <select formControlName="localidad">
+          <option *ngFor="let localidad of localidades" [value]="localidad.IdLocalidad">
+            {{ localidad.nombreLocalidad }}
+          </option>
+        </select>
 
-      <label>Hora del evento</label>
-      <input type="time" formControlName="horaEvento" />
+        <label>Hora del evento</label>
+        <input type="time" formControlName="horaEvento" />
 
-      <label>Cantidad de Entradas</label>
-      <input type="number" formControlName="cantidadEntradas" />
+        <label>Cantidad de Entradas</label>
+        <input type="number" formControlName="cantidadEntradas" />
 
-      <label>Precio de la Entrada</label>
-      <input type="number" formControlName="precioEntrada" />
+        <label>Precio de la Entrada</label>
+        <input type="number" formControlName="precioEntrada" />
 
-      <button type="button" (click)="eliminarSubEvento(i)">Eliminar SubEvento</button>
+        <div>
+          <label for="estadoSubEvento">Estado del Subevento</label>
+          <select id="estadoSubEvento" formControlName="estadoSubEvento">
+            <option *ngFor="let estado of estadoCuentaEnum" [value]="estado">{{ estado }}</option>
+          </select>
+        </div>
+
+        <button type="button" (click)="eliminarSubEvento(i)">Eliminar SubEvento</button>
+      </div>
     </div>
     <button type="button" (click)="agregarSubEvento()">Agregar SubEvento</button>
   </div>
+
 
   <div class="mb-3 row">
     <label for="imagen" class="col-sm-2 col-form-label">Imagen (opcional)</label>

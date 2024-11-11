@@ -9,8 +9,11 @@
         <button type="button" routerLink="/crear-cupon" class="btn btn-success me-2">
           <i class="fa-solid fa-plus me-1"></i> Crear cupón
         </button>
-        <button type="button" class="btn btn-danger" (click)="confirmarEliminacion()" [disabled]="cuponesSeleccionados.length == 0">
+        <button type="button" class="btn btn-danger me-2" (click)="confirmarEliminacion()" [disabled]="cuponesSeleccionados.length === 0">
           <i class="fa-solid fa-trash me-1"></i> Eliminar cupón {{ textoBtnEliminar }}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="navegarUpdate()" [disabled]="cuponesSeleccionados.length !== 1">
+          <i class="fa-solid fa-pen me-1"></i> Actualizar cupón
         </button>
       </div>
 
@@ -22,17 +25,23 @@
               <th>Nombre del Cupón</th>
               <th>Descripción</th>
               <th>Porcentaje de Descuento</th>
+              <th>Estado</th>
+              <th>Usuario</th>
               <th>Fecha de Vencimiento</th>
             </tr>
           </thead>
           <tbody class="table-group-divider">
-            <tr *ngFor="let cupon of cupones; trackBy: trackByIndex">
+            <tr *ngFor="let cupon of cupones; trackBy: trackByIndex"
+                [ngClass]="{'selected-row': cuponesSeleccionados.includes(cupon)}"
+                (click)="seleccionarCupon(cupon)">
               <td>
-                <input #check class="form-check-input" type="checkbox" (change)="seleccionarCupon(cupon, check.checked)" />
+                <input type="radio" [checked]="cuponesSeleccionados.includes(cupon)" disabled />
               </td>
               <td>{{ cupon.nombreCupon }}</td>
               <td>{{ cupon.descripcionCupon }}</td>
               <td>{{ cupon.porcentajeDescuento }}%</td>
+              <td>{{ cupon.estadoCupon }}</td>
+              <td>{{ cupon.userCupon }}</td>
               <td>{{ cupon.fechaVencimiento | date:'dd/MM/yyyy HH:mm' }}</td>
             </tr>
           </tbody>

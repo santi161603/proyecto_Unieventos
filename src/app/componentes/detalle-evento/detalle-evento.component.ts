@@ -22,12 +22,13 @@ export class DetalleEventoComponent {
       this.idEvento = sessionStorage.getItem('idEvento');
 
       if (this.idEvento) {
+        this.obtenerLocalidades();
         this.obtenerEvento(this.idEvento);
       } else {
         console.error("No se encontró el ID del evento en sessionStorage");
       }
   }
-  public obtenerLocalidades() {
+  private obtenerLocalidades() {
     this.clientService.obtenerTodasLasLocalidadesNombreID().subscribe({
       next: (data) => {
         this.localidades = data.respuesta;
@@ -46,14 +47,29 @@ export class DetalleEventoComponent {
     });
   }
 
-   private asignarNombresLocalidades() {
+  private asignarNombresLocalidades() {
+    console.log("estoy dentro de asignar nombres")
     if (this.evento && this.localidades.length) {
+      // Imprimir las localidades y los subeventos para depuración
+      console.log('Localidades:', this.localidades);
+      console.log('Subeventos:', this.evento.subEventos);
+
       this.evento.subEventos.forEach(subevento => {
-        const localidad = this.localidades.find(loc => loc.IdLocalidad === subevento.localidad);
+        // Asegurarse de que los tipos sean iguales para evitar problemas de comparación
+        const localidad = this.localidades.find(loc => loc.IdLocalidad === String(subevento.localidad));
+
+        // Verificar si la localidad fue encontrada y asignarla
         if (localidad) {
           subevento.localidadNombre = localidad.nombreLocalidad;
+        } else {
+          console.warn('No se encontró la localidad para el subevento:', subevento);
         }
       });
+    }
+    else{
+      console.log("error")
+      console.log(this.evento)
+      console.log(this.localidades.length)
     }
   }
 }

@@ -29,4 +29,16 @@ export class CuentaAutenticadaService {
     return this.http.get<MensajeDTO>(`${this.authURL}/obtener-todos-los-cupones`, {headers});
    }
 
+   public obtenerCuponPorID(idCupon: string): Observable<MensajeDTO> {
+    if(!this.tokenUser){
+      throw new Error('No tiene token de autenticacion disponible')
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.tokenUser}`
+    })
+
+    return this.http.get<MensajeDTO>(`${this.authURL}/obtener-cupon-id/${idCupon}`, {headers});
+   }
+
 }

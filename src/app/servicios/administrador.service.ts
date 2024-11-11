@@ -10,6 +10,7 @@ import { CrearCuentaDTO } from '../dto/crear-cuenta-dto';
 import { CrearCuponDTO } from '../dto/crear-cupon-dto';
 import { DTOActualizarLocalidad } from '../dto/actualizar-localidad-dto';
 import { EventoActualizarDTO } from '../dto/actualizar-evento-dto';
+import { CuponActualizadoDTO } from '../dto/actualizar-cupon-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -105,7 +106,7 @@ export class AdministradorService {
 
     return this.http.put<MensajeDTO>(`${this.authURL}/actualizar-evento/${idEvento}`, DTOActualizarEvento, {headers});
    }
-   public actualizarCupon(DTOActualizarCupon: DTOActualizarLocalidad): Observable<MensajeDTO> {
+   public actualizarCupon(idCupon:string,DTOActualizarCupon: CuponActualizadoDTO): Observable<MensajeDTO> {
 
     if(!this.tokenUser){
       throw new Error('No token de autenticación disponible')
@@ -115,7 +116,7 @@ export class AdministradorService {
       'Authorization': `Bearer ${this.tokenUser}`  // 'Bearer' seguido del token
     });
 
-    return this.http.post<MensajeDTO>(`${this.authURL}/crear-localidad`, DTOActualizarCupon, {headers});
+    return this.http.put<MensajeDTO>(`${this.authURL}/actualizar-cupon/${idCupon}`, DTOActualizarCupon, {headers});
    }
 
    public eliminarLocalidad(idLocalidad: string): Observable<MensajeDTO> {
@@ -129,6 +130,20 @@ export class AdministradorService {
     });
 
     return this.http.delete<MensajeDTO>(`${this.authURL}/eliminar-localidad/${idLocalidad}`, {headers});
+   }
+
+
+   public eliminarEvento(idEvento: string): Observable<MensajeDTO> {
+
+    if(!this.tokenUser){
+      throw new Error('No token de autenticación disponible')
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.tokenUser}`  // 'Bearer' seguido del token
+    });
+
+    return this.http.delete<MensajeDTO>(`${this.authURL}/eliminar-evento/${idEvento}`, {headers});
    }
 
 }

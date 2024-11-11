@@ -18,6 +18,7 @@ import { GestionarCuponComponent } from './componentes/gestionar-cupon/gestionar
 import { CrearCuponComponent } from './componentes/crear-cupon/crear-cupon.component';
 import { ActualizarLocalidadComponent } from './componentes/actualizar-localidad/actualizar-localidad.component';
 import { ActualizarEventoComponent } from './componentes/actualizar-evento/actualizar-evento.component';
+import { ActualizarCuponComponent } from './componentes/actualizar-cupon/actualizar-cupon.component';
 
 export const routes: Routes = [
    { path: '', component: InicioComponent },
@@ -38,6 +39,7 @@ export const routes: Routes = [
    { path: "eventos-detalle", component: DetalleEventoComponent},
    { path: "actualizar-localidad", component:ActualizarLocalidadComponent},
    { path: "actualizar-evento", component:ActualizarEventoComponent},
+   { path: "actualizar-cupon", component:ActualizarCuponComponent},
    { path: "**", pathMatch: "full", redirectTo: "" }
 ];
 

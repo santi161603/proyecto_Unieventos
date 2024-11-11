@@ -1,1 +1,77 @@
-<p>actualizar-cupon works!</p>
+<form [formGroup]="actualizarCuponForm" (ngSubmit)="onUpdate()" class="container mt-5">
+  <!-- Campo de Nombre del Cupón -->
+  <div class="mb-3 row">
+    <label for="nombreCupon" class="col-sm-2 col-form-label">Nombre del Cupón</label>
+    <div class="col-sm-10">
+      <input id="nombreCupon" formControlName="nombreCupon" type="text" class="form-control" />
+      <div *ngIf="actualizarCuponForm.get('nombreCupon')?.invalid && actualizarCuponForm.get('nombreCupon')?.touched" class="text-danger">
+        El nombre del cupón es obligatorio.
+      </div>
+    </div>
+  </div>
+
+  <!-- Campo de Descripción del Cupón -->
+  <div class="mb-3 row">
+    <label for="descripcionCupon" class="col-sm-2 col-form-label">Descripción</label>
+    <div class="col-sm-10">
+      <input id="descripcionCupon" formControlName="descripcionCupon" type="text" class="form-control" />
+      <div *ngIf="actualizarCuponForm.get('descripcionCupon')?.invalid && actualizarCuponForm.get('descripcionCupon')?.touched" class="text-danger">
+        La descripción del cupón es obligatoria.
+      </div>
+    </div>
+  </div>
+
+  <!-- Campo de Porcentaje de Descuento -->
+  <div class="mb-3 row">
+    <label for="porcentajeDescuento" class="col-sm-2 col-form-label">Porcentaje de Descuento</label>
+    <div class="col-sm-10">
+      <input id="porcentajeDescuento" formControlName="porcentajeDescuento" type="number" class="form-control" />
+      <div *ngIf="actualizarCuponForm.get('porcentajeDescuento')?.invalid && actualizarCuponForm.get('porcentajeDescuento')?.touched" class="text-danger">
+        El porcentaje de descuento debe ser mayor que 0 y no exceder 80.
+      </div>
+    </div>
+  </div>
+
+  <!-- Campo de Fecha de Vencimiento -->
+  <div class="mb-3 row">
+    <label for="fechaVencimiento" class="col-sm-2 col-form-label">Fecha de Vencimiento</label>
+    <div class="col-sm-10">
+      <input id="fechaVencimiento" formControlName="fechaVencimiento" type="date" class="form-control" />
+      <div *ngIf="actualizarCuponForm.get('fechaVencimiento')?.invalid && actualizarCuponForm.get('fechaVencimiento')?.touched" class="text-danger">
+        La fecha de vencimiento debe estar en el futuro.
+      </div>
+    </div>
+  </div>
+
+  <!-- Campo de Estado del Cupón -->
+  <div class="mb-3 row">
+    <label for="estadoCupon" class="col-sm-2 col-form-label">Estado del Cupón</label>
+    <div class="col-sm-10">
+      <select id="estadoCupon" formControlName="estadoCupon" class="form-select">
+        <option value="">Seleccione el estado</option>
+        <option *ngFor="let estado of estadosCupon" [value]="estado">{{ estado }}</option>
+      </select>
+      <div *ngIf="actualizarCuponForm.get('estadoCupon')?.invalid && actualizarCuponForm.get('estadoCupon')?.touched" class="text-danger">
+        El estado del cupón es obligatorio.
+      </div>
+    </div>
+  </div>
+
+  <!-- Campo de Cantidad -->
+  <div class="mb-3 row">
+    <label for="cantidad" class="col-sm-2 col-form-label">Cantidad</label>
+    <div class="col-sm-10">
+      <input id="cantidad" formControlName="cantidad" type="number" class="form-control" />
+      <div *ngIf="actualizarCuponForm.get('cantidad')?.invalid && actualizarCuponForm.get('cantidad')?.touched" class="text-danger">
+        La cantidad debe ser al menos 10.
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón de Actualizar -->
+  <div class="mb-3 row">
+    <div class="col-sm-10 offset-sm-2">
+      <button type="submit" class="btn btn-primary">Actualizar Cupón</button>
+    </div>
+  </div>
+</form>

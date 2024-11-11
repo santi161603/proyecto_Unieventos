@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
 import { LocalidadNombreIdDTO } from '../../dto/localidades-id-nombre';
 import { AdministradorService } from '../../servicios/administrador.service';
-import { SubEventosDto } from '../../dto/subevento-dto';
+import { SubEventosObtenidosDto } from '../../dto/subevento-dto';
 
 @Component({
   selector: 'app-gestion-eventos',
@@ -38,9 +38,7 @@ export class GestionEventosComponent {
   private cargarLocalidades(): void {
     this.clientServicio.obtenerTodasLasLocalidadesNombreID().subscribe({
       next: (response) => {
-        console.log(response.respuesta)
         this.localidades = response.respuesta;  // Almacena todas las localidades
-        console.log(this.localidades); // Verifica las localidades cargadas
       },
       error: (err) => {
         console.error('Error al cargar localidades', err);
@@ -50,7 +48,6 @@ export class GestionEventosComponent {
 
   private obtenerNombreLocalidad(localidadId: string): string {
     const localidad = this.localidades.find(l => l.IdLocalidad === localidadId); // Busca la localidad por IdLocalidad
-    console.log(localidad); // Verifica que el objeto localidad se haya encontrado correctamente
     return localidad ? localidad.nombreLocalidad : 'Desconocido'; // Retorna el nombre o 'Desconocido' si no se encuentra
   }
 
@@ -60,8 +57,7 @@ export class GestionEventosComponent {
         this.eventos = response.respuesta.map((evento: EventoObtenidoDTO) => ({
           ...evento,
           mostrarDetalles: false,
-          subEventos: evento.subEventos.map((subEvento: SubEventosDto) => {
-            console.log(subEvento.localidad); // Verifica qué contiene
+          subEventos: evento.subEventos.map((subEvento: SubEventosObtenidosDto) => {
             return {
               ...subEvento,
               localidadNombre: this.obtenerNombreLocalidad(subEvento.localidad)
@@ -96,7 +92,7 @@ export class GestionEventosComponent {
   public confirmarEliminacion() {
     Swal.fire({
       title: "¿Estás seguro?",
-      text: "Esta acción cambiará el estado de los eventos a Inactivos.",
+      text: "Esta acción cambiará el estado del evento a Eliminado.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Confirmar",
@@ -104,20 +100,33 @@ export class GestionEventosComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         this.eliminarEventos();
-        Swal.fire("Eliminados!", "Los eventos seleccionados han sido eliminados.", "success");
       }
     });
   }
 
   public eliminarEventos() {
-    this.seleccionados.forEach(evento => {
-      // Descomenta la siguiente línea cuando tengas el servicio implementado
-      // this.eventosService.eliminar(evento.nombre).subscribe(() => {
-        this.eventos = this.eventos.filter(e => e !== evento);
-      // });
-    });
-    this.seleccionados = [];
-    this.actualizarMensaje();
+    if (this.seleccionados.length === 1) {
+      // Redirigir o mostrar una vista para actualizar la localidad
+      const idEvento = this.seleccionados[0].idEvento;
+
+      this.adminService.eliminarEvento(idEvento).subscribe({
+        next:(value) => {
+          Swal.fire({
+            title: "Eliminado con exito",
+            text: "Se a eliminado exitosamente la localidad",
+            icon: "info",
+          })
+        },
+        error:(err) => {
+          Swal.fire({
+            title: "no se a podido eliminar",
+            text: "A surgido un error al intentar eliminar la localidad"+ err,
+            icon: "error",
+          })
+        }
+      })
+
+     }
   }
 
   public editarEvento(evento: EventoObtenidoDTO) {
