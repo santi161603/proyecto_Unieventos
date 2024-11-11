@@ -27,6 +27,6 @@ export class EnumService {
   }
 
   public listarEstadoCuenta(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.publicoURL}/get-estado-localidad`);
+    return this.http.get<string[]>(`${this.publicoURL}/get-estado-cuenta`);
   }
 }

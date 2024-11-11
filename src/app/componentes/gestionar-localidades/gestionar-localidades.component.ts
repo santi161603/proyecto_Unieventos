@@ -96,6 +96,13 @@ export class GestionLocalidadesComponent {
             text: "Se a eliminado exitosamente la localidad",
             icon: "info",
           })
+        },
+        error:(err) => {
+          Swal.fire({
+            title: "no se a podido eliminar",
+            text: "A surgido un error al intentar eliminar la localidad"+ err,
+            icon: "error",
+          })
         }
       })
 
