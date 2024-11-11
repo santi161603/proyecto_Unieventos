@@ -78,7 +78,7 @@ export class ActualizarLocalidadComponent implements OnInit {
   }
 
   private obtenerEstadoLocalidades() {
-    this.enumSer.listarEstadoCuenta().subscribe({
+    this.enumSer.listarEstadoLocalidades().subscribe({
       next: (data) => {
         this.estadoLocalidad = data
       },
