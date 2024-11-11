@@ -129,19 +129,6 @@ export class GestionEventosComponent {
      }
   }
 
-  public editarEvento(evento: EventoObtenidoDTO) {
-    // Implementa la lógica de edición, como redirigir a un formulario de edición
-    console.log("Editar evento:", evento);
-  }
-
-  public eliminarEvento(evento: EventoObtenidoDTO) {
-    // Descomenta la siguiente línea cuando tengas el servicio implementado
-    // this.eventosService.eliminar(evento.nombre).subscribe(() => {
-      this.eventos = this.eventos.filter(e => e !== evento);
-      this.actualizarMensaje();
-    // });
-  }
-
   public alternarDetalles(evento: EventoObtenidoDTO) {
     evento.mostrarDetalles = !evento.mostrarDetalles;
   }

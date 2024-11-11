@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CuponObtenidoDTO } from '../../dto/cupon-obtenido-dto';
 import { Router, RouterModule } from '@angular/router';
 import { CuentaAutenticadaService } from '../../servicios/cuenta-autenticada.service';
+import { AdministradorService } from '../../servicios/administrador.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -18,10 +19,9 @@ export class GestionarCuponComponent {
   cupones: CuponObtenidoDTO[] = [];
   cuponesSeleccionados: CuponObtenidoDTO[] = [];    // Lista de cupones seleccionados para eliminación
   textoBtnEliminar = '';
-  constructor(private cuponService: CuentaAutenticadaService, private router:Router) {
+  constructor(private cuponService: CuentaAutenticadaService, private router:Router, private administradorService: AdministradorService) {
     this.obtenerCupones();
   }
-
 
    navegarUpdate() {
     if (this.cuponesSeleccionados.length === 1) {
@@ -74,27 +74,36 @@ export class GestionarCuponComponent {
 
   // Confirmar eliminación de cupones seleccionados
   confirmarEliminacion(): void {
-    if (confirm(`¿Estás seguro de que quieres eliminar ${this.cuponesSeleccionados.length} cupón(es)?`)) {
-      this.eliminarCuponesSeleccionados();
-    }
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción cambiará el estado del evento a Eliminado.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Confirmar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.eliminarCuponesSeleccionados();
+      }
+    });
   }
 
   // Eliminar cupones seleccionados usando el servicio
-  eliminarCuponesSeleccionados(): void {
-    //const ids = this.cuponesSeleccionados.map(cupon => cupon.id); // Asegúrate de que cada cupón tenga un `id`
-   /* this.cuponService.deleteCupones(ids).subscribe(
-      () => {
-        // Filtrar los cupones eliminados de la lista principal
-        this.cupones = this.cupones.filter(cupon => !ids.includes(cupon.id));
-        this.cuponesSeleccionados = [];
-        this.actualizarTextoEliminar();
-        alert('Cupones eliminados con éxito.');
+  eliminarCuponesSeleccionados() {
+  // Asegúrate de que cada cupón tenga un `id`
+    const idCupon = this.cuponesSeleccionados[0].idCupon;
+    this.administradorService.eliminarCupon(idCupon).subscribe({
+      next:() => {
+        Swal.fire({
+          title: "Eliminado con exito",
+          text: "Se a eliminado exitosamente el cupon",
+          icon: "info",
+        })
       },
-      (error) => {
+      error:(error) => {
         console.error('Error al eliminar cupones:', error);
-        alert('Hubo un error al eliminar los cupones. Inténtalo de nuevo.');
       }
-    );*/
+  });
   }
 
   trackByIndex(index: number, item: CuponObtenidoDTO): number {

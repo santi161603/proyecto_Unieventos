@@ -132,6 +132,20 @@ export class AdministradorService {
     return this.http.delete<MensajeDTO>(`${this.authURL}/eliminar-localidad/${idLocalidad}`, {headers});
    }
 
+   public eliminarCupon(idCupon: string): Observable<MensajeDTO> {
+
+    if(!this.tokenUser){
+      throw new Error('No token de autenticación disponible');
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.tokenUser}`  // 'Bearer' seguido del token
+    });
+
+    return this.http.delete<MensajeDTO>(`${this.authURL}/eliminar-cupon/${idCupon}`, {headers});
+  }
+
+
 
    public eliminarEvento(idEvento: string): Observable<MensajeDTO> {
 

@@ -19,12 +19,14 @@ import { CrearCuponComponent } from './componentes/crear-cupon/crear-cupon.compo
 import { ActualizarLocalidadComponent } from './componentes/actualizar-localidad/actualizar-localidad.component';
 import { ActualizarEventoComponent } from './componentes/actualizar-evento/actualizar-evento.component';
 import { ActualizarCuponComponent } from './componentes/actualizar-cupon/actualizar-cupon.component';
+import { InformacionUsuarioComponent } from './componentes/informacion-usuario/informacion-usuario.component';
 
 export const routes: Routes = [
    { path: '', component: InicioComponent },
    { path: 'login', component: LoginComponent },
    { path: 'registro', component: RegistroComponent },
    { path: 'verificacion-codigo/:idUsuario', component: VerificacionCodigoComponent},
+   { path: "informacion-usuario",component: InformacionUsuarioComponent},
    { path: 'crear-evento',component:CrearEventoComponent},
    { path: "obtener-evento",component:DetalleEventoComponent},
    { path: 'crear-localidad', component:CrearLocalidadComponent},
