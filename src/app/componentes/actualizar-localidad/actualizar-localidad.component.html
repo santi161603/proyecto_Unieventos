@@ -21,6 +21,20 @@
       </div>
   </div>
 
+  <!-- Campo de Estado de Localidad (Spinner y Select) -->
+  <div class="mb-3 row">
+    <label for="estadoLocalidad" class="col-sm-2 col-form-label">Estado localidad</label>
+    <div class="col-sm-10">
+        <select id="estadoLocalidad" formControlName="estadoLocalidad" class="form-select">
+            <option value="">Seleccione un estado</option>
+            <option *ngFor="let estadoLocalidad of estadoLocalidad" [value]="estadoLocalidad">{{ estadoLocalidad }}</option>
+        </select>
+        <div *ngIf="actualizarLocalidadForm.get('estadoLocalidad')?.invalid && actualizarLocalidadForm.get('estadoLocalidad')?.touched" class="text-danger">
+            La ciudad es obligatoria.
+        </div>
+    </div>
+</div>
+
   <!-- Campo de Ciudad -->
   <div class="mb-3 row">
       <label for="ciudad" class="col-sm-2 col-form-label">Ciudad</label>

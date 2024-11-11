@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import { ClientService } from '../../servicios/auth.service';
 import { LocalidadObtenidaDTO } from '../../dto/localidad-obtenida-dto';
 import { CommonModule } from '@angular/common';
+import { AdministradorService } from '../../servicios/administrador.service';
 
 @Component({
   selector: 'app-gestion-localidades',
@@ -17,7 +18,7 @@ export class GestionLocalidadesComponent {
   seleccionadas: LocalidadObtenidaDTO[] = [];
   textoBtnEliminar: string = "";
 
-  constructor(public localidadesService: ClientService, private router: Router) {
+  constructor(public localidadesService: ClientService, private router: Router, private adminService: AdministradorService) {
     this.obtenerLocalidades();
   }
 
@@ -72,22 +73,33 @@ export class GestionLocalidadesComponent {
     Swal.fire({
       title: "¿Estás seguro?",
       text: "Esta acción eliminará la localidad seleccionada.",
-      icon: "error",
+      icon: "question",
       showCancelButton: true,
       confirmButtonText: "Confirmar",
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
         this.eliminarLocalidades();
-        Swal.fire("Eliminada!", "La localidad seleccionada ha sido eliminada.", "success");
       }
     });
   }
 
   public eliminarLocalidades() {
-    this.localidades = this.localidades.filter(l => !this.seleccionadas.includes(l));
-    this.seleccionadas = [];
-    this.actualizarMensaje();
+    if (this.seleccionadas.length === 1) {
+      // Redirigir o mostrar una vista para actualizar la localidad
+      const localidadId = this.seleccionadas[0].idLocalidad;
+
+      this.adminService.eliminarLocalidad(localidadId).subscribe({
+        next:(value) => {
+          Swal.fire({
+            title: "Eliminado con exito",
+            text: "Se a eliminado exitosamente la localidad",
+            icon: "info",
+          })
+        }
+      })
+
+     }
   }
 
   trackByIndex(index: number, item: LocalidadObtenidaDTO): number {

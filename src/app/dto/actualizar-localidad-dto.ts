@@ -1,6 +1,7 @@
 export interface DTOActualizarLocalidad {
   nombreLocalidad: string,
   direccion: string,
+  estadoLocalidad:string,
   ciudad: String,
   imageLocalidad: string,
   tipoLocalidad: String,

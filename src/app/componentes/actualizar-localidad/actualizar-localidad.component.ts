@@ -22,6 +22,7 @@ export class ActualizarLocalidadComponent implements OnInit {
   localidadActual: LocalidadObtenidaDTO | undefined; // Objeto de la localidad a actualizar
   ciudades: string[] = [];
   tiposLocalidad: string[] = [];
+  estadoLocalidad: string[] = [];
   imagenSeleccionada: File | null = null;
   idLocalidad: string ="";
 
@@ -35,13 +36,15 @@ export class ActualizarLocalidadComponent implements OnInit {
     this.actualizarLocalidadForm = this.fb.group({
       nombreLocalidad: ['', [Validators.required, Validators.maxLength(50)]],
       direccion: ['', Validators.required],
+      estadoLocalidad: ['', Validators.required],
       ciudad: ['', Validators.required],
       tipoLocalidad: ['', Validators.required],
       capacidadMaxima: ['', [Validators.required, Validators.min(1)]],
       capacidadDisponible: ['', [Validators.required, Validators.min(1)]],
     });
-    this.obtenerCiudades()
-    this.obtenerTipoLocalidades()
+    this.obtenerCiudades();
+    this.obtenerTipoLocalidades();
+    this.obtenerEstadoLocalidades();
   }
 
   private obtenerCiudades() {
@@ -73,6 +76,21 @@ export class ActualizarLocalidadComponent implements OnInit {
       },
     })
   }
+
+  private obtenerEstadoLocalidades() {
+    this.enumSer.listarEstadoCuenta().subscribe({
+      next: (data) => {
+        this.estadoLocalidad = data
+      },
+      error: (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error al intentar obtener las ciudades:' + error,
+        });
+      },
+    })
+  }
   ngOnInit(): void {
     const id = sessionStorage.getItem('idLocalidaActualizar');
     if(id){
@@ -84,6 +102,7 @@ export class ActualizarLocalidadComponent implements OnInit {
         this.actualizarLocalidadForm.patchValue({
           nombreLocalidad: data.respuesta.nombreLocalidad,
           direccion: data.respuesta.direccion,
+          estadoLocalidad: data.respuesta.estadoLocalidad,
           ciudad: data.respuesta.ciudad,
           tipoLocalidad: data.respuesta.tipoLocalidad,
           capacidadMaxima: data.respuesta.capacidadMaxima,
@@ -112,7 +131,6 @@ export class ActualizarLocalidadComponent implements OnInit {
     if (this.actualizarLocalidadForm.valid) {
       const localidadActualizada = {
         ...this.actualizarLocalidadForm.value,
-        imageLocalidad: this.imagenSeleccionada ? null : ""
       } as DTOActualizarLocalidad;
       console.log(localidadActualizada.imageLocalidad)
       if (this.imagenSeleccionada) {
@@ -162,7 +180,7 @@ export class ActualizarLocalidadComponent implements OnInit {
           if(result.isConfirmed){
         this.actualizarLocalidadForm.reset(); // Reinicia el formulario tras la creación exitosa
         this.imagenSeleccionada = null; // Resetea la imagen seleccionada
-        this.router.navigate(['/'])
+        this.router.navigate(['/gestion-localidad'])
           }
         });
 

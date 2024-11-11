@@ -18,12 +18,15 @@ export class EnumService {
   public listarTipoLocalidades(): Observable<string[]> {
     return this.http.get<string[]>(`${this.publicoURL}/get-tipo-localidad`);
   }
+  public listarEstadoLocalidades(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.publicoURL}/gget-estado-localidad`);
+  }
 
   public listarTipoEvento(): Observable<string[]> {
     return this.http.get<string[]>(`${this.publicoURL}/get-tipo-evento`);
   }
 
   public listarEstadoCuenta(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.publicoURL}/get-estado-cuenta`);
+    return this.http.get<string[]>(`${this.publicoURL}/get-estado-localidad`);
   }
 }
