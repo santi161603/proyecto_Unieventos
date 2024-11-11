@@ -53,19 +53,6 @@ export class AdministradorService {
     return this.http.post<MensajeDTO>(`${this.authURL}/subir-imagen`, formData, { headers });
   }
 
-  public obtenerTodasLasLocalidadesNombreID(): Observable<MensajeDTO> {
-
-    if (!this.tokenUser) {
-      throw new Error('No token de autenticación disponible');
-    }
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.tokenUser}`
-    });
-
-    return this.http.get<MensajeDTO>(`${this.authURL}/obtener-todas-localidades-id-nombre`, {headers})
-  }
-
 
    public crearLocalidad(LocalidadDTO: LocalidadDTO): Observable<MensajeDTO> {
 

@@ -57,7 +57,7 @@ public obtenereventosPorCiudad(ciudad: string): Observable<MensajeDTO>{
 }
 
 public obtenerTodasLasLocalidades(): Observable<MensajeDTO> {
-  return this.http.get<MensajeDTO>(`${this.authURL}/obtener-todas-localidad`)
+  return this.http.get<MensajeDTO>(`${this.authURL}/obtener-todas-localidades`)
 }
 
 public enviarTokenRecuperacion(correo: CorreoDTO): Observable<MensajeDTO> {
@@ -70,6 +70,10 @@ public obtenerEventoPorId(idEvento: string): Observable<MensajeDTO> {
 
 public obtenerLocalidadPorId(idLocalidad: string): Observable<MensajeDTO> {
   return this.http.get<MensajeDTO>(`${this.authURL}/obtener-por-id-localidad/${idLocalidad}`);
+}
+
+public obtenerTodasLasLocalidadesNombreID(): Observable<MensajeDTO> {
+  return this.http.get<MensajeDTO>(`${this.authURL}/obtener-todas-localidades-id-nombre`)
 }
 
  constructor(private http: HttpClient) { }

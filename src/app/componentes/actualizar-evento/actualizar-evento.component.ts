@@ -35,7 +35,8 @@ export class ActualizarEventoComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private adminEvent: AdministradorService,
-    private enumService: EnumService
+    private enumService: EnumService,
+    private clientService: ClientService
   ) {
     this.actualizarEventoForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.maxLength(50)]],
@@ -70,7 +71,7 @@ export class ActualizarEventoComponent implements OnInit {
   }
 
   getLocalidadesNombreId(){
-    this.adminEvent.obtenerTodasLasLocalidadesNombreID().subscribe({
+    this.clientService.obtenerTodasLasLocalidadesNombreID().subscribe({
       next: (value) =>{
         this.localidades = value.respuesta
       },

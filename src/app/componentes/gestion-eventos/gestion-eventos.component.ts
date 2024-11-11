@@ -21,7 +21,7 @@ export class GestionEventosComponent {
   seleccionados: EventoObtenidoDTO[] = [];
   textoBtnEliminar: string = "";
 
-  constructor(private clientSer: ClientService, private adminService: AdministradorService, private router: Router) {
+  constructor(private clientServicio: ClientService, private adminService: AdministradorService, private router: Router) {
     this.cargarLocalidades();
     this.cargarEventos();
   }
@@ -36,7 +36,7 @@ export class GestionEventosComponent {
   }
 
   private cargarLocalidades(): void {
-    this.adminService.obtenerTodasLasLocalidadesNombreID().subscribe({
+    this.clientServicio.obtenerTodasLasLocalidadesNombreID().subscribe({
       next: (response) => {
         console.log(response.respuesta)
         this.localidades = response.respuesta;  // Almacena todas las localidades
@@ -55,7 +55,7 @@ export class GestionEventosComponent {
   }
 
   private cargarEventos(): void {
-    this.clientSer.obtenerTodosLosEventos().subscribe({
+    this.clientServicio.obtenerTodosLosEventos().subscribe({
       next: (response) => {
         this.eventos = response.respuesta.map((evento: EventoObtenidoDTO) => ({
           ...evento,

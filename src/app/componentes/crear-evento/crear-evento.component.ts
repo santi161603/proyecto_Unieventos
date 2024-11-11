@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { EnumService } from '../../servicios/get-enums.service';
 import { CommonModule } from '@angular/common';
 import { AdministradorService } from '../../servicios/administrador.service';
+import { ClientService } from '../../servicios/auth.service';
 
 @Component({
   selector: 'app-crear-evento',
@@ -21,7 +22,7 @@ export class CrearEventoComponent implements OnInit{
   localidades: { nombreLocalidad: string, IdLocalidad: string }[] = [];
   imagenSeleccionada: File | null = null;
 
-  constructor(private fb: FormBuilder, private adminService: AdministradorService, private enums: EnumService, private admiService: AdministradorService) {
+  constructor(private fb: FormBuilder, private adminService: AdministradorService, private enums: EnumService, private clientService: ClientService) {
     this.crearEventoForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.maxLength(50)]],
       descripcion: ['', [Validators.required, Validators.maxLength(700)]],
@@ -40,7 +41,7 @@ export class CrearEventoComponent implements OnInit{
   }
 
   private getNombreLocalidades() {
-    this.adminService.obtenerTodasLasLocalidadesNombreID().subscribe({
+    this.clientService.obtenerTodasLasLocalidadesNombreID().subscribe({
       next: (data) => {
         console.log(data)
         this.localidades = data.respuesta; // Asigna las localidades obtenidas del backend
@@ -113,7 +114,7 @@ export class CrearEventoComponent implements OnInit{
       } as EventoDTO
 
       if(this.imagenSeleccionada){
-        this.admiService.subirImagen(this.imagenSeleccionada).subscribe({
+        this.adminService.subirImagen(this.imagenSeleccionada).subscribe({
           next: (urlImagen) => {
             crearEvento.imageEvento = urlImagen.respuesta;
             console.log(urlImagen)
