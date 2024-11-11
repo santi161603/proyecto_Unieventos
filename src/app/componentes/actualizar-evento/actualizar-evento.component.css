@@ -1,0 +1,132 @@
+/* Estilo general para el formulario */
+form {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Títulos del formulario */
+h4 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Estilo para los campos de entrada */
+label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+  display: block;
+}
+
+input[type="text"],
+textarea,
+select,
+input[type="date"],
+input[type="time"],
+input[type="number"],
+input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: #fff;
+}
+
+input[type="text"]:focus,
+textarea:focus,
+select:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="number"]:focus,
+input[type="file"]:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+}
+
+/* Estilo para los mensajes de error */
+div.ng-invalid.ng-touched {
+  color: #e74c3c;
+  font-size: 0.875rem;
+}
+
+button[type="button"], button[type="submit"] {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+button[type="button"]:hover,
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: #fff;
+  height: 150px; /* Ajusta esta altura a tu preferencia */
+  resize: vertical; /* Permite que el usuario pueda ajustar la altura */
+}
+
+img {
+  max-width: 200px;
+  max-height: 180px;
+  object-fit: cover; /* Ajusta la imagen para llenar el espacio */
+}
+
+/* Estilo para el botón de agregar y eliminar subevento */
+button[type="button"] {
+  background-color: #e74c3c;
+  margin-top: 10px;
+}
+
+button[type="button"]:hover {
+  background-color: #c0392b;
+}
+
+/* Contenedor para la imagen previa */
+.col-sm-10 {
+  position: relative;
+}
+
+img {
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+/* Contenedor para los subeventos */
+div[formArrayName="subEventos"] {
+  margin-bottom: 30px;
+  padding: 15px;
+  background-color: #f1f1f1;
+  border-radius: 10px;
+}
+
+div[formArrayName="subEventos"] label {
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+div[formArrayName="subEventos"] .form-check-input {
+  margin-right: 10px;
+}
+

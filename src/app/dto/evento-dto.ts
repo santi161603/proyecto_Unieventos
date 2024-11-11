@@ -3,7 +3,7 @@ import { SubEventosDto } from "./subevento-dto";
 export interface EventoDTO {
    nombre:string,
    descripcion:string,
-   TipoEvento:string,
+   tipoEvento:string,
    estadoEvento:string,
    subEvento: SubEventosDto[],
    imageEvento: string;

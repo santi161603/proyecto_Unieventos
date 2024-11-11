@@ -17,6 +17,7 @@ import { VerificarCodigoRestablecerComponent } from './componentes/verificar-cod
 import { GestionarCuponComponent } from './componentes/gestionar-cupon/gestionar-cupon.component';
 import { CrearCuponComponent } from './componentes/crear-cupon/crear-cupon.component';
 import { ActualizarLocalidadComponent } from './componentes/actualizar-localidad/actualizar-localidad.component';
+import { ActualizarEventoComponent } from './componentes/actualizar-evento/actualizar-evento.component';
 
 export const routes: Routes = [
    { path: '', component: InicioComponent },
@@ -36,6 +37,7 @@ export const routes: Routes = [
    { path: "crear-cupon", component:CrearCuponComponent},
    { path: "eventos-detalle", component: DetalleEventoComponent},
    { path: "actualizar-localidad", component:ActualizarLocalidadComponent},
+   { path: "actualizar-evento", component:ActualizarEventoComponent},
    { path: "**", pathMatch: "full", redirectTo: "" }
 ];
 

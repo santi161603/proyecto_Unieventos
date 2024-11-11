@@ -9,6 +9,7 @@ import { LocalidadDTO } from '../dto/localidad-dto';
 import { CrearCuentaDTO } from '../dto/crear-cuenta-dto';
 import { CrearCuponDTO } from '../dto/crear-cupon-dto';
 import { DTOActualizarLocalidad } from '../dto/actualizar-localidad-dto';
+import { EventoActualizarDTO } from '../dto/actualizar-evento-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -105,7 +106,7 @@ export class AdministradorService {
     return this.http.put<MensajeDTO>(`${this.authURL}/actualizar-localidad/${idLocalidad}`, DTOActualizarLocalidad, {headers});
    }
 
-   public actualizarEvento(DTOActualizarEvento: DTOActualizarLocalidad): Observable<MensajeDTO> {
+   public actualizarEvento(idEvento:string,DTOActualizarEvento: EventoActualizarDTO): Observable<MensajeDTO> {
 
     if(!this.tokenUser){
       throw new Error('No token de autenticación disponible')
@@ -115,7 +116,7 @@ export class AdministradorService {
       'Authorization': `Bearer ${this.tokenUser}`  // 'Bearer' seguido del token
     });
 
-    return this.http.post<MensajeDTO>(`${this.authURL}/crear-localidad`, DTOActualizarEvento, {headers});
+    return this.http.put<MensajeDTO>(`${this.authURL}/actualizar-evento/${idEvento}`, DTOActualizarEvento, {headers});
    }
    public actualizarCupon(DTOActualizarCupon: DTOActualizarLocalidad): Observable<MensajeDTO> {
 

@@ -11,3 +11,7 @@ img {
   max-height: 180px;
   object-fit: cover; /* Ajusta la imagen para llenar el espacio */
 }
+.selected {
+  background-color: #d1f7c4; /* Cambia el color de fondo cuando está seleccionado */
+}
+

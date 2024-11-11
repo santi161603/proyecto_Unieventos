@@ -1,1 +1,70 @@
-<p>actualizar-evento works!</p>
+<form [formGroup]="actualizarEventoForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="nombre">Nombre del evento</label>
+    <input id="nombre" formControlName="nombre" type="text" />
+    <div *ngIf="actualizarEventoForm.get('nombre')?.invalid && actualizarEventoForm.get('nombre')?.touched">
+      Nombre es obligatorio y debe tener máximo 50 caracteres.
+    </div>
+  </div>
+
+  <div>
+    <label for="descripcion">Descripción</label>
+    <textarea id="descripcion" formControlName="descripcion"></textarea>
+    <div *ngIf="actualizarEventoForm.get('descripcion')?.invalid && actualizarEventoForm.get('descripcion')?.touched">
+      Descripción es obligatoria y debe tener máximo 700 caracteres.
+    </div>
+  </div>
+
+  <div>
+    <label for="tipoEvento">Tipo de Evento</label>
+    <select id="tipoEvento" formControlName="tipoEvento">
+      <option *ngFor="let tipo of tipoEventoEnum" [value]="tipo">{{ tipo }}</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="estadoEvento">Estado del Evento</label>
+    <select id="estadoEvento" formControlName="estadoEvento">
+      <option *ngFor="let estado of estadoCuentaEnum" [value]="estado">{{ estado }}</option>
+    </select>
+  </div>
+
+  <div formArrayName="subEventos">
+    <h4>Subeventos</h4>
+    <div *ngFor="let subEvento of subEventos.controls; let i = index" [formGroupName]="i">
+      <label>Fecha del evento</label>
+      <input type="date" formControlName="fechaEvento" />
+
+      <label>Localidad</label>
+      <select formControlName="localidad">
+        <option *ngFor="let localidad of localidades" [value]="localidad.IdLocalidad">
+          {{ localidad.nombreLocalidad }}
+        </option>
+      </select>
+
+      <label>Hora del evento</label>
+      <input type="time" formControlName="horaEvento" />
+
+      <label>Cantidad de Entradas</label>
+      <input type="number" formControlName="cantidadEntradas" />
+
+      <label>Precio de la Entrada</label>
+      <input type="number" formControlName="precioEntrada" />
+
+      <button type="button" (click)="eliminarSubEvento(i)">Eliminar SubEvento</button>
+    </div>
+    <button type="button" (click)="agregarSubEvento()">Agregar SubEvento</button>
+  </div>
+
+  <div class="mb-3 row">
+    <label for="imagen" class="col-sm-2 col-form-label">Imagen (opcional)</label>
+    <div class="col-sm-10">
+      <div *ngIf="imagenPrevisualizada">
+        <img [src]="imagenPrevisualizada" alt="Imagen Previsualizada" width="150" />
+      </div>
+      <input id="imagen" type="file" (change)="onFileSelected($event)" class="form-control" />
+    </div>
+  </div>
+
+  <button type="submit">Actualizar Evento</button>
+</form>

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ClientService } from '../../servicios/auth.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { EventoObtenidoDTO } from '../../dto/evento-obtenido-dto';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
@@ -21,9 +21,18 @@ export class GestionEventosComponent {
   seleccionados: EventoObtenidoDTO[] = [];
   textoBtnEliminar: string = "";
 
-  constructor(private clientSer: ClientService, private adminService: AdministradorService) {
+  constructor(private clientSer: ClientService, private adminService: AdministradorService, private router: Router) {
     this.cargarLocalidades();
     this.cargarEventos();
+  }
+
+  public navegarEditar() {
+    if (this.seleccionados.length === 1) {
+      const eventoId = this.seleccionados[0].idEvento;
+      sessionStorage.removeItem("idEventoActualizar")
+      sessionStorage.setItem("idEventoActualizar", eventoId.toString()); // Guarda el ID en el sessionStorage
+      this.router.navigate(['/actualizar-evento']); // Redirige a la página de edición
+    }
   }
 
   private cargarLocalidades(): void {
@@ -66,17 +75,18 @@ export class GestionEventosComponent {
     });
   }
 
-  public seleccionar(evento: EventoObtenidoDTO, estado: boolean) {
-    if (estado) {
-      this.seleccionados.push(evento);
+  public seleccionar(evento: EventoObtenidoDTO) {
+    // Si el evento ya está seleccionado, desmarcarlo
+    if (this.seleccionados.includes(evento)) {
+      this.seleccionados = []; // Se desmarcan todos
     } else {
-      const index = this.seleccionados.indexOf(evento);
-      if (index !== -1) {
-        this.seleccionados.splice(index, 1);
-      }
+      // Si no está seleccionado, seleccionarlo
+      this.seleccionados = [evento]; // Solo se puede seleccionar un evento a la vez
     }
-    this.actualizarMensaje();
+    this.actualizarMensaje(); // Actualiza el mensaje para mostrar la cantidad de elementos seleccionados
   }
+
+
 
   private actualizarMensaje() {
     const tam = this.seleccionados.length;
