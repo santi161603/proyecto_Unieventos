@@ -1,0 +1,39 @@
+<div class="actualizar-perfil-container">
+    <div class="actualizar-perfil-form">
+      <h2>Actualizar Perfil</h2>
+      <form (ngSubmit)="onSubmit()" [formGroup]="perfilForm">
+        <div class="form-group">
+          <label for="nombre">Nombre:</label>
+          <input id="nombre" formControlName="nombre" type="text" placeholder="Ingresa tu nombre" required />
+        </div>
+  
+        <div class="form-group">
+          <label for="apellido">Apellido:</label>
+          <input id="apellido" formControlName="apellido" type="text" placeholder="Ingresa tu apellido" required />
+        </div>
+  
+        <div class="form-group">
+          <label for="direccion">Dirección:</label>
+          <input id="direccion" formControlName="direccion" type="text" placeholder="Ingresa tu dirección" required />
+        </div>
+  
+        <div class="form-group">
+          <label for="ciudad">Ciudad:</label>
+          <input id="ciudad" formControlName="ciudad" type="text" placeholder="Ingresa tu ciudad" required />
+        </div>
+  
+        <div class="form-group">
+          <label for="telefono">Teléfono:</label>
+          <input id="telefono" formControlName="telefono" type="tel" placeholder="Ingresa tu teléfono" required />
+        </div>
+  
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input id="email" formControlName="email" type="email" placeholder="Ingresa tu email" required />
+        </div>
+  
+        <button type="submit" class="save-button">Guardar Cambios</button>
+      </form>
+    </div>
+  </div>
+  

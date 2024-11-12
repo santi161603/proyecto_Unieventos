@@ -17,6 +17,7 @@ import { VerificarCodigoRestablecerComponent } from './componentes/verificar-cod
 import { GestionarCuponComponent } from './componentes/gestionar-cupon/gestionar-cupon.component';
 import { CrearCuponComponent } from './componentes/crear-cupon/crear-cupon.component';
 import { ActualizarLocalidadComponent } from './componentes/actualizar-localidad/actualizar-localidad.component';
+import { ActualizarPerfilComponent } from './componentes/actualizar-perfil/actualizar-perfil.component';
 import { ActualizarEventoComponent } from './componentes/actualizar-evento/actualizar-evento.component';
 import { ActualizarCuponComponent } from './componentes/actualizar-cupon/actualizar-cupon.component';
 import { InformacionUsuarioComponent } from './componentes/informacion-usuario/informacion-usuario.component';
@@ -31,6 +32,7 @@ export const routes: Routes = [
    { path: 'registro', component: RegistroComponent, canActivate: [LoginGuard] },
    { path: 'verificacion-codigo/:idUsuario', component: VerificacionCodigoComponent},
    { path: "informacion-usuario",component: InformacionUsuarioComponent},
+   { path: "actualizar-perfil", component: ActualizarPerfilComponent},
    { path: 'crear-evento',component:CrearEventoComponent, canActivate: [RolesGuard], data: {
     expectedRole: ["ADMINISTRADOR"]
    }},
