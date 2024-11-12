@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormArray, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { EventosService } from '../../servicios/eventos.service';
 import { EventoDTO } from '../../dto/evento-dto';
 import Swal from 'sweetalert2';
 import { EnumService } from '../../servicios/get-enums.service';

@@ -4,13 +4,64 @@
 
 .evento-imagen {
   max-height: 400px;
+  object-fit: cover;
 }
 
-.evento-subeventos table {
-  width: 100%;
+.evento-subeventos .card {
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.evento-subeventos .card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.evento-subeventos .card-body {
+  padding: 15px;
+}
+
+.evento-subeventos .btn-outline-secondary {
+  border: 1px solid #6c757d;
 }
 
 .evento-acciones button {
   font-size: 1.2em;
-  padding: 10px 20px;
+  padding: 12px 25px;
+  border-radius: 30px;
+}
+
+.evento-acciones .btn-primary {
+  background-color: #007bff;
+  border: none;
+}
+
+.evento-acciones .btn-secondary {
+  background-color: #6c757d;
+  border: none;
+}
+
+.card-title {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 0.9em;
+  color: #6c757d;
+}
+
+.row {
+  margin-bottom: 10px;
+}
+
+/* Aplicar border primario en el subevento seleccionado */
+.card.border-primary {
+  border-color: #007bff !important;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
+}
+
+.fas {
+  font-size: 1.2em;
 }

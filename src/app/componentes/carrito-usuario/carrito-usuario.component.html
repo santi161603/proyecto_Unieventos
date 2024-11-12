@@ -1,0 +1,49 @@
+<div class="carrito-container d-flex">
+  <!-- Sección de botones fijos a la izquierda -->
+  <div class="carrito-acciones-fijas">
+    <button (click)="vaciarCarrito()" class="btn btn-lg btn-warning mb-3 w-100">Vaciar Carrito</button>
+    <button (click)="comprar()" class="btn btn-lg btn-primary w-100">Comprar</button>
+    <div class="carrito-total mt-4">
+      <p>Total: {{ carrito?.totalPrecio| currency }}</p>
+    </div>
+  </div>
+
+  <!-- Lista de ítems desplazable a la derecha -->
+  <div class="carrito-items flex-grow-1 overflow-auto">
+    <div *ngFor="let item of carrito?.items" class="carrito-item card mb-3">
+      <div *ngIf="eventosObtenidos && getEvento(item.eventoId) as evento">
+        <div class="card-body d-flex align-items-center">
+          <!-- Imagen del evento -->
+          <div class="me-3">
+            <img [src]="evento.imagenPoster" alt="Imagen del Evento" class="img-fluid" style="width: 100px; height: auto; object-fit: cover;">
+          </div>
+
+          <!-- Detalles del evento -->
+          <div class="carrito-detalles">
+            <h5 class="card-title mb-1">{{ evento.nombre }}</h5>
+            <ng-container *ngIf="getSubEvento(evento, item.idSubevento) as subEvento">
+              <p class="mb-1">Localidad: {{ subEvento.localidadNombre || subEvento.localidad }}</p>
+              <p class="mb-1">Precio: {{ subEvento.precioEntrada | currency }}</p>
+            </ng-container>
+          </div>
+
+          <!-- Controles de cantidad y botón de eliminar -->
+          <div class="d-flex flex-column ms-auto align-items-center">
+            <div class="cantidad-controles d-flex align-items-center mb-2">
+              <button (click)="reducirCantidad(item, item.cantidadEntradas - 1)" class="btn btn-outline-secondary btn-sm me-2" [disabled]="item.cantidadEntradas <= 1">-</button>
+              <span>{{ item.cantidadEntradas }}</span>
+              <button (click)="aumentarCantidad(item, item.cantidadEntradas + 1)" class="btn btn-outline-secondary btn-sm ms-2" [disabled]="item.cantidadEntradas >= 10000">+</button>
+            </div>
+            <button (click)="eliminarItem(item)" class="btn btn-danger btn-sm mb-2">Eliminar</button>
+
+            <!-- Sección de cupón para cada ítem -->
+            <div class="carrito-cupon d-flex align-items-center">
+              <input type="text" class="form-control me-2" placeholder="Cupón" [(ngModel)]="item.codigoCupon" style="width: 150px;">
+              <button (click)="redimirCupon(item)" class="btn btn-success btn-sm">Redimir</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

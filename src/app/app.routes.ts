@@ -20,28 +20,51 @@ import { ActualizarLocalidadComponent } from './componentes/actualizar-localidad
 import { ActualizarEventoComponent } from './componentes/actualizar-evento/actualizar-evento.component';
 import { ActualizarCuponComponent } from './componentes/actualizar-cupon/actualizar-cupon.component';
 import { InformacionUsuarioComponent } from './componentes/informacion-usuario/informacion-usuario.component';
+import { CarritoUsuarioComponent } from './componentes/carrito-usuario/carrito-usuario.component';
+import { LoginGuard } from './guards/permiso.service';
+import { RolesGuard } from './guards/roles.service';
+
 
 export const routes: Routes = [
    { path: '', component: InicioComponent },
-   { path: 'login', component: LoginComponent },
-   { path: 'registro', component: RegistroComponent },
+   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
+   { path: 'registro', component: RegistroComponent, canActivate: [LoginGuard] },
    { path: 'verificacion-codigo/:idUsuario', component: VerificacionCodigoComponent},
    { path: "informacion-usuario",component: InformacionUsuarioComponent},
-   { path: 'crear-evento',component:CrearEventoComponent},
+   { path: 'crear-evento',component:CrearEventoComponent, canActivate: [RolesGuard], data: {
+    expectedRole: ["ADMINISTRADOR"]
+   }},
    { path: "obtener-evento",component:DetalleEventoComponent},
-   { path: 'crear-localidad', component:CrearLocalidadComponent},
-   { path: "gestion-eventos", component: GestionEventosComponent },
-   { path: "gestion-localidad", component: GestionLocalidadesComponent},
+   { path: 'crear-localidad', component:CrearLocalidadComponent,canActivate: [RolesGuard], data: {
+    expectedRole: ["ADMINISTRADOR"]
+   }},
+   { path: "gestion-eventos", component: GestionEventosComponent, canActivate: [RolesGuard], data: {
+    expectedRole: ["ADMINISTRADOR"]
+   } },
+   { path: "gestion-localidad", component: GestionLocalidadesComponent, canActivate: [RolesGuard], data: {
+    expectedRole: ["ADMINISTRADOR"]
+   }},
    { path: "eventos", component: EventosComponent},
    { path: "recuperar-contraseña", component: RestablecerContrasenaComponent},
    { path: "cambiar-contrasena", component: CambiarContrasenaComponent},
    { path: "verificar-codigo-restablecer", component: VerificarCodigoRestablecerComponent},
-   { path: "gestion-cupones", component: GestionarCuponComponent},
-   { path: "crear-cupon", component:CrearCuponComponent},
+   { path: "gestion-cupones", component: GestionarCuponComponent, canActivate: [RolesGuard], data: {
+    expectedRole: ["ADMINISTRADOR"]
+   }},
+   { path: "crear-cupon", component:CrearCuponComponent, canActivate: [RolesGuard], data: {
+    expectedRole: ["ADMINISTRADOR"]
+   }},
    { path: "eventos-detalle", component: DetalleEventoComponent},
-   { path: "actualizar-localidad", component:ActualizarLocalidadComponent},
-   { path: "actualizar-evento", component:ActualizarEventoComponent},
-   { path: "actualizar-cupon", component:ActualizarCuponComponent},
+   { path: "actualizar-localidad", component:ActualizarLocalidadComponent, canActivate: [RolesGuard], data: {
+    expectedRole: ["ADMINISTRADOR"]
+   }},
+   { path: "actualizar-evento", component:ActualizarEventoComponent, canActivate: [RolesGuard], data: {
+    expectedRole: ["ADMINISTRADOR"]
+   }},
+   { path: "actualizar-cupon", component:ActualizarCuponComponent, canActivate: [RolesGuard], data: {
+    expectedRole: ["ADMINISTRADOR"]
+   }},
+   { path: "carrito", component:CarritoUsuarioComponent},
    { path: "**", pathMatch: "full", redirectTo: "" }
 ];
 

@@ -62,17 +62,17 @@
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 85%; /* Cambia el ancho para reducir el tamaño en un 15% */
+  margin: 0 auto; /* Centra las tarjetas dentro de su contenedor */
 }
-
 .event-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Imagen de cada evento */
 .event-card img {
-  width: 100%;
-  height: 200px;
+  width: 100%; /* Ajusta el tamaño de la imagen para que se adapte al nuevo tamaño de la tarjeta */
+  height: 255px; /* Reducción del 15% en altura */
   object-fit: cover;
   border-radius: 8px;
 }

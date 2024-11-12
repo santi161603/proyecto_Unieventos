@@ -48,13 +48,17 @@ public isLoggerObservable(): Observable<boolean> {
   public login(token: string){
     this.setToken(token);
     this.isLoginSubject.next(true); // Asegura que isLogger esté en true después de iniciar sesión
-    this.router.navigate(["/"]);
+    this.router.navigate(["/"]).then(()=>{
+      window.location.reload()
+    });
  }
 
  public logout() {
   window.sessionStorage.clear();
   this.isLoginSubject.next(false); // Actualiza el estado de login a false
-  this.router.navigate(["/login"]);
+  this.router.navigate(["/login"]).then(()=>{
+    window.location.reload();
+  });
 }
 
 private decodeRoleFromToken(token: string): string {

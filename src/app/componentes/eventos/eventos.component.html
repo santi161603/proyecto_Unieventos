@@ -19,6 +19,9 @@
         <option value="" disabled selected>Seleccionar Ciudad</option>
         <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
       </select>
+
+      <!-- Botón para restablecer filtros -->
+      <button class="btn btn-secondary" (click)="resetFiltros()">Restablecer filtros</button>
     </div>
   </div>
 </div>
@@ -27,7 +30,7 @@
 <div class="categories">
   <h5>Lista de eventos</h5>
   <div class="row">
-    <div class="col-md-6" *ngFor="let event of categoryEvents">
+    <div class="col-md-6" *ngFor="let event of EventosFiltrados">
       <div class="event-card mb-4 p-3 border rounded shadow-sm">
         <img [src]="event.imagenPoster" alt="{{ event.imagenPoster }}" class="img-fluid rounded-top mb-3">
         <h6 class="event-title">{{ event.nombre }}</h6>
@@ -38,4 +41,3 @@
     </div>
   </div>
 </div>
-
