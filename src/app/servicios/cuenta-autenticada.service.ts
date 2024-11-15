@@ -15,7 +15,7 @@ export class CuentaAutenticadaService {
 
   constructor(private http: HttpClient) { }
 
-  private authURL = "https://proyecto-final-avanzada-unieventos.onrender.com:8080/servicios/cuenta-autenticada";
+  private authURL = "https://proyecto-final-avanzada-unieventos.onrender.com/servicios/cuenta-autenticada";
 
   public obtenerTodosLosCupones(): Observable<MensajeDTO> {
     return this.http.get<MensajeDTO>(`${this.authURL}/obtener-todos-los-cupones`);

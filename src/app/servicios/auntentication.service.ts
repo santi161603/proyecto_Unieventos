@@ -14,7 +14,7 @@ import { TokenService } from './token.service';
 export class AuthService {
   refreshTokenInProgress = false;
 
-  private authURL = "https://proyecto-final-avanzada-unieventos.onrender.com:8080/servicios/autenticacion";
+  private authURL = "https://proyecto-final-avanzada-unieventos.onrender.com/servicios/autenticacion";
 
   constructor(private http: HttpClient, private router: Router, private tokenservice: TokenService) { }
 
