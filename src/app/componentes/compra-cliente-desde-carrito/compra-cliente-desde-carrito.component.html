@@ -1,0 +1,44 @@
+<div class="carrito-container d-flex flex-column">
+  <!-- Lista de ítems desplazable -->
+  <div class="carrito-items flex-grow-1 overflow-auto">
+    <div *ngFor="let item of carrito?.items" class="carrito-item card mb-4 shadow-sm rounded">
+      <div *ngIf="eventosObtenidos && getEvento(item.eventoId) as evento">
+        <div class="card-body d-flex align-items-center">
+          <!-- Imagen del evento -->
+          <div class="me-3">
+            <img [src]="evento.imagenPoster" alt="Imagen del Evento" class="img-fluid evento-imagen rounded" />
+          </div>
+
+          <!-- Detalles del evento -->
+          <div class="carrito-detalles flex-grow-1">
+            <h5 class="card-title mb-1 text-primary">{{ evento.nombre }}</h5>
+            <ng-container *ngIf="getSubEvento(evento, item.idSubevento) as subEvento">
+              <p class="mb-1 text-muted">Localidad: <span class="fw-bold">{{ subEvento.localidadNombre || subEvento.localidad }}</span></p>
+              <p class="mb-1">Precio: <span class="text-success">{{ subEvento.precioEntrada | currency }}</span></p>
+            </ng-container>
+          </div>
+
+          <!-- Muestra solo la cantidad de entradas sin controles de ajuste -->
+          <div class="d-flex flex-column ms-auto align-items-center">
+            <div class="cantidad-controles mb-2">
+              <span class="fw-bold">Cantidad: {{ item.cantidadEntradas }}</span>
+            </div>
+
+            <!-- Sección de cupón para cada ítem -->
+            <div *ngIf="item.cuponRedimido" class="carrito-cupon d-flex align-items-center text-success">
+              <p class="mb-0">¡Cupón redimido! Descuento aplicado: {{ item.cupon }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección del total y botón de pago con MercadoPago -->
+  <div class="carrito-total mt-4 text-center">
+    <p class="h5 fw-bold">Total: {{ carrito?.totalPrecio | currency }}</p>
+    <button (click)="hacerPagoConMercadoPago()" class="btn btn-lg btn-primary mt-3 rounded-pill shadow-lg">
+      Hacer Pago con MercadoPago
+    </button>
+  </div>
+</div>

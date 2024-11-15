@@ -89,7 +89,7 @@ private cargarCiudades() {
         }).then((result) => {
           if (result.isConfirmed) {
             const idUsuario = data.respuesta;
-            this.router.navigate(['/verificacion-codigo', idUsuario]); // Redirección
+            this.router.navigate(['/verificacion-codigo']); // Redirección
           }
         });
       },

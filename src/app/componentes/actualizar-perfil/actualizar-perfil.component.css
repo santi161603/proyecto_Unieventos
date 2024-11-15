@@ -1,85 +1,143 @@
-/* Contenedor principal para centrar el formulario */
+/* Estilos generales */
 .actualizar-perfil-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f8f9fa; /* Color de fondo suave */
-  }
-  
-  /* Estilo del formulario */
-  .actualizar-perfil-form {
-    width: 100%;
-    max-width: 450px;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #ffffff; /* Fondo blanco */
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
-  }
-  
-  /* Título del formulario */
-  .actualizar-perfil-form h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #007bff; /* Color azul para el texto */
-    font-weight: 600;
-  }
-  
-  /* Estilo de los campos de entrada */
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .form-group label {
-    font-weight: 500;
-    margin-bottom: 5px;
-    color: #495057; /* Color de texto oscuro */
-    display: block;
-  }
-  
-  .form-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ced4da; /* Borde gris claro */
-    border-radius: 5px;
-    font-size: 16px;
-    color: #495057;
-  }
-  
-  /* Efecto de foco en los campos de entrada */
-  .form-group input:focus {
-    border-color: #007bff; /* Borde azul en foco */
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
-  }
-  
-  /* Botón de guardar cambios */
-  .save-button {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #ffffff;
-    background-color: #007bff; /* Color azul */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .save-button:hover {
-    background-color: #0056b3; /* Azul más oscuro al pasar el cursor */
-  }
-  
-  /* Pequeños ajustes de los campos de error */
-  input.ng-invalid.ng-touched {
-    border-color: #dc3545; /* Borde rojo para errores */
-  }
-  
-  /* Mensaje de error para validaciones */
-  .error-message {
-    color: #dc3545; /* Color rojo */
-    font-size: 14px;
-    margin-top: 5px;
-  }
-  
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  background-color: #f4f7fc;
+}
+
+.actualizar-perfil-form {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+}
+
+h2 {
+  text-align: center;
+  color: #4e73df;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+/* Estilo para la imagen de perfil */
+.profile-image-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.profile-image-preview {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: 2px solid #ddd;
+}
+
+#fileInput {
+  display: none;
+}
+
+.btn-file-label {
+  display: inline-block;
+  background-color: #4e73df;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+/* Estilo para el formulario */
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: 500;
+  color: #333;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Estilo para la lista de teléfonos */
+.telefono-list {
+  margin-bottom: 20px;
+}
+
+.telefono-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.telefono-item .form-label {
+  flex: 1;
+}
+
+.telefono-item .form-control {
+  width: 70%;
+}
+
+.telefono-item .btn-danger {
+  background-color: #e74a3b;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.telefono-item .btn-danger:hover {
+  background-color: #c0392b;
+}
+
+.add-phone {
+  display: inline-block;
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.add-phone:hover {
+  background-color: #218838;
+}
+
+/* Estilo para el botón de guardar */
+.btn-submit {
+  width: 100%;
+  background-color: #4e73df;
+  color: white;
+  padding: 12px;
+  border-radius: 5px;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-submit:hover {
+  background-color: #2e59d9;
+}

@@ -35,3 +35,12 @@ img {
   object-fit: cover; /* Ajusta la imagen para llenar el espacio */
 }
 
+.cupon-container {
+  width: 100%; /* Ajusta el ancho total si es necesario */
+}
+
+.cupon-input {
+  width: 150px; /* Ajusta el tamaño del campo de texto del cupón */
+}
+
+

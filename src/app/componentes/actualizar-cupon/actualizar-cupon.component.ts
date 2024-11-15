@@ -21,6 +21,9 @@ export class ActualizarCuponComponent {
   estadosCupon: string[] = []; // Asume que EstadoCupon es un enum
   idCupon: string ="";
   cuponObtenido: CuponObtenidoDTO | undefined;
+  cuponesObtenidos: CuponObtenidoDTO[] =[];
+  ciudades: string[] = [];
+  tipoEventos:string[] =[];
 
   constructor(private fb: FormBuilder, private enumService:EnumService
     ,private cuentaAut:CuentaAutenticadaService,
@@ -33,9 +36,10 @@ export class ActualizarCuponComponent {
       porcentajeDescuento: ['', [Validators.required, Validators.min(0.1), Validators.max(80)]],
       fechaVencimiento: ['', Validators.required],
       estadoCupon: ['', Validators.required],
-      cantidad: ['', [Validators.required, Validators.min(10)]]
+      cantidad: ['', [Validators.required, Validators.min(10)]],
+      ciudad:[''],
+      tipoEvento:['']
     });
-
 
     const id = sessionStorage.getItem("idCuponActualizar");
 
@@ -43,8 +47,42 @@ export class ActualizarCuponComponent {
       this.idCupon = id;
     this.obtenerEstadoCupon();
     this.obtenerCuponPorID(id);
+    this.obtenerCupones()
+    this.obtenerCiudades()
+    this.obtenerTipoEventos()
+
     }else{
 
+    }
+  }
+
+  obtenerCupones() {
+    this.cuentaAut.obtenerTodosLosCupones().subscribe({
+      next:(value)=> {
+          this.cuponesObtenidos = value.respuesta
+      },
+    })
+  }
+
+  obtenerCiudades() {
+    this.enumService.listarCiudades().subscribe({
+      next:(value)=> {
+          this.ciudades = value
+      },
+    })
+  }
+  obtenerTipoEventos() {
+    this.enumService.listarTipoEvento().subscribe({
+      next:(value)=> {
+          this.tipoEventos =value
+      },
+    })
+  }
+
+  transformarMayusculas() {
+    const nombre = this.actualizarCuponForm.get('nombreCupon')?.value;
+    if (nombre) {
+      this.actualizarCuponForm.get('nombreCupon')?.setValue(nombre.toUpperCase());
     }
   }
   obtenerCuponPorID(id: string) {
@@ -85,13 +123,16 @@ export class ActualizarCuponComponent {
       },
     })
   }
-
+  validarNombreUnico(nombre: string): boolean {
+    return this.cuponesObtenidos.some(cupon => cupon.nombreCupon === nombre);
+  }
 
 
   onUpdate() {
     if (this.actualizarCuponForm.valid) {
       const cupon: CuponActualizadoDTO = this.actualizarCuponForm.value as CuponActualizadoDTO;
 
+      if(this.validarNombreUnico(cupon.nombreCupon)){
       this.adminService.actualizarCupon(this.idCupon, cupon).subscribe({
         next: (value)=> {
 
@@ -112,5 +153,6 @@ export class ActualizarCuponComponent {
         }
     })
     }
+  }
   }
 }

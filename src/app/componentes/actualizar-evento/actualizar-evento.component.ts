@@ -25,9 +25,13 @@ export class ActualizarEventoComponent implements OnInit {
   imagenSeleccionada: File | null = null;
   imagenPrevisualizada: string | ArrayBuffer | null = null;
   eventoId: string = '';
-  localidades: LocalidadNombreIdDTO[] =[];
-  estadoCuentaEnum: string[]=[]
-  tipoEventoEnum: string [] = []
+  localidades: LocalidadNombreIdDTO[] = [];
+  estadoCuentaEnum: string[] = []
+  tipoEventoEnum: string[] = []
+
+  subEventoImagenes: string[] = []; // Almacena las imágenes de las localidades seleccionadas
+  subEventoCapacidades: number[] = []; // Almacena la capacidad disponible de las localidades seleccionadas
+
 
   constructor(
     private fb: FormBuilder,
@@ -48,34 +52,37 @@ export class ActualizarEventoComponent implements OnInit {
     });
   }
 
-  getTiposEvento(){
+  getTiposEvento() {
     this.enumService.listarTipoEvento().subscribe({
-      next: (value) =>{
+      next: (value) => {
         this.tipoEventoEnum = value
       },
-      error:(err) => {
-          console.log("error al obtener la lista de tipo evento", err)
+      error: (err) => {
+        console.log("error al obtener la lista de tipo evento", err)
       }
     })
   }
 
-  getEstadoEvento(){
+  getEstadoEvento() {
     this.enumService.listarEstadoCuenta().subscribe({
-      next: (value) =>{
+      next: (value) => {
         this.estadoCuentaEnum = value
       },
-      error:(err) => {
+      error: (err) => {
         console.log("error al obtener la lista de estado evento", err)
       }
     })
   }
 
-  getLocalidadesNombreId(){
+  getLocalidadesNombreId() {
     this.clientService.obtenerTodasLasLocalidadesNombreID().subscribe({
-      next: (value) =>{
+      next: (value) => {
         this.localidades = value.respuesta
+        if (this.eventoId) {
+          this.obtenerEventoPorId(this.eventoId);
+        }
       },
-      error:(err) => {
+      error: (err) => {
         console.log("error al obtener la lista de localidades", err)
       }
     })
@@ -86,12 +93,8 @@ export class ActualizarEventoComponent implements OnInit {
     this.getEstadoEvento();
     this.getLocalidadesNombreId();
     this.getTiposEvento();
-    if (id){
+    if (id) {
       this.eventoId = id;
-    if (this.eventoId) {
-      this.obtenerEventoPorId(this.eventoId);
-    }
-    }else{
 
     }
   }
@@ -109,7 +112,7 @@ export class ActualizarEventoComponent implements OnInit {
 
         // Crear los subeventos dinámicamente
         const subEventos = this.actualizarEventoForm.get('subEventos') as FormArray;
-        data.respuesta.subEventos.forEach((subEvento: SubEventosObtenidosDto) => {
+        data.respuesta.subEventos.forEach((subEvento: SubEventosObtenidosDto, index: number) => {
 
           console.log(subEvento.fechaEvento)
 
@@ -117,16 +120,24 @@ export class ActualizarEventoComponent implements OnInit {
           const fechaFormateada = fechaEvento.toISOString().split('T')[0]; // Esto convertirá la fecha a 'YYYY-MM-DD'
 
 
+          const localidad = this.localidades.find(loc => loc.IdLocalidad === subEvento.localidad);
 
-          subEventos.push(this.fb.group({
-            idSubEvento:[subEvento.idSubEvento],
-            fechaEvento: [fechaFormateada, Validators.required],
-            localidad: [subEvento.localidad, Validators.required],
-            horaEvento: [subEvento.horaEvento, Validators.required],
-            cantidadEntradas: [subEvento.cantidadEntradas, Validators.required],
-            precioEntrada: [subEvento.precioEntrada, Validators.required],
-            estadoSubEvento:[subEvento.estadoSubEvento, Validators.required]
-          }));
+          if (localidad) {
+            this.subEventoImagenes[index] = localidad.imageLocalidad;
+            this.subEventoCapacidades[index] = localidad.capacidadDisponible;
+
+            console.log(localidad.capacidadDisponible)
+
+            subEventos.push(this.fb.group({
+              idSubEvento: [subEvento.idSubEvento],
+              fechaEvento: [fechaFormateada, Validators.required],
+              localidad: [subEvento.localidad, Validators.required],
+              horaEvento: [subEvento.horaEvento, Validators.required],
+              cantidadEntradas: [subEvento.cantidadEntradas, Validators.required],
+              precioEntrada: [subEvento.precioEntrada, Validators.required],
+              estadoSubEvento: [subEvento.estadoSubEvento, Validators.required]
+            }));
+          }
         });
 
         // Previsualizar la imagen si existe
@@ -144,9 +155,32 @@ export class ActualizarEventoComponent implements OnInit {
     return this.actualizarEventoForm.get('subEventos') as FormArray;
   }
 
+  onLocalidadChange(event: Event, index: number): void {
+    const selectedLocalidadId = (event.target as HTMLSelectElement).value;
+    const localidad = this.localidades.find(loc => loc.IdLocalidad === selectedLocalidadId);
+
+    if (localidad) {
+      // Actualiza la imagen y la capacidad disponible para el subevento en la posición correspondiente
+      this.subEventoImagenes[index] = localidad.imageLocalidad;
+      this.subEventoCapacidades[index] = localidad.capacidadDisponible;
+
+      // Ajusta el valor máximo de entradas permitidas según la capacidad disponible de la localidad seleccionada
+      // Ajusta el validador del campo 'cantidadEntradas' para que tenga un límite máximo igual a la capacidad
+      const subEvento = this.subEventos.at(index);
+      subEvento?.get('cantidadEntradas')?.setValidators([
+        Validators.required,
+        Validators.min(1),
+        Validators.max(localidad.capacidadDisponible) // Aplica la capacidad máxima como validador
+      ]);
+
+      // Forzar la validación del campo después de cambiar el validador
+      subEvento?.get('cantidadEntradas')?.updateValueAndValidity();
+    }
+  }
+
   agregarSubEvento(): void {
     this.subEventos.push(this.fb.group({
-      idSubEvento:[0],
+      idSubEvento: [0],
       fechaEvento: ['', Validators.required],
       localidad: ['', Validators.required],
       horaEvento: ['', Validators.required],
@@ -174,6 +208,41 @@ export class ActualizarEventoComponent implements OnInit {
   }
 
   onSubmit(): void {
+
+    let esValido = true;
+    this.subEventos.controls.forEach((subEvento, index) => {
+      const localidadId = subEvento.get('localidad')?.value;
+      let capacidadMaxima = 0;
+      let nombreLocalidad = ";"
+      this.localidades.forEach(localidad => {
+        if (localidad.IdLocalidad == localidadId) {
+          capacidadMaxima = localidad.capacidadDisponible
+          nombreLocalidad = localidad.nombreLocalidad
+        }
+      });
+
+      const cantidadEntradas = subEvento.get('cantidadEntradas')?.value;
+
+      console.log(cantidadEntradas, capacidadMaxima)
+
+      if (cantidadEntradas > capacidadMaxima) {
+        esValido = false;
+          // Mostrar mensaje de error si alguna cantidad de entradas supera la capacidad
+          Swal.fire(
+            "un sub evento a superado la cantidad de entradas posible",
+            "El sub evento de la localidad" + nombreLocalidad + "a superado la cantidad de entradas posibible la capasidad disponible de la localidad es" + capacidadMaxima,
+            "error"
+          );
+
+        subEvento.get('cantidadEntradas')?.setErrors({ max: true });
+      }
+    });
+
+
+    if(!esValido){
+      return
+    }
+
     if (this.actualizarEventoForm.valid) {
       const eventoActualizado = { ...this.actualizarEventoForm.value } as EventoActualizarDTO;
       if (this.imagenSeleccionada) {
@@ -204,14 +273,14 @@ export class ActualizarEventoComponent implements OnInit {
           title: 'Éxito',
           text: 'La localidad se ha actualizado correctamente.',
           confirmButtonText: 'Aceptar'
-        }).then((result) =>{
-          if(result.isConfirmed){
-        this.actualizarEventoForm.reset(); // Reinicia el formulario tras la creación exitosa
-        this.imagenSeleccionada = null; // Resetea la imagen seleccionada
-        this.router.navigate(['/gestion-eventos']);
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.actualizarEventoForm.reset(); // Reinicia el formulario tras la creación exitosa
+            this.imagenSeleccionada = null; // Resetea la imagen seleccionada
+            this.router.navigate(['/gestion-eventos']);
           }
-      })
-    },
+        })
+      },
       error: (err) => {
         console.error('Error al actualizar evento:', err);
       }

@@ -55,8 +55,11 @@ export class EventosComponent {
   obtenerEventos() {
     this.clientService.obtenerTodosLosEventos().subscribe({
       next:(value)=> {
-          this.Eventos = value.respuesta
-          this.EventosFiltrados = value.respuesta
+         // Filtrar eventos donde el estado sea 'ACTIVO'
+      this.Eventos = value.respuesta.filter((evento: { estadoEvento: string; }) => evento.estadoEvento === 'ACTIVO');
+
+      // Si también deseas aplicar el filtro a la lista de eventos filtrados
+      this.EventosFiltrados = this.Eventos;
       },
       error:(err)=> {
         Swal.fire({
@@ -95,7 +98,11 @@ export class EventosComponent {
   this.filtrarEventos();
 }
 navegarADetalleEvento(idEvento: string) {
+  sessionStorage.removeItem('idEvento')
 
+  sessionStorage.setItem('idEvento', idEvento);
+
+  this.router.navigate(['/eventos-detalle']);
 }
 onCategoriaChange(event: Event) {
   const value = (event.target as HTMLSelectElement).value;

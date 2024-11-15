@@ -32,35 +32,48 @@
   <div formArrayName="subEventos">
     <h4>Subeventos</h4>
     <div *ngFor="let subEvento of subEventos.controls; let i = index" [formGroupName]="i">
-      <div *ngIf="subEvento.get('estadoSubEvento')?.value !== 'ELIMINADO'">
-        <label>Fecha del evento</label>
-        <input type="date" formControlName="fechaEvento" />
+      <label>Fecha del evento</label>
+      <input type="date" formControlName="fechaEvento" />
 
-        <label>Localidad</label>
-        <select formControlName="localidad">
+
+      <label>Localidad</label>
+      <div class="d-flex align-items-center">
+        <select formControlName="localidad" (change)="onLocalidadChange($event, i)">
           <option *ngFor="let localidad of localidades" [value]="localidad.IdLocalidad">
-            {{ localidad.nombreLocalidad }}
+            {{ localidad.nombreLocalidad }} - {{ localidad.ciudades }}
           </option>
         </select>
-
-        <label>Hora del evento</label>
-        <input type="time" formControlName="horaEvento" />
-
-        <label>Cantidad de Entradas</label>
-        <input type="number" formControlName="cantidadEntradas" />
-
-        <label>Precio de la Entrada</label>
-        <input type="number" formControlName="precioEntrada" />
-
-        <div>
-          <label for="estadoSubEvento">Estado del Subevento</label>
-          <select id="estadoSubEvento" formControlName="estadoSubEvento">
-            <option *ngFor="let estado of estadoCuentaEnum" [value]="estado">{{ estado }}</option>
-          </select>
-        </div>
-
-        <button type="button" (click)="eliminarSubEvento(i)">Eliminar SubEvento</button>
+        <!-- Muestra la imagen de la localidad seleccionada -->
+        <img *ngIf="subEventoImagenes[i]" [src]="subEventoImagenes[i]" alt="Imagen de la Localidad"
+          class="ms-3 img-thumbnail" style="width: 100px; height: 70px;">
       </div>
+
+      <label>Hora del evento</label>
+      <input type="time" formControlName="horaEvento" />
+
+      <label>Cantidad de Entradas</label>
+      <input type="number" formControlName="cantidadEntradas" />
+
+
+      <!-- Mensaje de error si la cantidad excede la capacidad -->
+      <div *ngIf="subEvento.get('cantidadEntradas')?.invalid && subEvento.get('cantidadEntradas')?.touched">
+        <small *ngIf="subEvento.get('cantidadEntradas')?.errors?.['max']">
+          La cantidad de entradas no puede exceder la capacidad máxima de {{ subEventoCapacidades[i] }}.
+        </small>
+      </div>
+
+
+      <label>Precio de la Entrada</label>
+      <input type="number" formControlName="precioEntrada" />
+
+      <div>
+        <label for="estadoSubEvento">Estado del Subevento</label>
+        <select id="estadoSubEvento" formControlName="estadoSubEvento">
+          <option *ngFor="let estado of estadoCuentaEnum" [value]="estado">{{ estado }}</option>
+        </select>
+      </div>
+
+      <button type="button" (click)="eliminarSubEvento(i)">Eliminar SubEvento</button>
     </div>
     <button type="button" (click)="agregarSubEvento()">Agregar SubEvento</button>
   </div>

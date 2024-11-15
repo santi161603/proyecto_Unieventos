@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { ClientService } from '../../servicios/auth.service'; // Asegúrate de importar el servicio
 import { MensajeDTO } from '../../dto/mensaje-dto'; // Si es necesario importar DTO
+import { TokenService } from '../../servicios/token.service';
 
 @Component({
   selector: 'app-verificacion-codigo',
@@ -17,7 +18,7 @@ export class VerificacionCodigoComponent {
   codigoForm: FormGroup;
   idUsuario!: string;
 
-  constructor(private formBuilder: FormBuilder, private router: Router,private authService: ClientService, private route: ActivatedRoute,) {
+  constructor(private formBuilder: FormBuilder, private router: Router,private authService: ClientService, private route: ActivatedRoute, private tokenSer:TokenService) {
     this.codigoForm = this.formBuilder.group({
       codigo: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4)]],
     });
@@ -25,7 +26,7 @@ export class VerificacionCodigoComponent {
 
   ngOnInit(): void {
     // Obtener el idUsuario desde la URL de la ruta activa
-    this.idUsuario = this.route.snapshot.paramMap.get('idUsuario') || '';
+    this.idUsuario = this.tokenSer.getIDCuenta()
     console.log('ID Usuario:', this.idUsuario);
   }
 

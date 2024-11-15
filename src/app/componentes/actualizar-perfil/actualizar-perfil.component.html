@@ -1,39 +1,65 @@
 <div class="actualizar-perfil-container">
-    <div class="actualizar-perfil-form">
-      <h2>Actualizar Perfil</h2>
-      <form (ngSubmit)="onSubmit()" [formGroup]="perfilForm">
-        <div class="form-group">
-          <label for="nombre">Nombre:</label>
-          <input id="nombre" formControlName="nombre" type="text" placeholder="Ingresa tu nombre" required />
-        </div>
-  
-        <div class="form-group">
-          <label for="apellido">Apellido:</label>
-          <input id="apellido" formControlName="apellido" type="text" placeholder="Ingresa tu apellido" required />
-        </div>
-  
-        <div class="form-group">
-          <label for="direccion">Dirección:</label>
-          <input id="direccion" formControlName="direccion" type="text" placeholder="Ingresa tu dirección" required />
-        </div>
-  
-        <div class="form-group">
-          <label for="ciudad">Ciudad:</label>
-          <input id="ciudad" formControlName="ciudad" type="text" placeholder="Ingresa tu ciudad" required />
-        </div>
-  
-        <div class="form-group">
-          <label for="telefono">Teléfono:</label>
-          <input id="telefono" formControlName="telefono" type="tel" placeholder="Ingresa tu teléfono" required />
-        </div>
-  
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input id="email" formControlName="email" type="email" placeholder="Ingresa tu email" required />
-        </div>
-  
-        <button type="submit" class="save-button">Guardar Cambios</button>
-      </form>
+  <div class="actualizar-perfil-form">
+    <h2>Actualizar Perfil</h2>
+
+    <!-- Imagen de perfil y selección -->
+    <div class="profile-image-section">
+      <img [src]="Usuario?.imageProfile" alt="Imagen de perfil" class="profile-image-preview" />
+     <!-- Selector de Nueva Imagen -->
+  <div class="mb-3 row">
+    <label for="imagen" class="col-sm-2 col-form-label">Nueva Imagen (opcional)</label>
+    <div class="col-sm-10">
+        <input id="imagen" type="file" (change)="onImageSelect($event)" class="form-control" />
     </div>
+ </div>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" [formGroup]="perfilForm" class="form-profile">
+      <!-- Campo para el nombre -->
+      <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input id="nombre" formControlName="nombre" type="text" placeholder="Ingresa tu nombre" required />
+      </div>
+
+      <!-- Campo para el apellido -->
+      <div class="form-group">
+        <label for="apellido">Apellido:</label>
+        <input id="apellido" formControlName="apellido" type="text" placeholder="Ingresa tu apellido" required />
+      </div>
+
+      <!-- Campo para la dirección -->
+      <div class="form-group">
+        <label for="direccion">Dirección:</label>
+        <input id="direccion" formControlName="direccion" type="text" placeholder="Ingresa tu dirección" />
+      </div>
+
+      <!-- Campo para la cédula -->
+      <div class="form-group">
+        <label for="cedula">Cédula:</label>
+        <input id="cedula" formControlName="cedula" type="text" placeholder="Ingresa tu cédula" required />
+      </div>
+
+      <!-- Campo desplegable para la ciudad -->
+      <div class="form-group">
+        <label for="ciudad">Ciudad:</label>
+        <select id="ciudad" formControlName="ciudad">
+          <option *ngFor="let city of ciudades" [value]="city">{{ city }}</option>
+        </select>
+      </div>
+
+      <!-- Lista de teléfonos con opciones para agregar/eliminar -->
+      <div formArrayName="telefono" class="telefono-list">
+        <div *ngFor="let tel of telefono.controls; let i = index" class="telefono-item">
+          <label class="form-label">Teléfono {{ i + 1 }}:</label>
+          <input type="number" class="form-control" [formControlName]="i" />
+          <button type="button" (click)="eliminarTelefono(i)" class="btn btn-danger">Eliminar</button>
+        </div>
+      </div>
+
+      <button (click)="agregarTelefono()" class="btn btn-primary add-phone">Agregar Teléfono</button>
+
+      <!-- Botón de guardar cambios -->
+      <button type="submit" class="btn btn-submit">Guardar Cambios</button>
+    </form>
   </div>
-  
+</div>

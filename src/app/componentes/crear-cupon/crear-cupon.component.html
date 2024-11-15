@@ -6,15 +6,16 @@
     <div class="card-body p-4">
       <form [formGroup]="cuponForm" (ngSubmit)="onSubmit()">
 
-        <!-- Nombre del Cupón -->
-        <div class="mb-3">
+         <!-- Nombre del Cupón -->
+         <div class="mb-3">
           <label for="nombreCupon" class="form-label">Nombre del Cupón</label>
           <input type="text" id="nombreCupon" formControlName="nombreCupon" class="form-control"
-            placeholder="Ingresa el nombre del cupón" />
+            placeholder="Ejemplo: DescuentoVerano" (input)="transformarMayusculas()" />
           <div *ngIf="cuponForm.get('nombreCupon')?.invalid && cuponForm.get('nombreCupon')?.touched" class="text-danger">
-            El nombre no puede estar en blanco
+            El nombre no puede estar en blanco ni en minúsculas.
           </div>
         </div>
+
 
         <!-- Descripción del Cupón -->
         <div class="mb-3">
@@ -60,6 +61,24 @@
           <div *ngIf="cuponForm.get('cantidad')?.invalid && cuponForm.get('cantidad')?.touched" class="text-danger">
             La cantidad debe ser al menos 10
           </div>
+        </div>
+
+        <!-- Tipo de Evento (opcional) -->
+        <div class="mb-3">
+          <label for="tipoEvento" class="form-label">Tipo de Evento (opcional)</label>
+          <select id="tipoEvento" formControlName="tipoEvento" class="form-control">
+            <option value="">Selecciona un tipo de evento</option>
+            <option *ngFor="let tipo of tipoEventos" [value]="tipo">{{ tipo }}</option>
+          </select>
+        </div>
+
+        <!-- Ciudad (opcional) -->
+        <div class="mb-3">
+          <label for="ciudad" class="form-label">Ciudad (opcional)</label>
+          <select id="ciudad" formControlName="ciudad" class="form-control">
+            <option value="">Selecciona una ciudad</option>
+            <option *ngFor="let ciudad of ciudades" [value]="ciudad">{{ ciudad }}</option>
+          </select>
         </div>
 
         <!-- Botón de Crear -->

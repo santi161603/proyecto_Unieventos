@@ -10,6 +10,7 @@ import { TokenService } from '../../servicios/token.service';
 import { ItemCarritoDTO } from '../../dto/item-carrito';
 import { CuentaAutenticadaService } from '../../servicios/cuenta-autenticada.service';
 import Swal from 'sweetalert2';
+import { differenceInDays, parseISO } from 'date-fns';
 
 @Component({
   selector: 'app-detalle-evento',
@@ -25,7 +26,7 @@ export class DetalleEventoComponent {
   selectedSubEvento: SubEventosObtenidosDto | null = null;  // Subevento seleccionado
   cantidadEntradas: number = 1;  // Inicializamos la cantidad de entradas en 1
 
-  constructor(private route: ActivatedRoute, private clientService: ClientService,  private serviceToken: TokenService,
+  constructor(private route: ActivatedRoute, private clientService: ClientService, private serviceToken: TokenService,
     private router: Router, private cuentaAut: CuentaAutenticadaService) {
 
     this.idEvento = sessionStorage.getItem('idEvento');
@@ -46,6 +47,31 @@ export class DetalleEventoComponent {
       next: ([localidadesData, eventoData]) => {
         this.localidades = localidadesData.respuesta;
         this.evento = eventoData.respuesta;
+
+
+
+        if (this.evento) {
+          const hoy = new Date(); // Fecha actual
+          hoy.setHours(0, 0, 0, 0); // Eliminar las horas, minutos, segundos y milisegundos de hoy
+          console.log("Hoy: ", hoy);
+
+          const dosDiasDespues = new Date(hoy); // Copiar la fecha de hoy
+          dosDiasDespues.setDate(hoy.getDate() + 2); // Añadir 2 días
+          console.log("Dos días después: ", dosDiasDespues);
+
+          // Filtrar los subeventos
+          this.evento.subEventos = this.evento.subEventos.filter(subevento => {
+            const fechaSubevento = new Date(subevento.fechaEvento);
+            fechaSubevento.setHours(0, 0, 0, 0); // Eliminar las horas, minutos, segundos y milisegundos de la fecha del subevento
+            console.log("Fecha subevento: ", fechaSubevento);
+
+            // Comparar solo las fechas sin las horas, minutos, segundos y milisegundos
+            const isWithinRange = fechaSubevento >= hoy && fechaSubevento >= dosDiasDespues
+            console.log(`Subevento está dentro del rango: ${isWithinRange}`);
+
+            return subevento.estadoSubEvento === 'ACTIVO' && isWithinRange;
+          });
+        }
         this.asignarNombresLocalidades();
       },
       error: (err) => console.error("Error al obtener datos:", err)
@@ -69,6 +95,7 @@ export class DetalleEventoComponent {
     }
   }
 
+
   disminuirEntradas(event: MouseEvent) {
     event.stopPropagation();
     if (this.cantidadEntradas > 1) {
@@ -82,74 +109,80 @@ export class DetalleEventoComponent {
       this.router.navigate(['/login']);
     } else {
       if (this.selectedSubEvento) {
-          // Crear el objeto que será enviado al backend
-          const itemCarrito: ItemCarritoDTO = {
-            eventoId: this.idEvento!,
-            idSubevento: this.selectedSubEvento.idSubEvento,
-            cantidadEntradas: this.cantidadEntradas,
-            codigoCupon: "",
-          };
+        // Crear el objeto que será enviado al backend
+        const itemCarrito: ItemCarritoDTO = {
+          eventoId: this.idEvento!,
+          idSubevento: this.selectedSubEvento.idSubEvento,
+          cantidadEntradas: this.cantidadEntradas,
+          cupon: "",
+        };
 
-          const idUser = this.serviceToken.getIDCuenta();
+        const idUser = this.serviceToken.getIDCuenta();
 
-          // Llamar al servicio para añadir el item al carrito
-          this.cuentaAut.anadirItemsAlCarritro(itemCarrito,idUser).subscribe({
-            next: (response) => {
-              Swal.fire({
-                icon: 'success',
-                title: 'Éxito',
-                text: 'Se a añadido el item al carrito',
-                confirmButtonText: 'Aceptar'
-              }).then((result) =>{
-                if(result.isConfirmed){
-              this.router.navigate(['/carrito']);
-                }
-              })
-            },
-            error: (err) => {
-              Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'No se a podido añadir el item al carrito' + err,
-              })
-            }
-          });
+        // Llamar al servicio para añadir el item al carrito
+        this.cuentaAut.anadirItemsAlCarritro(itemCarrito, idUser).subscribe({
+          next: (response) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Éxito',
+              text: 'Se a añadido el item al carrito',
+              confirmButtonText: 'Aceptar'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.router.navigate(['/carrito']);
+              }
+            })
+          },
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'No se a podido añadir el item al carrito' + err,
+            })
+          }
+        });
       } else {
         console.error('No se ha seleccionado un subevento');
       }
     }
   }
 
-   // Comprar entrada
-   comprarEntrada() {
+  getLocalidadInfo(localidadId: string): LocalidadNombreIdDTO | undefined {
+    const localidad = this.localidades.find(localidad =>
+      localidad.IdLocalidad == localidadId
+    )
+    if (localidad) {
+      return localidad
+    }
+    return undefined
+  }
+
+  // Comprar entrada
+  comprarEntrada() {
     if (!this.serviceToken.isLogged()) {
       // Redirigir al login si el usuario no está autenticado
       this.router.navigate(['/login']);
     } else {
       if (this.selectedSubEvento) {
-        /*
-        // Llamar al servicio para realizar la compra
-        this.clientService.comprarEntrada(this.selectedSubEvento, this.cantidadEntradas).subscribe({
-          next: (response) => {
-            console.log('Entrada comprada:', response);
-          },
-          error: (err) => console.error('Error al comprar la entrada:', err)
-        });*/
+
+        const itemCarrito: ItemCarritoDTO = {
+          eventoId: this.idEvento!,
+          idSubevento: this.selectedSubEvento.idSubEvento,
+          cantidadEntradas: this.cantidadEntradas,
+          cupon: "", // Puedes agregar el código de cupón si es necesario
+        };
+
+        sessionStorage.removeItem('itemCompra');
+        sessionStorage.setItem('itemCompra', JSON.stringify(itemCarrito));
+
+        this.router.navigate(['/compra-cliente']);
       } else {
         console.error('No se ha seleccionado un subevento');
       }
     }
   }
 
-  public obtenerEvento(idEvento: string) {
-    this.clientService.obtenerEventoPorId(idEvento).subscribe({
-      next: (data) => {
-        this.evento = data.respuesta;
-        this.asignarNombresLocalidades();
-      },
-      error: (err) => console.error("Error al obtener el evento:", err)
-    });
-  }
+
 
 
   private asignarNombresLocalidades() {

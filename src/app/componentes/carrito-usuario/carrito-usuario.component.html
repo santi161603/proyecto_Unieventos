@@ -4,7 +4,7 @@
     <button (click)="vaciarCarrito()" class="btn btn-lg btn-warning mb-3 w-100">Vaciar Carrito</button>
     <button (click)="comprar()" class="btn btn-lg btn-primary w-100">Comprar</button>
     <div class="carrito-total mt-4">
-      <p>Total: {{ carrito?.totalPrecio| currency }}</p>
+      <p>Total: {{ carrito?.totalPrecio | currency }}</p>
     </div>
   </div>
 
@@ -15,7 +15,7 @@
         <div class="card-body d-flex align-items-center">
           <!-- Imagen del evento -->
           <div class="me-3">
-            <img [src]="evento.imagenPoster" alt="Imagen del Evento" class="img-fluid" style="width: 100px; height: auto; object-fit: cover;">
+            <img [src]="evento.imagenPoster" alt="Imagen del Evento" class="img-fluid evento-imagen">
           </div>
 
           <!-- Detalles del evento -->
@@ -30,17 +30,24 @@
           <!-- Controles de cantidad y botón de eliminar -->
           <div class="d-flex flex-column ms-auto align-items-center">
             <div class="cantidad-controles d-flex align-items-center mb-2">
-              <button (click)="reducirCantidad(item, item.cantidadEntradas - 1)" class="btn btn-outline-secondary btn-sm me-2" [disabled]="item.cantidadEntradas <= 1">-</button>
+              <button (click)="reducirCantidad(item, item.cantidadEntradas - 1)"
+                class="btn btn-outline-secondary btn-sm me-2" [disabled]="item.cantidadEntradas <= 1">-</button>
               <span>{{ item.cantidadEntradas }}</span>
-              <button (click)="aumentarCantidad(item, item.cantidadEntradas + 1)" class="btn btn-outline-secondary btn-sm ms-2" [disabled]="item.cantidadEntradas >= 10000">+</button>
+              <button (click)="aumentarCantidad(item, item.cantidadEntradas + 1)"
+                class="btn btn-outline-secondary btn-sm ms-2" [disabled]="item.cantidadEntradas >= 10000">+</button>
             </div>
             <button (click)="eliminarItem(item)" class="btn btn-danger btn-sm mb-2">Eliminar</button>
 
             <!-- Sección de cupón para cada ítem -->
-            <div class="carrito-cupon d-flex align-items-center">
-              <input type="text" class="form-control me-2" placeholder="Cupón" [(ngModel)]="item.codigoCupon" style="width: 150px;">
-              <button (click)="redimirCupon(item)" class="btn btn-success btn-sm">Redimir</button>
+            <div *ngIf="item.cuponRedimido; else cuponRedimido" class="carrito-cupon d-flex align-items-center">
+              <p>Has redimido el cupón: {{ item.cupon }}</p>
             </div>
+            <ng-template #cuponRedimido>
+              <div class="d-flex align-items-center cupon-container">
+                <input type="text" class="form-control me-2 cupon-input" placeholder="Cupón" [(ngModel)]="item.textIngresado">
+                <button (click)="redimirCupon(item)" class="btn btn-success btn-sm">Redimir</button>
+              </div>
+            </ng-template>
           </div>
         </div>
       </div>

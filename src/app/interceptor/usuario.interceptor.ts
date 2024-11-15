@@ -12,7 +12,7 @@ export const usuarioInterceptor: HttpInterceptorFn = (req, next) => {
   const isAPiPublico = req.url.includes("/servicios/cuenta-no-autenticada");
   const isEnumsServie = req.url.includes("/servicios/obtener-enums");
 
-  if (!tokenService.isLogged() || isApiAuth || isAPiPublico) {
+  if (!tokenService.isLogged() || isApiAuth || isAPiPublico || isEnumsServie) {
     return next(req);
   }
 
@@ -24,8 +24,6 @@ export const usuarioInterceptor: HttpInterceptorFn = (req, next) => {
     }
   });
 
-
-  // Pasar la solicitud
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401 && !authService.refreshTokenInProgress) {
@@ -38,15 +36,16 @@ export const usuarioInterceptor: HttpInterceptorFn = (req, next) => {
               });
               return next(retryReq);
             } else {
-              return throwError(error);
+              return throwError(error); // Si no se obtiene un nuevo token, lanzamos el error
             }
           }),
           catchError(refreshError => {
-            return throwError(refreshError);
+            authService.refreshTokenInProgress = false;
+            return throwError(refreshError); // Reseteamos el estado y lanzamos el error
           })
         );
       }
-      return throwError(error);
+      return throwError(error); // Si el error no es 401, lo lanzamos tal cual
     })
   );
 };

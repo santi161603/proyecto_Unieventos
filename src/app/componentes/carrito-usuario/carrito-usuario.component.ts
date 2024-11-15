@@ -10,37 +10,54 @@ import { TokenService } from '../../servicios/token.service';
 import { EventoObtenidoDTO } from '../../dto/evento-obtenido-dto';
 import { SubEventosObtenidosDto } from '../../dto/subevento-dto';
 import { LocalidadNombreIdDTO } from '../../dto/localidades-id-nombre';
+import { CuponObtenidoDTO } from '../../dto/cupon-obtenido-dto';
+import Swal from 'sweetalert2';
+import { routes } from '../../app.routes';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-carrito-usuario',
   standalone: true,
-  imports: [ReactiveFormsModule,CommonModule, FormsModule],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule],
   templateUrl: './carrito-usuario.component.html',
   styleUrl: './carrito-usuario.component.css'
 })
 export class CarritoUsuarioComponent implements OnInit {
-
 
   carrito: CarritoObtenidoDTO | undefined;
   usuarioId: string = "";  // Simulamos un usuario logueado
   eventosObtenidos: EventoObtenidoDTO[] = [];
   codigoCupon: string = ""; // Variable para almacenar el código del cupón // Lista para almacenar los eventos obtenidos
   localidadNombres: LocalidadNombreIdDTO[] = []
+  cupones: CuponObtenidoDTO[] = []
+  totalPrecio = 0;
+  cuponIngresado: string = '';
 
-  constructor(private carritoService: CuentaAutenticadaService, private clientServ: ClientService, private tokenService: TokenService) {}
+  constructor(private carritoService: CuentaAutenticadaService, private clientServ: ClientService, private tokenService: TokenService, private router:Router) { }
 
   ngOnInit(): void {
     this.obtenerNombresIdLocalidades();
+    this.obtenerTodosCupones();
     this.usuarioId = this.tokenService.getIDCuenta();
     this.obtenerCarrito();
   }
+  obtenerTodosCupones() {
+    this.carritoService.obtenerTodosLosCupones().subscribe({
+      next: (value) => {
+        this.cupones = value.respuesta
+      },
+      error: (error) => {
+        console.log("Error al intentar obtener todos los cupones", error);
+      }
+    })
+  }
   obtenerNombresIdLocalidades() {
     this.clientServ.obtenerTodasLasLocalidadesNombreID().subscribe({
-      next:(value) => {
-          this.localidadNombres =  value.respuesta;
+      next: (value) => {
+        this.localidadNombres = value.respuesta;
       },
-      error:(err)=> {
-          console.log("error al obtener los nombres localidades", err)
+      error: (err) => {
+        console.log("error al obtener los nombres localidades", err)
       },
     })
   }
@@ -54,48 +71,209 @@ export class CarritoUsuarioComponent implements OnInit {
       next: (carritoData) => {
         this.carrito = carritoData.respuesta;
         if (this.carrito?.items) {
-          // Llamar al método para obtener los eventos para cada item del carrito
-          this.obtenerEventosParaCarrito(this.carrito.items);
+          // Paso 1: Obtener los eventos para los items del carrito
+          this.obtenerEventosParaCarrito(this.carrito.items).then(() => {
+            // Paso 2: Una vez que los eventos estén cargados, validar y aplicar cupones
+            this.validarYAplicarCupones();
+          }).catch((err) => {
+            console.error("Error al obtener los eventos para el carrito:", err);
+          });
         }
       },
       error: (err) => console.error('Error al obtener carrito:', err)
     });
   }
 
+  obtenerEventosParaCarrito(items: ItemCarritoDTO[]): Promise<void> {
+    // Retornar una promesa que se resolverá cuando todos los eventos hayan sido cargados
+    const promises = items.map(item => {
+      return new Promise<void>((resolve, reject) => {
+        this.clientServ.obtenerEventoPorId(item.eventoId).subscribe({
+          next: (data) => {
+            if (data.respuesta) {
+              this.asignarNombreLocalidadASubEventos(data.respuesta);
+              this.eventosObtenidos.push(data.respuesta);
+              resolve(); // Resolver la promesa cuando el evento se haya cargado
+            } else {
+              reject("Evento no encontrado");
+            }
+          },
+          error: (err) => reject(`Error al obtener el evento con ID ${item.eventoId}: ${err}`)
+        });
+      });
+    });
+
+    // Retornar una promesa que se resuelve cuando todos los eventos se hayan cargado
+    return Promise.all(promises).then(() => { });
+  }
+
+  validarYAplicarCupones() {
+    this.carrito?.items.forEach(item => {
+      this.cupones.forEach(cupon => {
+        if (item.cupon == cupon.nombreCupon) {
+          if (cupon.cantidad > 0) {
+            if (cupon.userCupon != "N/A" && cupon.ciudad != null && cupon.tipoEvento != null) {
+              if (cupon.userCupon == this.usuarioId) {
+                const evento = this.getEvento(item.eventoId);
+                if (evento) {
+                  const subEvento = this.getSubEvento(evento, item.idSubevento);
+                  this.localidadNombres.forEach(localidad => {
+                    if (localidad.IdLocalidad === subEvento?.localidad) {
+                      if (cupon.ciudad == localidad.ciudades) {
+                        if (cupon.tipoEvento == evento.tipoEvento) {
+                          this.cuponRedimido(item, cupon);
+                        } else {
+                          this.cuponNoredimido(item)
+                        }
+                      } else {
+                        this.cuponNoredimido(item)
+                      }
+                    } else {
+                      this.cuponNoredimido(item)
+                    }
+                  });
+                }
+              } else {
+                this.cuponNoredimido(item)
+              }
+            }
+            else if (cupon.userCupon != "N/A" && cupon.ciudad != null) {
+              if (cupon.userCupon == this.usuarioId) {
+                const evento = this.getEvento(item.eventoId);
+                if (evento) {
+                  const subEvento = this.getSubEvento(evento, item.idSubevento);
+                  this.localidadNombres.forEach(localidad => {
+                    if (localidad.IdLocalidad === subEvento?.localidad) {
+                      if (cupon.ciudad == localidad.ciudades) {
+                        this.cuponRedimido(item, cupon);
+                      } else {
+                        this.cuponNoredimido(item)
+                      }
+                    } else {
+                      this.cuponNoredimido(item)
+                    }
+                  });
+                }
+              } else {
+                this.cuponNoredimido(item)
+              }
+            } else if (cupon.tipoEvento != null && cupon.ciudad != null) {
+              const evento = this.getEvento(item.eventoId);
+              if (evento) {
+                const subEvento = this.getSubEvento(evento, item.idSubevento);
+                this.localidadNombres.forEach(localidad => {
+                  if (localidad.IdLocalidad === subEvento?.localidad) {
+                    if (cupon.ciudad == localidad.ciudades) {
+                      if (cupon.tipoEvento == evento.tipoEvento) {
+                        this.cuponRedimido(item, cupon);
+                      } else {
+                        this.cuponNoredimido(item)
+                      }
+                    } else {
+                      this.cuponNoredimido(item)
+                    }
+                  } else {
+                    this.cuponNoredimido(item)
+                  }
+                });
+              }
+            }
+            else if (cupon.userCupon != "N/A" && cupon.tipoEvento != null) {
+              if (cupon.userCupon == this.usuarioId) {
+                const evento = this.getEvento(item.eventoId);
+                if (evento) {
+                  if (cupon.tipoEvento == evento.tipoEvento) {
+                    this.cuponRedimido(item, cupon);
+                  } else {
+                    this.cuponNoredimido(item)
+                  }
+                }
+              } else {
+                this.cuponNoredimido(item)
+              }
+            }
+            else if (cupon.userCupon != "N/A") {
+              if (cupon.userCupon == this.usuarioId) {
+                this.cuponRedimido(item, cupon);
+              } else {
+                this.cuponNoredimido(item)
+              }
+            }
+            else if (cupon.ciudad != null) {
+              const evento = this.getEvento(item.eventoId);
+              if (evento) {
+                const subEvento = this.getSubEvento(evento, item.idSubevento);
+                this.localidadNombres.forEach(localidad => {
+                  if (localidad.IdLocalidad === subEvento?.localidad) {
+                    if (cupon.ciudad == localidad.ciudades) {
+                      this.cuponRedimido(item, cupon);
+                    } else {
+                      this.cuponNoredimido(item)
+                    }
+                  } else {
+                    this.cuponNoredimido(item)
+                  }
+                });
+              }
+            }
+            else if (cupon.tipoEvento != null) {
+              const evento = this.getEvento(item.eventoId);
+              if (cupon.tipoEvento == evento?.tipoEvento) {
+                this.cuponRedimido(item, cupon);
+              } else {
+                this.cuponNoredimido(item)
+              }
+            }
+            else {
+              this.cuponRedimido(item, cupon);
+            }
+          } else {
+            this.cuponNoredimido(item)
+          }
+        }
+      });
+    });
+  }
+
+  cuponNoredimido(item: ItemCarritoDTO) {
+    item.cupon = ""
+    this.carritoService.actualizarItemCarrito(item, this.usuarioId)
+  }
+
+  cuponRedimido(item: ItemCarritoDTO, cupon: CuponObtenidoDTO) {
+    item.cuponRedimido = true;
+    cupon.cantidad -= 1;
+    const evento = this.getEvento(item.eventoId);
+
+    if (evento) {
+
+      const subEvento = this.getSubEvento(evento, item.idSubevento);
+
+      if (subEvento) {
+        // Aplicar el descuento al precio de la entrada
+        const descuento = cupon.porcentajeDescuento / 100; // Ejemplo: 10% de descuento
+        subEvento.precioEntrada = subEvento.precioEntrada * (1 - descuento);
+        if (this.carrito) {
+          this.carrito.totalPrecio = item.cantidadEntradas * subEvento.precioEntrada;
+        }
+      }
+    }
+  }
+
+
   eliminarItem(item: ItemCarritoDTO): void {
     this.carritoService.eliminarItemsAlCarritro(item, this.usuarioId).subscribe({
-      next:(value) => {
+      next: (value) => {
         window.location.reload();
       },
-      error:(err)=> {
-          console.log("No se pudo eliminar el item carrito", err)
+      error: (err) => {
+        console.log("No se pudo eliminar el item carrito", err)
       },
     })
   }
 
 
-   // Método para obtener los eventos asociados a cada item del carrito
-   obtenerEventosParaCarrito(items: ItemCarritoDTO[]): void {
-    this.eventosObtenidos = []; // Inicializar la lista antes de agregar eventos
 
-    items.forEach(item => {
-      this.obtenerEventoPorId(item.eventoId);
-    });
-  }
-
-  // Método para obtener un evento por su ID
-  obtenerEventoPorId(eventoId: string): void {
-    this.clientServ.obtenerEventoPorId(eventoId).subscribe({
-      next: (data) => {
-        if (data.respuesta) {
-          this.asignarNombreLocalidadASubEventos(data.respuesta);
-          console.log(data.respuesta)
-          this.eventosObtenidos.push(data.respuesta); // Agregar el evento a la lista
-        }
-      },
-      error: (err) => console.error(`Error al obtener el evento con ID ${eventoId}:`, err)
-    });
-  }
 
   asignarNombreLocalidadASubEventos(evento: EventoObtenidoDTO): void {
     evento.subEventos.forEach(subEvento => {
@@ -111,47 +289,204 @@ export class CarritoUsuarioComponent implements OnInit {
   }
 
   redimirCupon(item: ItemCarritoDTO): void {
-    if (item.codigoCupon.trim()) {
-      console.log("Cupón redimido para el item:", item, "Cupón:", item.codigoCupon);
-      // Aquí puedes agregar la lógica para aplicar el cupón específico del item
-    } else {
-      console.warn("Por favor, ingrese un código de cupón válido para este item.");
-    }
+    this.cupones.forEach(cupon => {
+      if (item.textIngresado == cupon.nombreCupon) {
+        if (cupon.cantidad > 0) {
+          if (cupon.userCupon != "N/A" && cupon.ciudad != null && cupon.tipoEvento != null) {
+            if (cupon.userCupon == this.usuarioId) {
+              const evento = this.getEvento(item.eventoId);
+              if (evento) {
+                const subEvento = this.getSubEvento(evento, item.idSubevento);
+                this.localidadNombres.forEach(localidad => {
+                  if (localidad.IdLocalidad === subEvento?.localidad) {
+                    if (cupon.ciudad == localidad.ciudades) {
+                      if (cupon.tipoEvento == evento.tipoEvento) {
+                        this.redimiredimirCupon(item, cupon);
+                      } else {
+                        Swal.fire("Cupon solo apto para el tipo evento: " + cupon.tipoEvento, "el cupon solo es apto para el tipo de evento mensionado", "info")
+                      }
+                    } else {
+                      Swal.fire("Cupon solo apto para la ciudad de:" + cupon.ciudad, "el cupon solo es apto para la ciuda indicada", "info")
+                    }
+                  } else {
+                    console.log("localidad no encontrada")
+                  }
+                });
+              }
+            } else {
+              console.log("el usuario no tiene este cupon");
+            }
+          }
+          else if (cupon.userCupon != "N/A" && cupon.ciudad != null) {
+            if (cupon.userCupon == this.usuarioId) {
+              const evento = this.getEvento(item.eventoId);
+              if (evento) {
+                const subEvento = this.getSubEvento(evento, item.idSubevento);
+                this.localidadNombres.forEach(localidad => {
+                  if (localidad.IdLocalidad === subEvento?.localidad) {
+                    if (cupon.ciudad == localidad.ciudades) {
+                      this.redimiredimirCupon(item, cupon);
+                    } else {
+                      Swal.fire("Cupon solo apto para la ciudad de:" + cupon.ciudad, "el cupon solo es apto para la ciuda indicada", "info")
+                    }
+                  } else {
+                    console.log("localidad no encontrada")
+                  }
+                });
+              }
+            } else {
+              console.log("Usuario no tiene este cupon")
+            }
+          } else if (cupon.tipoEvento != null && cupon.ciudad != null) {
+            const evento = this.getEvento(item.eventoId);
+            if (evento) {
+              const subEvento = this.getSubEvento(evento, item.idSubevento);
+              this.localidadNombres.forEach(localidad => {
+                if (localidad.IdLocalidad === subEvento?.localidad) {
+                  if (cupon.ciudad == localidad.ciudades) {
+                    if (cupon.tipoEvento == evento.tipoEvento) {
+                      this.redimiredimirCupon(item, cupon);
+                    } else {
+                      Swal.fire("Cupon solo apto para el tipo evento: " + cupon.tipoEvento, "el cupon solo es apto para el tipo de evento mensionado", "info")
+                    }
+                  } else {
+                    Swal.fire("Cupon solo apto para la ciudad de:" + cupon.ciudad, "el cupon solo es apto para la ciuda indicada", "info")
+                  }
+                } else {
+                  console.log("localidad no encontrada")
+                }
+              });
+            }
+          }
+          else if (cupon.userCupon != "N/A" && cupon.tipoEvento != null) {
+            if (cupon.userCupon == this.usuarioId) {
+              const evento = this.getEvento(item.eventoId);
+              if (evento) {
+                if (cupon.tipoEvento == evento.tipoEvento) {
+                  this.redimiredimirCupon(item, cupon);
+                } else {
+                  Swal.fire("Cupon solo apto para el tipo evento: " + cupon.tipoEvento, "el cupon solo es apto para el tipo de evento mensionado", "info")
+                }
+              }
+            } else {
+              console.log("el usuario no tiene este cupon");
+            }
+          }
+          else if (cupon.userCupon != "N/A") {
+            if (cupon.userCupon == this.usuarioId) {
+              this.redimiredimirCupon(item, cupon);
+            } else {
+              console.log("el usuario no tiene este cupon");
+            }
+          }
+          else if (cupon.ciudad != null) {
+            const evento = this.getEvento(item.eventoId);
+            if (evento) {
+              const subEvento = this.getSubEvento(evento, item.idSubevento);
+              this.localidadNombres.forEach(localidad => {
+                if (localidad.IdLocalidad === subEvento?.localidad) {
+                  if (cupon.ciudad == localidad.ciudades) {
+                    this.redimiredimirCupon(item, cupon);
+                  } else {
+                    Swal.fire("Cupon solo apto para la ciudad de:" + cupon.ciudad, "el cupon solo es apto para la ciuda indicada", "info")
+                  }
+                } else {
+                  console.log("localidad no encontrada")
+                }
+              });
+            }
+          }
+          else if (cupon.tipoEvento != null) {
+            const evento = this.getEvento(item.eventoId);
+            if (cupon.tipoEvento == evento?.tipoEvento) {
+              this.redimiredimirCupon(item, cupon);
+            } else {
+              Swal.fire("Cupon solo apto para el tipo evento: " + cupon.tipoEvento, "el cupon solo es apto para el tipo de evento mensionado", "info")
+            }
+          }
+          else {
+            this.redimiredimirCupon(item, cupon);
+          }
+        } else {
+          Swal.fire("No encontramos el cupon", "el cupon que intentar redimir tal vez esta mal escrito, no existe o a agotado existencia", "info")
+        }
+      }
+    });
+
   }
 
-  aumentarCantidad(item: ItemCarritoDTO,cantidad: number) {
-    this.carritoService.aumentarCanridad(this.usuarioId,item).subscribe({
-      next: (value)=>{
+
+
+  redimiredimirCupon(item: ItemCarritoDTO, cupon: CuponObtenidoDTO
+  ) {
+    console.log("estoy aqui")
+    item.cuponRedimido = true;
+    item.cupon = cupon.nombreCupon;
+    this.carritoService.actualizarItemCarrito(item, this.usuarioId).subscribe({
+      next: () => {
+
+        cupon.cantidad -= 1;
+        const evento = this.getEvento(item.eventoId);
+
+        if (evento) {
+
+          const subEvento = this.getSubEvento(evento, item.idSubevento);
+
+          if (subEvento) {
+            // Aplicar el descuento al precio de la entrada
+            const descuento = cupon.porcentajeDescuento / 100; // Ejemplo: 10% de descuento
+            subEvento.precioEntrada = subEvento.precioEntrada * (1 - descuento);
+            if (this.carrito) {
+              this.carrito.totalPrecio = item.cantidadEntradas * subEvento.precioEntrada;
+            }
+          }
+        }
+      },
+      error: (err) => {
+        console.error("Error al actualizar item con el cupón:", err)
+      }
+    });
+  }
+
+  aumentarCantidad(item: ItemCarritoDTO, cantidad: number) {
+    this.carritoService.aumentarCanridad(this.usuarioId, item).subscribe({
+      next: (value) => {
         item.cantidadEntradas = cantidad
-        console.log("cantidad aumentada", value)
 
         window.location.reload();
       },
-      error:(err)=> {
-          console.log("cantidad no aumentada", err)
+      error: (err) => {
+        console.log("cantidad no aumentada", err)
       },
 
     })
   }
 
-  reducirCantidad(item: ItemCarritoDTO,cantidad: number) {
-    this.carritoService.reducirCantidad(this.usuarioId,item).subscribe({
-      next:(value) => {
+  reducirCantidad(item: ItemCarritoDTO, cantidad: number) {
+    this.carritoService.reducirCantidad(this.usuarioId, item).subscribe({
+      next: (value) => {
 
-          console.log("cantidad reducida", value)
-          item.cantidadEntradas = cantidad
+        item.cantidadEntradas = cantidad
 
         window.location.reload();
       },
-      error:(err)=> {
-   console.log("error al intentar reducir cantidad", err)
+      error: (err) => {
+        console.log("error al intentar reducir cantidad", err)
       },
     })
   }
-comprar() {
-}
-vaciarCarrito() {
-}
+  comprar() {
+    this.router.navigate(['/compra-cliente-desde-carrito'])
+  }
+  vaciarCarrito() {
+    this.carritoService.vaciarCarrito(this.usuarioId).subscribe({
+      next:(value)=> {
+
+        window.location.reload();
+
+      },
+    });
+  }
 
 
 }

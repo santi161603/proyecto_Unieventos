@@ -1,10 +1,6 @@
 .profile-image {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 50%;
-}
-header img {
-  max-width: 40px;  /* Ajusta el tamaño según lo necesites */
-  height: auto;
+  width: 40px; /* O el tamaño que desees */
+  height: 40px; /* Aseguramos que la imagen sea cuadrada */
+  object-fit: cover; /* Asegura que la imagen se recorte proporcionalmente sin deformarse */
+  border-radius: 50%; /* Hace la imagen redonda */
 }

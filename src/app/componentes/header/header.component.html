@@ -9,17 +9,14 @@
     </div>
 
     <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-      <li><a href="/eventos" class="nav-link px-2 link-secondary">Eventos</a></li>
-      <li><a href="/eventos" class="nav-link px-2 link-body-emphasis">Inventory</a></li>
-      <li><a href="/eventos" class="nav-link px-2 link-body-emphasis">Customers</a></li>
-      <li><a href="/eventos" class="nav-link px-2 link-body-emphasis">Products</a></li>
+      <li><a href="/eventos" class="nav-link px-2 link-secondary">Ver todos los eventos</a></li>
     </ul>
 
     <div class="col-md-3 text-end">
       <ng-container *ngIf="isLogger; else loginButtons">
         <div class="dropdown">
           <a href="#" class="d-inline-block" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-            <img [src]="userProfileImage" alt="Foto de perfil" class="rounded-circle profile-image">
+            <img [src]="usuario?.imageProfile" alt="Foto de perfil" class="rounded-circle profile-image">
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
             <li *ngIf="rol === 'ADMINISTRADOR'">
@@ -28,6 +25,7 @@
               <a class="dropdown-item" href="/gestion-cupones">Gestionar Cupones</a>
             </li>
             <li><a class="dropdown-item" href="/informacion-usuario">Perfil de Usuario</a></li>
+            <li><a class="dropdown-item" href="/historial-compras">Historial de compras</a></li>
             <li><a class="dropdown-item" href="/carrito">Carrito</a></li>
             <li><a class="dropdown-item" (click)="cerrarSesion()">Cerrar sesión</a></li>
           </ul>

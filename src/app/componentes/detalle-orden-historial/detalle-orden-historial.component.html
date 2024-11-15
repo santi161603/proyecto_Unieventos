@@ -1,0 +1,55 @@
+<div class="order-details-container">
+  <h2>Detalle de Orden</h2>
+
+  <!-- Información de la Orden -->
+  <div class="order-info">
+    <p><strong>ID de Orden:</strong> {{ ordenInfo.idOrden }}</p>
+    <p><strong>Fecha de Pago:</strong> {{ ordenInfo.pago.fechaPago }}</p>
+    <p><strong>Método de Pago:</strong> {{ ordenInfo.pago.metodoPago }}</p>
+    <p><strong>Estado de Pago:</strong> {{ ordenInfo.pago.estadoPago }}</p>
+    <p><strong>Total:</strong> {{ ordenInfo.montoTotal | currency: ordenInfo.pago.moneda }}</p>
+    <p *ngIf="ordenInfo.montoTotalSinDescuento > ordenInfo.montoTotal">
+      <strong>Total sin descuento:</strong> {{ ordenInfo.montoTotalSinDescuento | currency: ordenInfo.pago.moneda }}
+    </p>
+  </div>
+
+  <!-- Lista de Productos Comprados -->
+  <div class="products-list">
+    <h3>Productos Comprados</h3>
+    <div *ngFor="let item of ordenInfo.transaccion.productos" class="product-item">
+      <p><strong>Cantidad de Entradas:</strong> {{ item.cantidadEntradas }}</p>
+      <p *ngIf="item.cupon">Cupón Aplicado: {{ item.cupon }}</p>
+      <p *ngIf="item.cuponRedimido">Cupón Redimido: Sí</p>
+
+      <!-- Información del Evento -->
+      <div *ngIf="getEvento(item.eventoId) as evento">
+        <h4>Evento: {{ evento.nombre }}</h4>
+        <p><strong>Descripción:</strong> {{ evento.descripcion }}</p>
+        <p><strong>Tipo:</strong> {{ evento.tipoEvento }}</p>
+
+        <!-- Imagen del Evento -->
+        <div class="event-poster">
+          <img [src]="evento.imagenPoster" [alt]="'Póster de ' + evento.nombre" class="poster-image" />
+        </div>
+
+        <!-- Información del Subevento -->
+        <div *ngIf="getSubEventInfo(item.eventoId, item.idSubevento) as subevento">
+          <h5>Subevento</h5>
+          <p><strong>Fecha:</strong> {{ subevento.fechaEvento }}</p>
+          <p><strong>Hora:</strong> {{ subevento.horaEvento }}</p>
+          <p><strong>Cupon:</strong> {{ item.cupon || "N/A" }}</p>
+          <p><strong>Localidad:</strong> {{ obtenerLocalidadNombre(subevento.localidad) }}</p>
+          <p><strong>Precio:</strong> {{ subevento.precioEntrada | currency: ordenInfo.pago.moneda }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón de Reintentar Pago -->
+  <button *ngIf="mostrarReintentarPago()" class="retry-payment-button" (click)="reintentarPago()">
+    Reintentar Pago
+  </button>
+  <button *ngIf="mostrarReintentarPago()" class="retry-payment-button" (click)="cancelarOrden()">
+    cancelarOrden
+  </button>
+</div>

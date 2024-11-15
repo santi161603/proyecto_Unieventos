@@ -36,17 +36,29 @@
       <input type="date" formControlName="fechaEvento" />
 
       <label>Localidad</label>
-      <select formControlName="localidad">
-        <option *ngFor="let localidad of localidades" [value]="localidad.IdLocalidad">
-          {{ localidad.nombreLocalidad }}
-        </option>
-      </select>
-
+      <div class="d-flex align-items-center">
+        <select formControlName="localidad" (change)="onLocalidadChange($event, i)">
+          <option *ngFor="let localidad of localidades" [value]="localidad.IdLocalidad">
+            {{ localidad.nombreLocalidad }} - {{ localidad.ciudades }} - {{ localidad.capacidadDisponible}}
+          </option>
+        </select>
+        <!-- Muestra la imagen de la localidad seleccionada -->
+        <img *ngIf="subEventoImagenes[i]" [src]="subEventoImagenes[i]" alt="Imagen de la Localidad"
+          class="ms-3 img-thumbnail" style="width: 100px; height: 70px;">
+      </div>
       <label>Hora del evento</label>
       <input type="time" formControlName="horaEvento" />
 
-      <label>Cantidad de Entradas</label>
-      <input type="number" formControlName="cantidadEntradas" />
+      <!-- Campo de cantidad de entradas -->
+      <label for="cantidadEntradas">Cantidad de Entradas</label>
+      <input id="cantidadEntradas" formControlName="cantidadEntradas" type="number" />
+
+      <!-- Mensaje de error si la cantidad excede la capacidad -->
+      <div *ngIf="subEvento.get('cantidadEntradas')?.invalid && subEvento.get('cantidadEntradas')?.touched">
+        <small *ngIf="subEvento.get('cantidadEntradas')?.errors?.['max']">
+          La cantidad de entradas no puede exceder la capacidad máxima de {{ subEventoCapacidades[i] }}.
+        </small>
+      </div>
 
       <label>Precio de la Entrada</label>
       <input type="number" formControlName="precioEntrada" />
@@ -60,9 +72,9 @@
   <div class="mb-3 row">
     <label for="imagen" class="col-sm-2 col-form-label">Imagen (opcional)</label>
     <div class="col-sm-10">
-        <input id="imagen" type="file" (change)="onFileSelected($event)" class="form-control" />
+      <input id="imagen" type="file" (change)="onFileSelected($event)" class="form-control" />
     </div>
- </div>
+  </div>
 
   <button type="submit">Crear Evento</button>
 </form>

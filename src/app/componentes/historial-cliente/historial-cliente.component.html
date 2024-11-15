@@ -1,0 +1,57 @@
+<div class="historial-container">
+  <h2>Historial de Compras</h2>
+
+  <div *ngIf="ordenes.length === 0" class="empty-message">
+    <p>No tienes órdenes realizadas aún.</p>
+  </div>
+
+  <div *ngFor="let orden of ordenes" class="orden-item">
+    <div class="orden-header">
+      <div>
+        <h3>Orden #{{ orden.idOrden }}</h3>
+        <p><strong>Estado:</strong>
+          <span *ngIf="orden.montoTotal === 0">PENDIENTE DE PAGO</span>
+          <span *ngIf="orden.montoTotal !== 0">{{ orden.pago.estadoPago }}</span>
+        </p>
+
+        <p *ngIf="orden.montoTotal !== 0"><strong>Fecha de pago:</strong> {{ orden.pago.fechaPago | date:'shortDate' }}</p>
+
+        <p><strong>Método de pago:</strong> {{ orden.pago.metodoPago }}</p>
+
+        <!-- Mostrar "Total" si montoTotal es 0, de lo contrario mostrar ambos totales -->
+        <ng-container *ngIf="orden.montoTotal === 0">
+          <p><strong>Total sin descuentos:</strong> {{ orden.montoTotalSinDescuento }}</p>
+        </ng-container>
+
+        <ng-container *ngIf="orden.montoTotal !== 0">
+          <p><strong>Total sin descuento:</strong> {{ orden.montoTotalSinDescuento }}</p>
+          <p><strong>Total con descuento:</strong> {{ orden.montoTotal }}</p>
+        </ng-container>
+      </div>
+
+      <div class="orden-buttons">
+        <button class="btn-detail" (click)="verDetalle(orden.idOrden)">Ver Detalle de Orden</button>
+        <button class="btn-more" (click)="verMas(orden.idOrden)">Ver Productos</button>
+      </div>
+
+    <!-- Lista de productos en la orden -->
+    <div *ngIf="selectedOrdenId === orden.idOrden" class="productos-list">
+      <h4>Productos en esta Orden:</h4>
+      <ul>
+        <li *ngFor="let producto of orden.transaccion.productos" class="producto-item">
+          <div class="producto-info">
+            <img [src]="getProductPoster(producto.eventoId)" alt="Imagen del Evento" class="evento-img">
+            <div>
+              <p><strong>Evento:</strong> {{ getEventName(producto.eventoId) }}</p>
+              <p><strong>Subevento Fecha:</strong> {{ getSubEventInfo(producto.eventoId, producto.idSubevento)?.fechaEvento }}</p>
+              <p><strong>Subevento Localidad:</strong> {{ getSubEventInfo(producto.eventoId, producto.idSubevento)?.localidadNombre }}</p>
+              <p><strong>Subevento Hora:</strong> {{ getSubEventInfo(producto.eventoId, producto.idSubevento)?.horaEvento }}</p>
+              <p><strong>Cantidad:</strong> {{ producto.cantidadEntradas }}</p>
+              <p *ngIf="producto.cupon"><strong>Cupon aplicado:</strong> {{ producto.cupon }}</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

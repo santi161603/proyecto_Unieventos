@@ -51,7 +51,7 @@ export class EventosPorCiudadComponent implements OnInit {
     this.clientService.obtenereventosPorCiudad(ciudadAleatorio).subscribe({
         next: (value) => {
             console.log(value)
-            this.citysEvents = this.obtenerEventosAleatorios(value.respuesta);
+            this.citysEvents = this.obtenerEventosAleatorios(value.respuesta.filter((evento: { estadoEvento: string; }) => evento.estadoEvento === 'ACTIVO'));
             console.log(this.citysEvents)
         },
         error: (error) =>{

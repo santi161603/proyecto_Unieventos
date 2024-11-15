@@ -1,70 +1,102 @@
-/* Contenedor para centrar el componente en la mitad de la pantalla */
+/* Contenedor centrado y fondo */
 .user-profile-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  width: 100vw;
-  background-color: #f4f4f4;
+  background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-/* Estilos del componente de usuario */
+/* Estilos de perfil de usuario */
 .user-profile {
-  width: 350px;
-  max-width: 90%;
-  border: 1px solid #000;
-  padding: 20px;
-  border-radius: 10px;
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  font-family: Arial, sans-serif;
+  width: 480px;
+  max-width: 100%;
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
 }
 
 .user-profile h2 {
-  text-align: center;
+  color: #333;
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .profile-section {
   display: flex;
-  align-items: center;
   flex-direction: column;
+  align-items: center;
 }
 
+/* Estilos de la foto de perfil */
 .profile-photo {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .photo-placeholder {
-  width: 100px;
-  height: 100px;
+  width: 180px;
+  height: 150px;
   border-radius: 50%;
-  border: 2px solid #000;
+  border: 3px solid #007bff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Estilos de la información del perfil */
 .profile-info {
   width: 100%;
+  margin-top: 10px;
 }
 
 .info-item {
   display: flex;
   justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid #ccc;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .info-item span {
   font-weight: bold;
+  color: #666;
 }
 
+.info-item p {
+  margin: 0;
+  color: #333;
+  text-align: right;
+}
+
+.phone-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.phone-list li {
+  color: #007bff;
+  font-weight: bold;
+}
+
+/* Botón de edición del perfil */
 .edit-profile-button {
   width: 100%;
-  padding: 10px;
-  margin-top: 10px;
+  padding: 12px;
+  margin-top: 15px;
   background-color: #007bff;
-  color: #fff;
+  color: #ffffff;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  transition: background-color 0.3s;
 }
 
 .edit-profile-button:hover {

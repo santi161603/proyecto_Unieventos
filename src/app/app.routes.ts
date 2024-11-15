@@ -24,13 +24,21 @@ import { InformacionUsuarioComponent } from './componentes/informacion-usuario/i
 import { CarritoUsuarioComponent } from './componentes/carrito-usuario/carrito-usuario.component';
 import { LoginGuard } from './guards/permiso.service';
 import { RolesGuard } from './guards/roles.service';
+import { CompraClienteComponent } from './componentes/compra-cliente/compra-cliente.component';
+import { PagoExitosoComponent } from './componentes/pago-exitoso/pago-exitoso.component';
+import { PagoFallidoComponent } from './componentes/pago-fallido/pago-fallido.component';
+import { PagoPendienteComponent } from './componentes/pago-pendiente/pago-pendiente.component';
+import { HistorialClienteComponent } from './componentes/historial-cliente/historial-cliente.component';
+import { CompraClienteDesdeCarritoComponent } from './componentes/compra-cliente-desde-carrito/compra-cliente-desde-carrito.component';
+import { DetalleOrdenHistorialComponent } from './componentes/detalle-orden-historial/detalle-orden-historial.component';
+import { CorreSuspendidoComponent } from './componentes/corre-suspendido/corre-suspendido.component';
 
 
 export const routes: Routes = [
    { path: '', component: InicioComponent },
    { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
    { path: 'registro', component: RegistroComponent, canActivate: [LoginGuard] },
-   { path: 'verificacion-codigo/:idUsuario', component: VerificacionCodigoComponent},
+   { path: 'verificacion-codigo', component: VerificacionCodigoComponent},
    { path: "informacion-usuario",component: InformacionUsuarioComponent},
    { path: "actualizar-perfil", component: ActualizarPerfilComponent},
    { path: 'crear-evento',component:CrearEventoComponent, canActivate: [RolesGuard], data: {
@@ -48,6 +56,7 @@ export const routes: Routes = [
    }},
    { path: "eventos", component: EventosComponent},
    { path: "recuperar-contraseña", component: RestablecerContrasenaComponent},
+   { path: "recuperar-suspendido", component: CorreSuspendidoComponent},
    { path: "cambiar-contrasena", component: CambiarContrasenaComponent},
    { path: "verificar-codigo-restablecer", component: VerificarCodigoRestablecerComponent},
    { path: "gestion-cupones", component: GestionarCuponComponent, canActivate: [RolesGuard], data: {
@@ -67,6 +76,13 @@ export const routes: Routes = [
     expectedRole: ["ADMINISTRADOR"]
    }},
    { path: "carrito", component:CarritoUsuarioComponent},
+   { path: "compra-cliente", component:CompraClienteComponent},
+   { path: "pago-exitoso", component:PagoExitosoComponent},
+   { path: "pago-fallido", component:PagoFallidoComponent},
+   { path: "pago-pendiente", component:PagoPendienteComponent},
+   { path: "historial-compras", component: HistorialClienteComponent},
+   { path: "compra-cliente-desde-carrito", component:CompraClienteDesdeCarritoComponent},
+   { path: "detalle-orden", component:DetalleOrdenHistorialComponent},
    { path: "**", pathMatch: "full", redirectTo: "" }
 ];
 

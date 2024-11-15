@@ -48,7 +48,8 @@ export class EventosPorCategoriasComponent implements OnInit {
     this.clientService.obtenereventosPorCategorias(tipoAleatorio).subscribe({
         next: (value) => {
             console.log(value)
-            this.categoryEvents = this.obtenerEventosAleatorios(value.respuesta);
+
+            this.categoryEvents = this.obtenerEventosAleatorios(value.respuesta.filter((evento: { estadoEvento: string; }) => evento.estadoEvento === 'ACTIVO'));
             console.log(this.categoryEvents)
         },
     })

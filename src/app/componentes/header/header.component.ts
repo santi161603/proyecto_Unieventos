@@ -3,6 +3,8 @@ import { RouterModule } from '@angular/router';
 import { TokenService } from '../../servicios/token.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { CuentaAutenticadaService } from '../../servicios/cuenta-autenticada.service';
+import { CuentaObtenidaClienteDto } from '../../dto/cuenta-obtenida-cliente-dto';
 
 @Component({
   selector: 'app-header',
@@ -16,15 +18,22 @@ export class HeaderComponent {
   title="UNIEVENTOS";
   rol: string = "";
   isLogger: boolean = false;
-  userProfileImage: string = 'https://firebasestorage.googleapis.com/v0/b/unieventos-d397d.appspot.com/o/11f17bd7-a025-4ea2-af87-f34f3bcff858-usuario.jpg?alt=media&token=9f26ebc4-54fb-476a-8fd5-67f365add5c3';
+  usuario:CuentaObtenidaClienteDto |undefined;
   private rolSubscription: Subscription | undefined;
   private isLoggerSubscription: Subscription | undefined;
 
-  constructor(private tokenService: TokenService ) {
+  constructor(private tokenService: TokenService, private cuentaaut:CuentaAutenticadaService ) {
   }
 
   ngOnInit(): void {
     // Nos suscribimos al observable del rol para detectar cambios
+    this.cuentaaut.obtenerUsuarioPorID(this.tokenService.getIDCuenta()).subscribe(
+      {
+        next:(value)=> {
+          this.usuario = value.respuesta
+        },
+      }
+    )
     this.rolSubscription = this.tokenService.getRolObservable().subscribe({
       next: (rol) => {
         this.rol = rol;

@@ -6,6 +6,7 @@ import { EnumService } from '../../servicios/get-enums.service';
 import { CommonModule } from '@angular/common';
 import { AdministradorService } from '../../servicios/administrador.service';
 import { ClientService } from '../../servicios/auth.service';
+import { LocalidadNombreIdDTO } from '../../dto/localidades-id-nombre';
 
 @Component({
   selector: 'app-crear-evento',
@@ -14,12 +15,16 @@ import { ClientService } from '../../servicios/auth.service';
   templateUrl: './crear-evento.component.html',
   styleUrls: ['./crear-evento.component.css']
 })
-export class CrearEventoComponent implements OnInit{
+export class CrearEventoComponent implements OnInit {
   crearEventoForm: FormGroup;
   tipoEventoEnum: string[] = []; // Opciones de ejemplo
   estadoCuentaEnum: string[] = []; // Opciones de ejemplo
-  localidades: { nombreLocalidad: string, IdLocalidad: string }[] = [];
+  localidades: LocalidadNombreIdDTO[] = [];
   imagenSeleccionada: File | null = null;
+
+  subEventoImagenes: string[] = []; // Almacena las imágenes de las localidades seleccionadas
+  subEventoCapacidades: number[] = []; // Almacena la capacidad disponible de las localidades seleccionadas
+
 
   constructor(private fb: FormBuilder, private adminService: AdministradorService, private enums: EnumService, private clientService: ClientService) {
     this.crearEventoForm = this.fb.group({
@@ -39,6 +44,29 @@ export class CrearEventoComponent implements OnInit{
     this.agregarSubEvento(); // Agregar un subevento inicial
   }
 
+  onLocalidadChange(event: Event, index: number): void {
+    const selectedLocalidadId = (event.target as HTMLSelectElement).value;
+    const localidad = this.localidades.find(loc => loc.IdLocalidad === selectedLocalidadId);
+
+    if (localidad) {
+      // Actualiza la imagen y la capacidad disponible para el subevento en la posición correspondiente
+      this.subEventoImagenes[index] = localidad.imageLocalidad;
+      this.subEventoCapacidades[index] = localidad.capacidadDisponible;
+
+      // Ajusta el valor máximo de entradas permitidas según la capacidad disponible de la localidad seleccionada
+      // Ajusta el validador del campo 'cantidadEntradas' para que tenga un límite máximo igual a la capacidad
+      const subEvento = this.subEventos.at(index);
+      subEvento?.get('cantidadEntradas')?.setValidators([
+        Validators.required,
+        Validators.min(1),
+        Validators.max(localidad.capacidadDisponible) // Aplica la capacidad máxima como validador
+      ]);
+
+      // Forzar la validación del campo después de cambiar el validador
+      subEvento?.get('cantidadEntradas')?.updateValueAndValidity();
+    }
+  }
+
   private getNombreLocalidades() {
     this.clientService.obtenerTodasLasLocalidadesNombreID().subscribe({
       next: (data) => {
@@ -51,20 +79,20 @@ export class CrearEventoComponent implements OnInit{
     });
   }
 
-  private getTipoEvento(){
-      this.enums.listarTipoEvento().subscribe({
-        next:(data) => {
-          this.tipoEventoEnum = data; // Asigna las ciudades obtenidas a la lista
-        },
-        error: (error) => {
-          console.error('Error al obtener ciudades:', error);
-        }
-      });
+  private getTipoEvento() {
+    this.enums.listarTipoEvento().subscribe({
+      next: (data) => {
+        this.tipoEventoEnum = data; // Asigna las ciudades obtenidas a la lista
+      },
+      error: (error) => {
+        console.error('Error al obtener ciudades:', error);
+      }
+    });
   }
 
-  private getEstadoEvento(){
+  private getEstadoEvento() {
     this.enums.listarEstadoCuenta().subscribe({
-      next:(data) => {
+      next: (data) => {
         this.estadoCuentaEnum = data; // Asigna las ciudades obtenidas a la lista
       },
       error: (error) => {
@@ -73,13 +101,13 @@ export class CrearEventoComponent implements OnInit{
     });
   }
 
-   // Getter para obtener el FormArray de subEventos
-   get subEventos(): FormArray {
+  // Getter para obtener el FormArray de subEventos
+  get subEventos(): FormArray {
     return this.crearEventoForm.get('subEventos') as FormArray;
   }
 
-   // Método para añadir un subevento al FormArray
-   agregarSubEvento(): void {
+  // Método para añadir un subevento al FormArray
+  agregarSubEvento(): void {
     console.log('Subevento agregado'); // Verificar que el método se llame
     const subEventoForm = this.fb.group({
       fechaEvento: ['', Validators.required],
@@ -94,6 +122,8 @@ export class CrearEventoComponent implements OnInit{
 
   eliminarSubEvento(indice: number): void {
     this.subEventos.removeAt(indice);
+    this.subEventoImagenes.splice(indice, 1);
+    this.subEventoCapacidades.splice(indice, 1);
   }
 
   onFileSelected(event: Event): void {
@@ -112,13 +142,13 @@ export class CrearEventoComponent implements OnInit{
         ...this.crearEventoForm.value
       } as EventoDTO
 
-      if(this.imagenSeleccionada){
+      if (this.imagenSeleccionada) {
         this.adminService.subirImagen(this.imagenSeleccionada).subscribe({
           next: (urlImagen) => {
             crearEvento.imageEvento = urlImagen.respuesta;
             console.log(urlImagen)
             console.log(urlImagen.respuesta)
-             // Agrega la URL de la imagen al DTO
+            // Agrega la URL de la imagen al DTO
             this.crearEventoServicio(crearEvento);
           },
           error: (error) => {
@@ -130,7 +160,7 @@ export class CrearEventoComponent implements OnInit{
           }
         });
       }
-      else{
+      else {
         this.crearEventoServicio(crearEvento)
       }
       // Llamada al servicio para enviar los datos al backend
@@ -145,9 +175,9 @@ export class CrearEventoComponent implements OnInit{
     }
   }
 
-  crearEventoServicio(crearEvento: EventoDTO){
+  crearEventoServicio(crearEvento: EventoDTO) {
     this.adminService.crearEvento(crearEvento).subscribe({
-      next :(response) => {
+      next: (response) => {
         // Alerta de éxito si la respuesta del backend es positiva
         Swal.fire({
           icon: 'success',
@@ -156,6 +186,7 @@ export class CrearEventoComponent implements OnInit{
         });
         this.crearEventoForm.reset(); // Reinicia el formulario tras la creación exitosa
         this.imagenSeleccionada = null;
+        this.subEventoImagenes = []
       },
       error: (error) => {
         // Alerta de error si ocurre algún problema en el envío
@@ -165,6 +196,6 @@ export class CrearEventoComponent implements OnInit{
           text: 'Hubo un problema al crear el evento. Por favor, inténtalo de nuevo.',
         });
       }
-  });
+    });
   }
 }

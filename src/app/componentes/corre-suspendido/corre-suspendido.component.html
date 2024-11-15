@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="card" style="max-width: 400px; margin: 0 auto; margin-top: 50px;">
+    <div class="card-header text-center">
+      <h4>Restablecer Contraseña suspendido</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="restablecerForm" (ngSubmit)="enviarCorreo()">
+        <div class="mb-3">
+          <label for="correo" class="form-label">Ingresa tu correo electrónico:</label>
+          <input
+            type="email"
+            id="correo"
+            class="form-control"
+            formControlName="correo"
+            placeholder="ejemplo@dominio.com"
+          />
+          <div *ngIf="restablecerForm.get('correo')?.invalid && restablecerForm.get('correo')?.touched" class="text-danger">
+            Por favor, ingrese un correo electrónico válido.
+          </div>
+        </div>
+        <div class="text-center">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="restablecerForm.invalid"
+          >
+            Continuar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

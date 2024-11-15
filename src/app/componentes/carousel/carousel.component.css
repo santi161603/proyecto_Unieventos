@@ -1,15 +1,40 @@
-img{
-    border-radius: 5%;
-    height: 400px;
-    width: 80%;
-}
-.custom-control .carousel-control-prev-icon,
-.custom-control .carousel-control-next-icon {
-  background-color: rgba(0, 0, 0, 0.5); /* Fondo negro semitransparente */
-  border-radius: 50%; /* Hace que el icono sea circular */
+.custom-carousel {
+  max-width: 800px;
+  margin: auto;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
-.custom-control:hover .carousel-control-prev-icon,
-.custom-control:hover .carousel-control-next-icon {
-  background-color: rgba(0, 0, 0, 0.8); /* Fondo más oscuro al pasar el mouse */
+.carousel-image {
+  height: 450px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.carousel-caption {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.carousel-caption h5 {
+  font-size: 1.8em;
+  margin-bottom: 5px;
+}
+
+.carousel-caption p {
+  font-size: 1em;
+  margin-bottom: 10px;
+}
+
+.carousel-caption .btn {
+  font-size: 1em;
+  padding: 8px 15px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(1);
 }

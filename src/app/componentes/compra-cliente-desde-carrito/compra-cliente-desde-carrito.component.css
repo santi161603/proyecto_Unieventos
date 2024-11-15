@@ -1,0 +1,41 @@
+.carrito-item {
+  max-width: 100%;
+  border: none; /* Eliminar el borde de las tarjetas */
+  background-color: #fff; /* Fondo blanco para tarjetas */
+}
+
+.evento-imagen {
+  max-width: 120px; /* Controlar el tamaño de las imágenes */
+  height: auto;
+  border-radius: 8px; /* Bordes redondeados en las imágenes */
+}
+
+.carrito-cupon {
+  font-size: 14px;
+  font-weight: bold;
+  color: #28a745; /* Color verde para los cupones */
+}
+
+.carrito-total {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.carrito-items {
+  overflow-y: auto;
+  max-height: 400px; /* Para que la lista sea desplazable */
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+  padding: 12px 30px;
+  font-size: 16px;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+

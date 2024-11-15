@@ -5,6 +5,8 @@ export interface CuponObtenidoDTO{
   porcentajeDescuento: number,
   estadoCupon:string,
   userCupon:string,
+  ciudad:string,
+  tipoEvento:string,
   fechaVencimiento: string,
   cantidad: number;
 }
