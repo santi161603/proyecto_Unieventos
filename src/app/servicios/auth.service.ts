@@ -15,7 +15,7 @@ import { LoginDTO } from '../dto/login-dto';
 })
 export class ClientService {
 
-  private authURL = "https://proyecto-final-avanzada-unieventos.onrender.com/servicios/cuenta-no-autenticada";
+  private authURL = "https://proyecto-final-avanzada-unieventos.onrender.com:8080/servicios/cuenta-no-autenticada";
 
   public crearCuenta(cuentaDTO: CrearCuentaDTO): Observable<MensajeDTO> {
     return this.http.post<MensajeDTO>(`${this.authURL}/crear-cuenta`, cuentaDTO);
