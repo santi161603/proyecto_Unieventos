@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class EnumService {
 
-  private publicoURL = 'http://localhost:8081/servicios/obtener-enums';
+  private publicoURL = 'https://proyecto-final-avanzada-unieventos.onrender.com/servicios/obtener-enums';
 
   constructor(private http: HttpClient) { }
 

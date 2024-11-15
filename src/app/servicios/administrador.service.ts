@@ -20,7 +20,7 @@ export class AdministradorService {
 
   constructor(private http: HttpClient) {}
 
-  private authURL = "http://localhost:8081/servicios/cuenta-administrador";
+  private authURL = "https://proyecto-final-avanzada-unieventos.onrender.com/servicios/cuenta-administrador";
 
   public crearEvento(eventoDTO: EventoDTO): Observable<MensajeDTO> {
 
