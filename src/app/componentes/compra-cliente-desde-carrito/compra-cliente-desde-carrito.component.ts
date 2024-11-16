@@ -247,11 +247,20 @@ export class CompraClienteDesdeCarritoComponent {
       const subEvento = this.getSubEvento(evento, item.idSubevento);
 
       if (subEvento) {
+        if (this.carrito) {
+
+          console.log(this.carrito.totalPrecio)
+
+       this.carrito.totalPrecio = this.carrito.totalPrecio - (item.cantidadEntradas * subEvento.precioEntrada);
         // Aplicar el descuento al precio de la entrada
+
+        console.log(this.carrito.totalPrecio)
         const descuento = cupon.porcentajeDescuento / 100; // Ejemplo: 10% de descuento
         subEvento.precioEntrada = subEvento.precioEntrada * (1 - descuento);
-        if (this.carrito) {
-          this.carrito.totalPrecio = item.cantidadEntradas * subEvento.precioEntrada;
+
+        this.carrito.totalPrecio = this.carrito.totalPrecio + item.cantidadEntradas * subEvento.precioEntrada;
+
+          console.log(this.carrito.totalPrecio)
         }
       }
     }

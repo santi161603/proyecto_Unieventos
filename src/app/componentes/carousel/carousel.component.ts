@@ -40,11 +40,8 @@ export class CarouselComponent {
   // Navegar al detalle del evento
   navegarADetalle(idEvento: string) {
 
-       // Redirigir o mostrar una vista para actualizar la localidad
-       sessionStorage.removeItem('idEvento')
-       sessionStorage.setItem('idEvento', idEvento);
 
-       this.router.navigate(['/eventos-detalle']);
+       this.router.navigate(['/eventos-detalle', idEvento]);
 
   }
 }

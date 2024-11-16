@@ -98,11 +98,8 @@ export class EventosComponent {
   this.filtrarEventos();
 }
 navegarADetalleEvento(idEvento: string) {
-  sessionStorage.removeItem('idEvento')
 
-  sessionStorage.setItem('idEvento', idEvento);
-
-  this.router.navigate(['/eventos-detalle']);
+  this.router.navigate(['/eventos-detalle', idEvento]);
 }
 onCategoriaChange(event: Event) {
   const value = (event.target as HTMLSelectElement).value;

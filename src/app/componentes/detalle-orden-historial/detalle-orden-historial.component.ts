@@ -11,6 +11,7 @@ import { LocalidadObtenidaDTO } from '../../dto/localidad-obtenida-dto';
 import { LocalidadNombreIdDTO } from '../../dto/localidades-id-nombre';
 import Swal from 'sweetalert2';
 import { MensajeDTO } from '../../dto/mensaje-dto';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-detalle-orden-historial',
@@ -43,15 +44,19 @@ export class DetalleOrdenHistorialComponent {
   localidades: LocalidadNombreIdDTO[] = [];
   idOrden: string | null = "";
 
-  constructor(private cuentaAtu: CuentaAutenticadaService, private clientServ: ClientService) { }
+  constructor(private cuentaAtu: CuentaAutenticadaService, private clientServ: ClientService, private route:ActivatedRoute) { }
 
   ngOnInit() {
 
-    this.idOrden = sessionStorage.getItem("idOrden");
+    this.route.params.subscribe((param) =>{
+    this.idOrden = param['ordenId']
+
+
     if (this.idOrden) {
       this.obtenerLocalidades()
       this.obtenerOrdenesPorID(this.idOrden)
     }
+   })
   }
   obtenerLocalidades() {
     this.clientServ.obtenerTodasLasLocalidadesNombreID().subscribe({

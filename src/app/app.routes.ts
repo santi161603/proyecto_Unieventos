@@ -65,7 +65,7 @@ export const routes: Routes = [
    { path: "crear-cupon", component:CrearCuponComponent, canActivate: [RolesGuard], data: {
     expectedRole: ["ADMINISTRADOR"]
    }},
-   { path: "eventos-detalle", component: DetalleEventoComponent},
+   { path: "eventos-detalle/:eventoId", component: DetalleEventoComponent},
    { path: "actualizar-localidad", component:ActualizarLocalidadComponent, canActivate: [RolesGuard], data: {
     expectedRole: ["ADMINISTRADOR"]
    }},
@@ -82,7 +82,7 @@ export const routes: Routes = [
    { path: "pago-pendiente", component:PagoPendienteComponent},
    { path: "historial-compras", component: HistorialClienteComponent},
    { path: "compra-cliente-desde-carrito", component:CompraClienteDesdeCarritoComponent},
-   { path: "detalle-orden", component:DetalleOrdenHistorialComponent},
+   { path: "detalle-orden/:ordenId", component:DetalleOrdenHistorialComponent},
    { path: "**", pathMatch: "full", redirectTo: "" }
 ];
 

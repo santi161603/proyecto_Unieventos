@@ -29,13 +29,17 @@ export class DetalleEventoComponent {
   constructor(private route: ActivatedRoute, private clientService: ClientService, private serviceToken: TokenService,
     private router: Router, private cuentaAut: CuentaAutenticadaService) {
 
-    this.idEvento = sessionStorage.getItem('idEvento');
+    this.route.params.subscribe((param) => {
+
+      this.idEvento = param['eventoId']
 
     if (this.idEvento) {
       this.obtenerDatosEvento(this.idEvento);
     } else {
       console.error("No se encontró el ID del evento en sessionStorage");
     }
+    })
+
   }
 
   private obtenerDatosEvento(idEvento: string) {
