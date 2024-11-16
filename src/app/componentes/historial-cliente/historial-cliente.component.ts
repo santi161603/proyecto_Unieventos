@@ -121,12 +121,8 @@ getSubEventInfo(eventoId: string, idSubevento: number): SubEventosObtenidosDto |
 
   // Método para manejar el clic en "Ver detalle de orden"
   verDetalle(ordenId: string): void {
-
-    sessionStorage.removeItem("idOrden")
-    sessionStorage.setItem("idOrden", ordenId)
-
     console.log(ordenId)
 
-    this.router.navigate(['/detalle-orden'])
+    this.router.navigate(['/detalle-orden', ordenId])
   }
 }

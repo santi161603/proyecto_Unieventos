@@ -76,11 +76,7 @@ export class EventosPorCiudadComponent implements OnInit {
 
   navegarADetalleEvento(idEvento: string) {
 
-    sessionStorage.removeItem('idEvento')
-
-    sessionStorage.setItem('idEvento', idEvento);
-
-    this.router.navigate(['/eventos-detalle']);
+    this.router.navigate(['/eventos-detalle', idEvento]);
 
   }
 
