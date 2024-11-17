@@ -70,7 +70,10 @@ export class AdministradorService {
     return this.http.delete<MensajeDTO>(`${this.authURL}/eliminar-cupon/${idCupon}`);
   }
 
+  public obtenerTodasLasOrdenes(): Observable<MensajeDTO> {
 
+    return this.http.get<MensajeDTO>(`${this.authURL}/obtener-todas-las-ordenes`);
+  }
 
    public eliminarEvento(idEvento: string): Observable<MensajeDTO> {
     return this.http.delete<MensajeDTO>(`${this.authURL}/eliminar-evento/${idEvento}`);
