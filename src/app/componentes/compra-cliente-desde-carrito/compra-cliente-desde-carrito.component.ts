@@ -36,12 +36,12 @@ export class CompraClienteDesdeCarritoComponent {
     this.obtenerNombresIdLocalidades();
     this.obtenerTodosCupones();
     this.usuarioId = this.tokenService.getIDCuenta();
-    this.obtenerCarrito();
   }
   obtenerTodosCupones() {
     this.carritoService.obtenerTodosLosCupones().subscribe({
       next: (value) => {
         this.cupones = value.respuesta
+        this.obtenerCarrito();
       },
       error: (error) => {
         console.log("Error al intentar obtener todos los cupones", error);
@@ -107,6 +107,29 @@ export class CompraClienteDesdeCarritoComponent {
   validarYAplicarCupones() {
     this.carrito?.items.forEach(item => {
       this.cupones.forEach(cupon => {
+        if(item.textIngresado == "BIENVENIDO" ||item.textIngresado == "PRIMERACOMPRA" ){
+          if (item.textIngresado == "BIENVENIDO") {
+            if (cupon.userCupon == this.usuarioId) {
+              if(cupon.cantidad > 0){
+                this.cuponRedimido(item, cupon);
+              }else {
+                this.cuponNoredimido(item)
+              }
+            } else {
+              this.cuponNoredimido(item)
+            }
+          } else{
+            if (cupon.userCupon == this.usuarioId) {
+              if(cupon.cantidad > 0){
+                this.cuponRedimido(item, cupon);
+              }else {
+                this.cuponNoredimido(item)
+                }
+            } else {
+              this.cuponNoredimido(item)
+            }
+          }
+        }else{
         if (item.cupon == cupon.nombreCupon) {
           if (cupon.cantidad > 0) {
             if (cupon.userCupon != "N/A" && cupon.ciudad != null && cupon.tipoEvento != null) {
@@ -228,6 +251,7 @@ export class CompraClienteDesdeCarritoComponent {
             this.cuponNoredimido(item)
           }
         }
+      }
       });
     });
   }
@@ -283,9 +307,9 @@ export class CompraClienteDesdeCarritoComponent {
 
     this.cuentaAut.ordenDesdeCarrito(this.tokenService.getIDCuenta()).subscribe({
       next:(value)=> {
+        this.cuentaAut.vaciarCarrito(this.tokenService.getIDCuenta()).subscribe({})
           this.cuentaAut.realizarPago(value.respuesta).subscribe({
             next:(value)=> {
-              this.cuentaAut.vaciarCarrito(this.tokenService.getIDCuenta())
               window.location.href = value.respuesta.initPoint;
             },
           })

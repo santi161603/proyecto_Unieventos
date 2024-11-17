@@ -8,6 +8,8 @@ import { RestabecerContrasenaDTO } from '../dto/restablecer-contrasena-dto';
 import { TipoEventoDTO } from '../dto/tipo-evento-dto';
 import { EventoObtenidoDTO } from '../dto/evento-obtenido-dto';
 import { LoginDTO } from '../dto/login-dto';
+import { CorreoActivoDTO } from '../dto/correo-activo-dto';
+import { CodigoVerificacionDTO } from '../dto/codigo-verificacion.dto';
 
 
 @Injectable({
@@ -21,10 +23,19 @@ export class ClientService {
     return this.http.post<MensajeDTO>(`${this.authURL}/crear-cuenta`, cuentaDTO);
   }
 
-  public activarCuenta(idUsuario: string, codigo: number): Observable<MensajeDTO> {
-    return this.http.put<MensajeDTO>(`${this.authURL}/activar-cuenta/${idUsuario}`, {
-      codigo: codigo
-    });
+  public activarCuenta(correo: string, codigo: number): Observable<MensajeDTO> {
+
+    const codigoDto:CodigoVerificacionDTO = {
+      codigo:codigo
+    }
+
+    const correoDTO:CorreoActivoDTO = {
+      correo:correo,
+      codigo:codigoDto
+    }
+
+    console.log(correoDTO)
+    return this.http.put<MensajeDTO>(`${this.authURL}/activar-cuenta`, correoDTO);
   }
 
   public verificarCodigo(idUsuario: string, codigo: number): Observable<MensajeDTO> {
@@ -33,8 +44,8 @@ export class ClientService {
     });
   }
 
-  public reenviarToken(idUsuario: string): Observable<MensajeDTO> {
-    return this.http.put<MensajeDTO>(`${this.authURL}/reenviar-token/${idUsuario}`, {});
+  public reenviarToken(correo: CorreoDTO): Observable<MensajeDTO> {
+    return this.http.put<MensajeDTO>(`${this.authURL}/reenviar-token`, correo);
   }
 
   public restablecerContrasena(restablecer: RestabecerContrasenaDTO): Observable<MensajeDTO> {

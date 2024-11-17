@@ -6,6 +6,7 @@ import { EnumService } from '../../servicios/get-enums.service';
 import { CrearCuentaDTO } from '../../dto/crear-cuenta-dto';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
+import { secondsInMonth } from 'date-fns/constants';
 
 @Component({
   selector: 'app-registro',
@@ -18,12 +19,13 @@ export class RegistroComponent {
 
   registroForm!: FormGroup;
   ciudades: string[] = []; // Lista para almacenar las ciudades
+  isButtonDisabled: boolean = false; // Controla el estado del botón
 
-  constructor(private formBuilder: FormBuilder,private authService: ClientService, private router: Router, private enumService: EnumService) {
+  constructor(private formBuilder: FormBuilder, private authService: ClientService, private router: Router, private enumService: EnumService) {
 
     this.crearFormulario();
     this.cargarCiudades();
- }
+  }
 
 
   private crearFormulario() {
@@ -39,48 +41,52 @@ export class RegistroComponent {
       confirmaPassword: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]],
     },
 
-    { validators: this.passwordsMatchValidator }
-  );
- }
+      { validators: this.passwordsMatchValidator }
+    );
+  }
 
- private crearTelefonoControl(): FormControl {
-  return this.formBuilder.control('', [Validators.required, Validators.maxLength(10)]);
-}
+  private crearTelefonoControl(): FormControl {
+    return this.formBuilder.control('', [Validators.required, Validators.maxLength(10)]);
+  }
 
-get telefono(): FormArray {
-  return this.registroForm.get('telefono') as FormArray;
-}
+  get telefono(): FormArray {
+    return this.registroForm.get('telefono') as FormArray;
+  }
 
-public addTelefono() {
-  this.telefono.push(this.crearTelefonoControl());
-}
+  public addTelefono() {
+    this.telefono.push(this.crearTelefonoControl());
+  }
 
-public removeTelefono(index: number): void {
-  this.telefono.removeAt(index);
-}
+  public removeTelefono(index: number): void {
+    this.telefono.removeAt(index);
+  }
 
-private cargarCiudades() {
-  this.enumService.listarCiudades().subscribe({
-    next: (data) => {
-      this.ciudades = data; // Asigna las ciudades obtenidas a la lista
-    },
-    error: (error) => {
-      console.error('Error al obtener ciudades:', error);
-    }
-  });
-}
+  private cargarCiudades() {
+    this.enumService.listarCiudades().subscribe({
+      next: (data) => {
+        this.ciudades = data; // Asigna las ciudades obtenidas a la lista
+      },
+      error: (error) => {
+        console.error('Error al obtener ciudades:', error);
+      }
+    });
+  }
 
   public registrar() {
+    if (this.isButtonDisabled) return; // Prevenir múltiples llamadas
+    this.isButtonDisabled = true; // Deshabilitar botón
+
     const crearCuenta = {
       ...this.registroForm.value,
       telefono: this.registroForm.value.telefono.map((tel: string) => tel.toString()) // Asegúrate de que son cadenas
 
-  } as CrearCuentaDTO;
+    } as CrearCuentaDTO;
 
-  console.log('Datos a enviar:', crearCuenta);
+    console.log('Datos a enviar:', crearCuenta);
 
     this.authService.crearCuenta(crearCuenta).subscribe({
       next: (data) => {
+        this.isButtonDisabled = false; // Deshabilitar botón
         Swal.fire({
           title: 'Cuenta creada',
           text: 'La cuenta se ha creado correctamente',
@@ -89,11 +95,14 @@ private cargarCiudades() {
         }).then((result) => {
           if (result.isConfirmed) {
             const idUsuario = data.respuesta;
+            sessionStorage.removeItem("correoUsuario")
+            sessionStorage.setItem("correoUsuario", crearCuenta.email);
             this.router.navigate(['/verificacion-codigo']); // Redirección
           }
         });
       },
       error: (error) => {
+        this.isButtonDisabled = false; // Deshabilitar botón
         Swal.fire({
           title: 'Error',
           text: error.error.respuesta,
@@ -102,18 +111,16 @@ private cargarCiudades() {
         })
       }
     });
+  }
 
 
-    }
+  passwordsMatchValidator(formGroup: FormGroup) {
+    const password = formGroup.get('contrasena')?.value;
+    const confirmaPassword = formGroup.get('confirmaPassword')?.value;
 
-
- passwordsMatchValidator(formGroup: FormGroup) {
-  const password = formGroup.get('contrasena')?.value;
-  const confirmaPassword = formGroup.get('confirmaPassword')?.value;
-
-  // Si las contraseñas no coinciden, devuelve un error, de lo contrario, null
-  return password == confirmaPassword ? null : { passwordsMismatch: true };
- }
+    // Si las contraseñas no coinciden, devuelve un error, de lo contrario, null
+    return password == confirmaPassword ? null : { passwordsMismatch: true };
+  }
 
 }
 

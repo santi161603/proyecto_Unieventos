@@ -105,6 +105,32 @@ export class CompraClienteComponent implements OnInit {
 
   redimirCupon(item: ItemCarritoDTO): void {
     this.cuponesObtenidos.forEach(cupon => {
+
+      if(cupon.estadoCupon == "ACTIVO"){
+      if(item.textIngresado == "BIENVENIDO" ||item.textIngresado == "PRIMERACOMPRA" ){
+        if (item.textIngresado == "BIENVENIDO") {
+          if (cupon.userCupon == this.usuarioId) {
+            if(cupon.cantidad > 0){
+            this.redimiredimirCupon(item, cupon);
+            }else {
+              Swal.fire("No encontramos el cupon", "el cupon que intentar redimir tal vez esta mal escrito, no existe o a agotado existencia", "info")
+            }
+          } else {
+            console.log("el usuario no tiene este cupon");
+          }
+        } else{
+          if (cupon.userCupon == this.usuarioId) {
+            if(cupon.cantidad > 0){
+            this.redimiredimirCupon(item, cupon);
+            }else {
+              Swal.fire("No encontramos el cupon", "el cupon que intentar redimir tal vez esta mal escrito, no existe o a agotado existencia", "info")
+            }
+          } else {
+            console.log("el usuario no tiene este cupon");
+          }
+        }
+      }else{
+
       if (item.textIngresado == cupon.nombreCupon) {
         if (cupon.cantidad > 0) {
           if (cupon.userCupon != "N/A" && cupon.ciudad != null && cupon.tipoEvento != null) {
@@ -216,11 +242,11 @@ export class CompraClienteComponent implements OnInit {
           Swal.fire("No encontramos el cupon", "el cupon que intentar redimir tal vez esta mal escrito, no existe o a agotado existencia", "info")
         }
       }
+    }
+  }
     });
 
   }
-
-
 
   redimiredimirCupon(item: ItemCarritoDTO, cupon: CuponObtenidoDTO
   ) {
@@ -233,7 +259,7 @@ export class CompraClienteComponent implements OnInit {
       const descuento = cupon.porcentajeDescuento / 100; // Ejemplo: 10% de descuento
       this.subEventoCompra.precioEntrada = this.subEventoCompra.precioEntrada * (1 - descuento);
 
-      this.totalCompra = this.subEventoCompra.precioEntrada ;
+      this.totalCompra = this.subEventoCompra.precioEntrada * item.cantidadEntradas ;
 
       this.codigoCupon = cupon.nombreCupon;
     }

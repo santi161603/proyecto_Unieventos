@@ -5,6 +5,7 @@ import { ClientService } from '../../servicios/auth.service';
 import Swal from 'sweetalert2';
 import { MensajeDTO } from '../../dto/mensaje-dto';
 import { CommonModule } from '@angular/common';
+import { CorreoDTO } from '../../dto/correo-dto';
 
 @Component({
   selector: 'app-verificar-codigo-restablecer',
@@ -70,7 +71,15 @@ export class VerificarCodigoRestablecerComponent {
   }
 
   reenviarCodigo() {
-    this.authService.reenviarToken(this.idUsuario).subscribe({
+
+    if(this.correoUsuario){
+
+      const correoDto:CorreoDTO = {
+        correo:this.correoUsuario
+      }
+
+
+    this.authService.reenviarToken(correoDto).subscribe({
       next: (response: MensajeDTO) => {
         Swal.fire({
           title: 'Éxito',
@@ -88,5 +97,6 @@ export class VerificarCodigoRestablecerComponent {
         });
       }
     });
+  }
   }
 }

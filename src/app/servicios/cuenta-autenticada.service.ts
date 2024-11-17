@@ -91,4 +91,9 @@ export class CuentaAutenticadaService {
   obtenerOrdenPorId(ordenId:string): Observable<MensajeDTO>  {
     return this.http.get<MensajeDTO>(`${this.authURL}/obtener-orden-por-id/${ordenId}`)
   }
+
+  cancelarOrden(ordenId:string): Observable<MensajeDTO> {
+    return this.http.delete<MensajeDTO>(`${this.authURL}/cancelar-orden/${ordenId}`)
+  }
+
 }
