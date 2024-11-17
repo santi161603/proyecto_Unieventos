@@ -89,6 +89,7 @@ getSubEventInfo(eventoId: string, idSubevento: number): SubEventosObtenidosDto |
     this.clientAut.getOrdenesByCliente(this.tokenSer.getIDCuenta()).subscribe({
     next:(value) => {
         this.ordenes = value.respuesta;
+        this.ordenes.filter(orden => orden.pago.estadoPago != "ELIMINADO")
         this.ordenes.forEach(orden => {
          const fechaString = orden.pago.fechaPago;
 

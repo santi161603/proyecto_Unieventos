@@ -130,6 +130,16 @@ export class ActualizarPerfilComponent implements OnInit {
         // Si no se seleccionó una nueva imagen, actualizar directamente
         this.actualizarUsuario(updatedData);
       }
+    }else{
+      Swal.fire({
+        icon: 'error',
+        title: 'Formulario no valido',
+        text: 'Formulario no valido verifique y vuelva a intentar',
+        confirmButtonText: 'Aceptar'
+      }).then((result) =>{
+        if(result.isConfirmed){
+        }
+      });
     }
   }
 

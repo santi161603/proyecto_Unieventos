@@ -18,11 +18,11 @@
       <img [src]="evento.imagenPoster" alt="{{ evento.nombre }}" />
       <p>
         Entradas vendidas total evento:
-        {{ ventasPorEvento[evento.idEvento]?.cantidadVendida || 0 }}
+        {{ ventasPorEvento[evento.idEvento].cantidadVendida || 0 }}
       </p>
       <p>
         total benedicios por evento:
-        {{ ventasPorEvento[evento.idEvento]?.beneficiosPorEvento || 0 | currency:"COP$"}}
+        {{ ventasPorEvento[evento.idEvento].beneficiosPorEvento || 0 | currency:"COP$"}}
       </p>
       <ul>
         <li *ngFor="let subEvento of evento.subEventos">
@@ -31,15 +31,15 @@
           <!-- Reemplaza el uso de template strings -->
           <p>
             Entradas vendidas:
-            {{ ventasPorSubevento[evento.idEvento + '_' + subEvento.idSubEvento]?.cantidadVendida || 0 }}
+            {{ ventasPorSubevento[evento.idEvento + '_' + subEvento.idSubEvento].cantidadVendida || 0 }}
           </p>
           <p>
             Porcentaje vendido:
-            {{ ventasPorSubevento[evento.idEvento + '_' + subEvento.idSubEvento]?.porcentajeVendido || 0 }}%
+            {{ ventasPorSubevento[evento.idEvento + '_' + subEvento.idSubEvento].porcentajeVendido || 0 }}%
           </p>
           <p>
             total benedicios:
-            {{ ventasPorSubevento[evento.idEvento + '_' + subEvento.idSubEvento]?.cantidadVendido || 0  | currency:"COP$"}}
+            {{ ventasPorSubevento[evento.idEvento + '_' + subEvento.idSubEvento].cantidadVendido || 0  | currency:"COP$"}}
           </p>
         </li>
       </ul>

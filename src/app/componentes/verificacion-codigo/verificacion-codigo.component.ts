@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { ClientService } from '../../servicios/auth.service'; // Asegúrate de importar el servicio
 import { MensajeDTO } from '../../dto/mensaje-dto'; // Si es necesario importar DTO
 import { TokenService } from '../../servicios/token.service';
+import { CorreoDTO } from '../../dto/correo-dto';
 
 @Component({
   selector: 'app-verificacion-codigo',
@@ -16,7 +17,7 @@ import { TokenService } from '../../servicios/token.service';
 })
 export class VerificacionCodigoComponent {
   codigoForm: FormGroup;
-  idUsuario!: string;
+  correo!: string |null;
 
   constructor(private formBuilder: FormBuilder, private router: Router,private authService: ClientService, private route: ActivatedRoute, private tokenSer:TokenService) {
     this.codigoForm = this.formBuilder.group({
@@ -26,8 +27,8 @@ export class VerificacionCodigoComponent {
 
   ngOnInit(): void {
     // Obtener el idUsuario desde la URL de la ruta activa
-    this.idUsuario = this.tokenSer.getIDCuenta()
-    console.log('ID Usuario:', this.idUsuario);
+    this.correo =  sessionStorage.getItem("correoUsuario")
+    console.log('ID Usuario:', this.correo);
   }
 
   verificarCodigo() {
@@ -35,7 +36,12 @@ export class VerificacionCodigoComponent {
 
     if (this.codigoForm.valid) {
       // Llamar al servicio para verificar el código
-      this.authService.activarCuenta(this.idUsuario, codigo).subscribe({
+
+      if(this.correo){
+
+        console.log(this.correo, codigo)
+
+        this.authService.activarCuenta(this.correo, codigo).subscribe({
         next: (response: MensajeDTO) => {
           // Aquí manejas la respuesta. Si el código es correcto, rediriges o muestras un mensaje de éxito
           console.log('Respuesta:', response);
@@ -57,12 +63,19 @@ export class VerificacionCodigoComponent {
             confirmButtonText: 'Aceptar'
           });
         }
-      });
+      });}
+
+
     }
   }
 
   reenviarCodigo() {
-    this.authService.reenviarToken(this.idUsuario).subscribe({
+    if(this.correo){
+
+      const correoDTO:CorreoDTO = {
+        correo:this.correo
+      }
+    this.authService.reenviarToken(correoDTO).subscribe({
       next: (response: MensajeDTO) => {
         Swal.fire({
           title: 'Éxito',
@@ -80,6 +93,7 @@ export class VerificacionCodigoComponent {
         });
       }
     });
+  }
   }
 }
 

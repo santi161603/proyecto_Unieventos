@@ -67,6 +67,24 @@ export class LoginComponent {
               } else if (result.isDismissed) {
               }
             });
+          } else if(error.error.respuesta == "inactiva"){
+            Swal.fire({
+              title: "Tu cuenta no a sido activada",
+              text: "Tu cuenta no a sido activada activala para continuar, oprime aceptar.",
+              icon: "warning",
+              showCancelButton: true, // Muestra el botón de cancelar
+              confirmButtonText: 'Aceptar', // Texto del botón Aceptar
+              cancelButtonText: 'Cancelar', // Texto del botón Cancelar
+            }).then((result) => {
+              if (result.isConfirmed) {
+
+                sessionStorage.removeItem("correoUsuario")
+                sessionStorage.setItem("correoUsuario", loginDTO.email)
+                this.router.navigate(['/verificacion-codigo'])
+
+              } else if (result.isDismissed) {
+              }
+          })
           }
         },
       });

@@ -63,7 +63,6 @@ export class DetalleEventoComponent {
           dosDiasDespues.setDate(hoy.getDate() + 2); // Añadir 2 días
           console.log("Dos días después: ", dosDiasDespues);
 
-          // Filtrar los subeventos
           this.evento.subEventos = this.evento.subEventos.filter(subevento => {
             const fechaSubevento = new Date(subevento.fechaEvento);
             fechaSubevento.setHours(0, 0, 0, 0); // Eliminar las horas, minutos, segundos y milisegundos de la fecha del subevento

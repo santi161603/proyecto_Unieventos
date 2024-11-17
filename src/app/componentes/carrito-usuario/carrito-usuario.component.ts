@@ -34,7 +34,7 @@ export class CarritoUsuarioComponent implements OnInit {
   totalPrecio = 0;
   cuponIngresado: string = '';
 
-  constructor(private carritoService: CuentaAutenticadaService, private clientServ: ClientService, private tokenService: TokenService, private router:Router) { }
+  constructor(private carritoService: CuentaAutenticadaService, private clientServ: ClientService, private tokenService: TokenService, private router: Router) { }
 
   ngOnInit(): void {
     this.obtenerNombresIdLocalidades();
@@ -91,13 +91,27 @@ export class CarritoUsuarioComponent implements OnInit {
       return new Promise<void>((resolve, reject) => {
         this.clientServ.obtenerEventoPorId(item.eventoId).subscribe({
           next: (data) => {
+             const evento:EventoObtenidoDTO = data.respuesta;
             if (data.respuesta) {
               this.asignarNombreLocalidadASubEventos(data.respuesta);
+              if(evento){
+                if(evento.estadoEvento == "ACTIVO"){
+                const subEvento =  evento.subEventos.find(subevento => item.idSubevento == subevento.idSubEvento)
+                if(subEvento){
+                  if(subEvento.estadoSubEvento == "ACTIVO"){
               this.eventosObtenidos.push(data.respuesta);
               resolve(); // Resolver la promesa cuando el evento se haya cargado
+                }else{
+                  this.eliminarItem(item);
+                }
+                }
+              }else{
+                this.eliminarItem(item);
+              }
             } else {
               reject("Evento no encontrado");
             }
+          }
           },
           error: (err) => reject(`Error al obtener el evento con ID ${item.eventoId}: ${err}`)
         });
@@ -111,10 +125,79 @@ export class CarritoUsuarioComponent implements OnInit {
   validarYAplicarCupones() {
     this.carrito?.items.forEach(item => {
       this.cupones.forEach(cupon => {
-        if (item.cupon == cupon.nombreCupon) {
-          if (cupon.cantidad > 0) {
-            if (cupon.userCupon != "N/A" && cupon.ciudad != null && cupon.tipoEvento != null) {
-              if (cupon.userCupon == this.usuarioId) {
+
+        if(cupon.estadoCupon == "ACTIVO"){
+        if (item.textIngresado == "BIENVENIDO" || item.textIngresado == "PRIMERACOMPRA") {
+          if (item.textIngresado == "BIENVENIDO") {
+            if (cupon.userCupon == this.usuarioId) {
+              if (cupon.cantidad > 0) {
+                this.cuponRedimido(item, cupon);
+              } else {
+                this.cuponNoredimido(item)
+              }
+            } else {
+              this.cuponNoredimido(item)
+            }
+          } else {
+            if (cupon.userCupon == this.usuarioId) {
+              if (cupon.cantidad > 0) {
+                this.cuponRedimido(item, cupon);
+              } else {
+                this.cuponNoredimido(item)
+              }
+            } else {
+              this.cuponNoredimido(item)
+            }
+          }
+        } else {
+          if (item.cupon == cupon.nombreCupon) {
+            if (cupon.cantidad > 0) {
+              if (cupon.userCupon != "N/A" && cupon.ciudad != null && cupon.tipoEvento != null) {
+                if (cupon.userCupon == this.usuarioId) {
+                  const evento = this.getEvento(item.eventoId);
+                  if (evento) {
+                    const subEvento = this.getSubEvento(evento, item.idSubevento);
+                    this.localidadNombres.forEach(localidad => {
+                      if (localidad.IdLocalidad === subEvento?.localidad) {
+                        if (cupon.ciudad == localidad.ciudades) {
+                          if (cupon.tipoEvento == evento.tipoEvento) {
+                            this.cuponRedimido(item, cupon);
+                          } else {
+                            this.cuponNoredimido(item)
+                          }
+                        } else {
+                          this.cuponNoredimido(item)
+                        }
+                      } else {
+                        this.cuponNoredimido(item)
+                      }
+                    });
+                  }
+                } else {
+                  this.cuponNoredimido(item)
+                }
+              }
+              else if (cupon.userCupon != "N/A" && cupon.ciudad != null) {
+                if (cupon.userCupon == this.usuarioId) {
+                  const evento = this.getEvento(item.eventoId);
+                  if (evento) {
+                    const subEvento = this.getSubEvento(evento, item.idSubevento);
+                    this.localidadNombres.forEach(localidad => {
+                      if (localidad.IdLocalidad === subEvento?.localidad) {
+                        if (cupon.ciudad == localidad.ciudades) {
+                          this.cuponRedimido(item, cupon);
+                        } else {
+                          this.cuponNoredimido(item)
+                        }
+                      } else {
+                        this.cuponNoredimido(item)
+                      }
+                    });
+                  }
+                } else {
+                  this.cuponNoredimido(item)
+                }
+              } else if (cupon.tipoEvento != null && cupon.ciudad != null) {
                 const evento = this.getEvento(item.eventoId);
                 if (evento) {
                   const subEvento = this.getSubEvento(evento, item.idSubevento);
@@ -134,12 +217,29 @@ export class CarritoUsuarioComponent implements OnInit {
                     }
                   });
                 }
-              } else {
-                this.cuponNoredimido(item)
               }
-            }
-            else if (cupon.userCupon != "N/A" && cupon.ciudad != null) {
-              if (cupon.userCupon == this.usuarioId) {
+              else if (cupon.userCupon != "N/A" && cupon.tipoEvento != null) {
+                if (cupon.userCupon == this.usuarioId) {
+                  const evento = this.getEvento(item.eventoId);
+                  if (evento) {
+                    if (cupon.tipoEvento == evento.tipoEvento) {
+                      this.cuponRedimido(item, cupon);
+                    } else {
+                      this.cuponNoredimido(item)
+                    }
+                  }
+                } else {
+                  this.cuponNoredimido(item)
+                }
+              }
+              else if (cupon.userCupon != "N/A") {
+                if (cupon.userCupon == this.usuarioId) {
+                  this.cuponRedimido(item, cupon);
+                } else {
+                  this.cuponNoredimido(item)
+                }
+              }
+              else if (cupon.ciudad != null) {
                 const evento = this.getEvento(item.eventoId);
                 if (evento) {
                   const subEvento = this.getSubEvento(evento, item.idSubevento);
@@ -155,83 +255,26 @@ export class CarritoUsuarioComponent implements OnInit {
                     }
                   });
                 }
-              } else {
-                this.cuponNoredimido(item)
               }
-            } else if (cupon.tipoEvento != null && cupon.ciudad != null) {
-              const evento = this.getEvento(item.eventoId);
-              if (evento) {
-                const subEvento = this.getSubEvento(evento, item.idSubevento);
-                this.localidadNombres.forEach(localidad => {
-                  if (localidad.IdLocalidad === subEvento?.localidad) {
-                    if (cupon.ciudad == localidad.ciudades) {
-                      if (cupon.tipoEvento == evento.tipoEvento) {
-                        this.cuponRedimido(item, cupon);
-                      } else {
-                        this.cuponNoredimido(item)
-                      }
-                    } else {
-                      this.cuponNoredimido(item)
-                    }
-                  } else {
-                    this.cuponNoredimido(item)
-                  }
-                });
-              }
-            }
-            else if (cupon.userCupon != "N/A" && cupon.tipoEvento != null) {
-              if (cupon.userCupon == this.usuarioId) {
+              else if (cupon.tipoEvento != null) {
                 const evento = this.getEvento(item.eventoId);
-                if (evento) {
-                  if (cupon.tipoEvento == evento.tipoEvento) {
-                    this.cuponRedimido(item, cupon);
-                  } else {
-                    this.cuponNoredimido(item)
-                  }
+                if (cupon.tipoEvento == evento?.tipoEvento) {
+                  this.cuponRedimido(item, cupon);
+                } else {
+                  this.cuponNoredimido(item)
                 }
-              } else {
-                this.cuponNoredimido(item)
               }
-            }
-            else if (cupon.userCupon != "N/A") {
-              if (cupon.userCupon == this.usuarioId) {
+              else {
                 this.cuponRedimido(item, cupon);
-              } else {
-                this.cuponNoredimido(item)
               }
+            } else {
+              this.cuponNoredimido(item)
             }
-            else if (cupon.ciudad != null) {
-              const evento = this.getEvento(item.eventoId);
-              if (evento) {
-                const subEvento = this.getSubEvento(evento, item.idSubevento);
-                this.localidadNombres.forEach(localidad => {
-                  if (localidad.IdLocalidad === subEvento?.localidad) {
-                    if (cupon.ciudad == localidad.ciudades) {
-                      this.cuponRedimido(item, cupon);
-                    } else {
-                      this.cuponNoredimido(item)
-                    }
-                  } else {
-                    this.cuponNoredimido(item)
-                  }
-                });
-              }
-            }
-            else if (cupon.tipoEvento != null) {
-              const evento = this.getEvento(item.eventoId);
-              if (cupon.tipoEvento == evento?.tipoEvento) {
-                this.cuponRedimido(item, cupon);
-              } else {
-                this.cuponNoredimido(item)
-              }
-            }
-            else {
-              this.cuponRedimido(item, cupon);
-            }
-          } else {
-            this.cuponNoredimido(item)
           }
         }
+      }else{
+        this.cuponNoredimido(item);
+      }
       });
     });
   }
@@ -251,18 +294,18 @@ export class CarritoUsuarioComponent implements OnInit {
       const subEvento = this.getSubEvento(evento, item.idSubevento);
 
       if (subEvento) {
-         if (this.carrito) {
+        if (this.carrito) {
 
           console.log(this.carrito.totalPrecio)
 
-       this.carrito.totalPrecio = this.carrito.totalPrecio - (item.cantidadEntradas * subEvento.precioEntrada);
-        // Aplicar el descuento al precio de la entrada
+          this.carrito.totalPrecio = this.carrito.totalPrecio - (item.cantidadEntradas * subEvento.precioEntrada);
+          // Aplicar el descuento al precio de la entrada
 
-        console.log(this.carrito.totalPrecio)
-        const descuento = cupon.porcentajeDescuento / 100; // Ejemplo: 10% de descuento
-        subEvento.precioEntrada = subEvento.precioEntrada * (1 - descuento);
+          console.log(this.carrito.totalPrecio)
+          const descuento = cupon.porcentajeDescuento / 100; // Ejemplo: 10% de descuento
+          subEvento.precioEntrada = subEvento.precioEntrada * (1 - descuento);
 
-        this.carrito.totalPrecio = this.carrito.totalPrecio + item.cantidadEntradas * subEvento.precioEntrada;
+          this.carrito.totalPrecio = this.carrito.totalPrecio + item.cantidadEntradas * subEvento.precioEntrada;
 
           console.log(this.carrito.totalPrecio)
         }
@@ -300,6 +343,33 @@ export class CarritoUsuarioComponent implements OnInit {
 
   redimirCupon(item: ItemCarritoDTO): void {
     this.cupones.forEach(cupon => {
+
+      if(cupon.estadoCupon == "ACTIVO"){
+
+      if(item.textIngresado == "BIENVENIDO" ||item.textIngresado == "PRIMERACOMPRA" ){
+        if (item.textIngresado == "BIENVENIDO") {
+          if (cupon.userCupon == this.usuarioId) {
+            if(cupon.cantidad > 0){
+            this.redimiredimirCupon(item, cupon);
+            }else {
+              Swal.fire("No encontramos el cupon", "el cupon que intentar redimir tal vez esta mal escrito, no existe o a agotado existencia", "info")
+            }
+          } else {
+            console.log("el usuario no tiene este cupon");
+          }
+        } else{
+          if (cupon.userCupon == this.usuarioId) {
+            if(cupon.cantidad > 0){
+            this.redimiredimirCupon(item, cupon);
+            }else {
+              Swal.fire("No encontramos el cupon", "el cupon que intentar redimir tal vez esta mal escrito, no existe o a agotado existencia", "info")
+            }
+          } else {
+            console.log("el usuario no tiene este cupon");
+          }
+        }
+      }else{
+
       if (item.textIngresado == cupon.nombreCupon) {
         if (cupon.cantidad > 0) {
           if (cupon.userCupon != "N/A" && cupon.ciudad != null && cupon.tipoEvento != null) {
@@ -421,6 +491,8 @@ export class CarritoUsuarioComponent implements OnInit {
           Swal.fire("No encontramos el cupon", "el cupon que intentar redimir tal vez esta mal escrito, no existe o a agotado existencia", "info")
         }
       }
+    }
+  }
     });
 
   }
@@ -445,16 +517,16 @@ export class CarritoUsuarioComponent implements OnInit {
           if (subEvento) {
             if (this.carrito) {
 
-            console.log(this.carrito.totalPrecio)
+              console.log(this.carrito.totalPrecio)
 
-           this.carrito.totalPrecio = this.carrito.totalPrecio - (item.cantidadEntradas * subEvento.precioEntrada);
-            // Aplicar el descuento al precio de la entrada
+              this.carrito.totalPrecio = this.carrito.totalPrecio - (item.cantidadEntradas * subEvento.precioEntrada);
+              // Aplicar el descuento al precio de la entrada
 
-            console.log(this.carrito.totalPrecio)
-            const descuento = cupon.porcentajeDescuento / 100; // Ejemplo: 10% de descuento
-            subEvento.precioEntrada = subEvento.precioEntrada * (1 - descuento);
+              console.log(this.carrito.totalPrecio)
+              const descuento = cupon.porcentajeDescuento / 100; // Ejemplo: 10% de descuento
+              subEvento.precioEntrada = subEvento.precioEntrada * (1 - descuento);
 
-            this.carrito.totalPrecio = this.carrito.totalPrecio + item.cantidadEntradas * subEvento.precioEntrada;
+              this.carrito.totalPrecio = this.carrito.totalPrecio + item.cantidadEntradas * subEvento.precioEntrada;
 
               console.log(this.carrito.totalPrecio)
             }
@@ -499,7 +571,7 @@ export class CarritoUsuarioComponent implements OnInit {
   }
   vaciarCarrito() {
     this.carritoService.vaciarCarrito(this.usuarioId).subscribe({
-      next:(value)=> {
+      next: (value) => {
 
         window.location.reload();
 

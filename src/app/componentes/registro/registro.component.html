@@ -7,30 +7,30 @@
         </h5>
       </div>
       <div class="card-body p-4">
-        <form class="row g-3" [formGroup]="registroForm" (ngSubmit)="registrar()" >
+        <form class="row g-3" [formGroup]="registroForm" (ngSubmit)="registrar()">
 
           <div class="col-6">
             <label class="form-label">Cédula: </label>
             <input type="text" class="form-control" formControlName="cedula" />
-           </div>
+          </div>
 
 
-           <div class="col-6">
+          <div class="col-6">
             <label class="form-label">Nombre: </label>
             <input type="text" class="form-control" formControlName="nombre" />
-           </div>
+          </div>
 
-           <div class="col-6">
+          <div class="col-6">
             <label class="form-label">apellido: </label>
             <input type="text" class="form-control" formControlName="apellido" />
-           </div>
+          </div>
 
-           <div class="col-6">
+          <div class="col-6">
             <label class="form-label">Email: </label>
             <input type="email" class="form-control" formControlName="email" />
           </div>
 
-           <div class="col-6">
+          <div class="col-6">
             <label class="form-label">Dirección: </label>
             <input type="text" class="form-control" formControlName="direccion" />
           </div>
@@ -46,14 +46,15 @@
 
           <div formArrayName="telefono">
             <div *ngFor="let tel of telefono.controls; let i=index" class="col-6">
-                <label class="form-label">Teléfono {{ i + 1 }}: </label>
-                <input type="number" class="form-control" [formControlName]="i" />
-                <button (click)="removeTelefono(i)" class="btn btn-danger">Eliminar</button>
+              <label class="form-label">Teléfono {{ i + 1 }}: </label>
+              <input type="number" class="form-control" [formControlName]="i" />
+              <button type="button" (click)="removeTelefono(i)" class="btn btn-danger">Eliminar</button>
             </div>
-        </div>
-        <button (click)="addTelefono()" class="btn btn-primary">Agregar Teléfono</button>
+          </div>
+          <button type="button" (click)="addTelefono()" class="btn btn-primary">Agregar Teléfono</button>
 
-           <div class="col-6">
+
+          <div class="col-6">
             <label class="form-label">Contraseña: </label>
             <input type="password" class="form-control" formControlName="contrasena" />
           </div>
@@ -63,18 +64,20 @@
             <input type="password" class="form-control" formControlName="confirmaPassword" />
           </div>
           @if (registroForm.hasError('passwordsMismatch')) {
-            <div class="alert alert-danger" role="alert" >Las contraseñas no coinciden</div>
-           }
+          <div class="alert alert-danger" role="alert">Las contraseñas no coinciden</div>
+          }
 
 
-           <div class="col-12 text-center">
-            <button type="submit" class="btn btn-primary" [disabled]="registroForm.invalid">
+          <div class="col-12 text-center">
+            <button type="button" (click)="registrar()" class="btn btn-primary"
+              [disabled]="registroForm.invalid || isButtonDisabled">
               <i class="fa-solid fa-plus me-2"></i>Registrarse
             </button>
-           </div>
+
+          </div>
         </form>
       </div>
     </div>
-   </div>
+  </div>
 
 </form>

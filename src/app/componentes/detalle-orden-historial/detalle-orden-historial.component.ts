@@ -11,7 +11,7 @@ import { LocalidadObtenidaDTO } from '../../dto/localidad-obtenida-dto';
 import { LocalidadNombreIdDTO } from '../../dto/localidades-id-nombre';
 import Swal from 'sweetalert2';
 import { MensajeDTO } from '../../dto/mensaje-dto';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-detalle-orden-historial',
@@ -44,7 +44,7 @@ export class DetalleOrdenHistorialComponent {
   localidades: LocalidadNombreIdDTO[] = [];
   idOrden: string | null = "";
 
-  constructor(private cuentaAtu: CuentaAutenticadaService, private clientServ: ClientService, private route:ActivatedRoute) { }
+  constructor(private cuentaAtu: CuentaAutenticadaService, private clientServ: ClientService, private route:ActivatedRoute, private router:Router) { }
 
   ngOnInit() {
 
@@ -140,7 +140,27 @@ export class DetalleOrdenHistorialComponent {
   }
 
   cancelarOrden() {
+    if(this.ordenInfo){
+    this.cuentaAtu.cancelarOrden(this.ordenInfo.idOrden).subscribe({
+      next:(value)=> {
+        Swal.fire({
+          title: "Éxito", // Título de la alerta
+          text: "Su orden ha sido cancelada", // Texto del mensaje
+          icon: "success", // Tipo de icono: success, error, warning, info, question
+          confirmButtonText: 'Aceptar', // Texto del botón de confirmación
+        }).then((result) => {
+            if (result.isConfirmed) {
 
+              this.router.navigate(['/historial-compras'])
+
+            } else if (result.isDismissed) {
+            }
+        })
+      },
+    })
+    }else{
+      Swal.fire("Error", "No pudimos hacer eso por favor vuelve a intentarlo", "error")
+    }
   }
   // Método para verificar si se debe mostrar el botón de reintentar pago
   mostrarReintentarPago(): boolean {
