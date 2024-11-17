@@ -29,7 +29,7 @@
             class="card-img-top img-fluid localidad-imagen">
 
           <div class="card-body">
-            <h5 class="card-title">{{ subevento.localidadNombre || subevento.localidad }}</h5>
+            <h5 class="card-title">{{ subevento.localidadNombre || subevento.localidad }} - {{getLocalidadInfo(subevento.localidad)?.ciudades}}</h5>
             <p class="card-text">Fecha: {{ subevento.fechaEvento | date: 'dd/MM/yyyy' }} - Hora: {{ subevento.horaEvento
               }}</p>
             <p><strong>Cantidad de Entradas:</strong> {{ subevento.cantidadEntradas }}</p>

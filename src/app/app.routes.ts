@@ -32,6 +32,7 @@ import { HistorialClienteComponent } from './componentes/historial-cliente/histo
 import { CompraClienteDesdeCarritoComponent } from './componentes/compra-cliente-desde-carrito/compra-cliente-desde-carrito.component';
 import { DetalleOrdenHistorialComponent } from './componentes/detalle-orden-historial/detalle-orden-historial.component';
 import { CorreSuspendidoComponent } from './componentes/corre-suspendido/corre-suspendido.component';
+import { GestionReportesComponent } from './componentes/gestion-reportes/gestion-reportes.component';
 
 
 export const routes: Routes = [
@@ -83,6 +84,7 @@ export const routes: Routes = [
    { path: "historial-compras", component: HistorialClienteComponent},
    { path: "compra-cliente-desde-carrito", component:CompraClienteDesdeCarritoComponent},
    { path: "detalle-orden/:ordenId", component:DetalleOrdenHistorialComponent},
+   { path: "gestion-reportes", component:GestionReportesComponent},
    { path: "**", pathMatch: "full", redirectTo: "" }
 ];
 

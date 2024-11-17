@@ -186,9 +186,6 @@ export class DetalleEventoComponent {
     }
   }
 
-
-
-
   private asignarNombresLocalidades() {
     console.log("estoy dentro de asignar nombres");
     if (this.evento && this.localidades.length) {

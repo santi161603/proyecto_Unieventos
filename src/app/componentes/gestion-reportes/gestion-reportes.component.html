@@ -1,0 +1,51 @@
+<div class="report-container">
+  <!-- Total y Porcentajes -->
+  <div class="total-and-percentages">
+    <h2>Total: {{ totalOrdenes }}</h2>
+    <div class="percentages">
+      <div class="percentage-item">Aprobadas: {{ porcentajeAprobadas }}%</div>
+      <div class="percentage-item">Pendientes: {{ porcentajePendientes }}%</div>
+      <div class="percentage-item">Otras: {{ porcentajeOtras }}%</div>
+    </div>
+  </div>
+
+  <h2>Total beneficos generales: {{ totalBeneficiosgenerales | currency:"COP$" }}</h2>
+
+  <!-- Lista de eventos y subeventos -->
+  <div class="scrollable-list">
+    <div *ngFor="let evento of eventos">
+      <h3>{{ evento.nombre }}</h3>
+      <img [src]="evento.imagenPoster" alt="{{ evento.nombre }}" />
+      <p>
+        Entradas vendidas total evento:
+        {{ ventasPorEvento[evento.idEvento]?.cantidadVendida || 0 }}
+      </p>
+      <p>
+        total benedicios por evento:
+        {{ ventasPorEvento[evento.idEvento]?.beneficiosPorEvento || 0 | currency:"COP$"}}
+      </p>
+      <ul>
+        <li *ngFor="let subEvento of evento.subEventos">
+          <p>Subevento: {{ subEvento.localidadNombre }} - {{  subEvento.fechaEvento | date: 'dd/MM/yyyy' }}</p>
+          <p>Entradas disponibles: {{ subEvento.cantidadEntradas }}</p>
+          <!-- Reemplaza el uso de template strings -->
+          <p>
+            Entradas vendidas:
+            {{ ventasPorSubevento[evento.idEvento + '_' + subEvento.idSubEvento]?.cantidadVendida || 0 }}
+          </p>
+          <p>
+            Porcentaje vendido:
+            {{ ventasPorSubevento[evento.idEvento + '_' + subEvento.idSubEvento]?.porcentajeVendido || 0 }}%
+          </p>
+          <p>
+            total benedicios:
+            {{ ventasPorSubevento[evento.idEvento + '_' + subEvento.idSubEvento]?.cantidadVendido || 0  | currency:"COP$"}}
+          </p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Botón Generar PDF -->
+  <button (click)="generarPdf()">Generar PDF Reporte</button>
+</div>
